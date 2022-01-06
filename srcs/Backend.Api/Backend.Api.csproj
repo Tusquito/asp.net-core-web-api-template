@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>9</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Backend.Api.Database\Backend.Api.Database.csproj" />
+      <ProjectReference Include="..\Backend.Api.Models\Backend.Api.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extension" />
+      <Folder Include="Service" />
+    </ItemGroup>
+
+</Project>

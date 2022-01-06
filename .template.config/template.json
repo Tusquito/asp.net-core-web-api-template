@@ -1,0 +1,25 @@
+{
+    "author": "Hugo Pagniez",
+    "name": "Backend Base Solution",
+    "description": "",
+    "identity": "HugoPagniez.Backend.1.0",
+    "shortName": "backendapi",
+    "tags": {
+      "language": "C#",
+      "type": "solution"
+    },
+    "sourceName": "Backend",
+    "symbols": {
+      "Framework": {
+        "type": "parameter",
+        "description": "The target framework for the project.",
+        "datatype": "choice",
+        "choices": [
+          {
+            "choice": "net5.0"
+          }
+        ],
+        "defaultValue": "net5.0"
+      }
+    }
+  }
