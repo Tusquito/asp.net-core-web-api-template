@@ -4,12 +4,21 @@ using System.Threading.Tasks;
 using Backend.Api.Database.Account;
 using Backend.Api.Database.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.DataEncryption;
+using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
 
 namespace Backend.Api.Database.Context
 {
-    public class WebContext : DbContext
+    public class BackendDbContext : DbContext
     {
-        public WebContext(DbContextOptions<WebContext> options) : base(options) { }
+        private readonly IEncryptionProvider _encryptionProvider;
+        private readonly PgsqlDatabaseConfiguration _dbConfig = PgsqlDatabaseConfiguration.FromEnv();
+        public BackendDbContext(DbContextOptions<BackendDbContext> options) : base(options)
+        {
+            byte[] encryptionKey = Convert.FromBase64String(_dbConfig.EncryptionKey ?? throw new ArgumentException("PGSQL_DATABASE_ENCRYPTION_KEY env variable missing"));
+            byte[] encryptionIv = Convert.FromBase64String(_dbConfig.EncryptionIv ?? throw new ArgumentException("PGSQL_DATABASE_ENCRYPTION_IV env variable missing"));
+            _encryptionProvider = new AesProvider(encryptionKey, encryptionIv);
+        }
         
         public DbSet<AccountEntity> Accounts { get; set; }
         public DbSet<TestEntity> Tests { get; set; }
@@ -58,6 +67,7 @@ namespace Backend.Api.Database.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.UseEncryption(_encryptionProvider);
             modelBuilder.ApplyConfiguration(new AccountEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TestEntityTypeConfiguration());
         }

@@ -5,23 +5,21 @@ using Backend.Domain;
 using Backend.Domain.Account;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Backend.Api.Database.Extensions
 {
     public static class ServiceCollectionExtensions
     {
         
-        public static IServiceCollection AddPgsqlDatabaseContext<TDbContext>(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddPgsqlDatabaseContext<TDbContext>(this IServiceCollection services)
             where TDbContext : DbContext
         {
-            services.Configure<PgsqlDatabaseConfigurationOptions>(configuration.GetSection(PgsqlDatabaseConfigurationOptions.Name));
+            services.AddTransient(_ => PgsqlDatabaseConfiguration.FromEnv());
             services.AddDbContext<TDbContext>((provider, builder)  =>
             {
-                string dbConfig = provider.GetRequiredService<IOptions<PgsqlDatabaseConfigurationOptions>>().Value.ToString();
+                string dbConfig = provider.GetRequiredService<PgsqlDatabaseConfiguration>().ToString();
                 builder
                     .UseNpgsql(dbConfig)
                     .ConfigureWarnings(s => s.Log(
@@ -33,7 +31,7 @@ namespace Backend.Api.Database.Extensions
 
             services.AddDbContextFactory<TDbContext>((provider, builder) =>
             {
-                string dbConfig = provider.GetRequiredService<IOptions<PgsqlDatabaseConfigurationOptions>>().Value.ToString();
+                string dbConfig = provider.GetRequiredService<PgsqlDatabaseConfiguration>().ToString();
                 builder
                     .UseNpgsql(dbConfig)
                     .ConfigureWarnings(s => s.Log(

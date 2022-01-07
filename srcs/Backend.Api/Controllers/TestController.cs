@@ -7,25 +7,25 @@ using Backend.Api.Database.Account;
 using Backend.Api.Database.Context;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Api.Controller
+namespace Backend.Api.Controllers
 {
     [Route("api/tests")]
     [ApiController]
     public class TestController : GenericController
     {
-        private readonly WebContext _webContext;
+        private readonly BackendDbContext _backendDbContext;
         private readonly Random _random = new(Guid.NewGuid().GetHashCode());
 
-        public TestController(WebContext webContext)
+        public TestController(BackendDbContext backendDbContext)
         {
-            _webContext = webContext;
+            _backendDbContext = backendDbContext;
         }
         
         // POST
         [HttpPost("database")]
         public async Task<IActionResult> CreateTestDatabaseAsync()
         {
-            await _webContext.Database.EnsureCreatedAsync();
+            await _backendDbContext.Database.EnsureCreatedAsync();
             var accountEntities = new List<AccountEntity>
             {
                 new()
@@ -49,9 +49,9 @@ namespace Backend.Api.Controller
             };
 
             var testEntities = accountEntities.Select(x => new TestEntity { Id = x.TestId }).ToList();
-            await _webContext.AddRangeAsync(testEntities);
-            await _webContext.AddRangeAsync(accountEntities);
-            await _webContext.SaveChangesAsync();
+            await _backendDbContext.AddRangeAsync(testEntities);
+            await _backendDbContext.AddRangeAsync(accountEntities);
+            await _backendDbContext.SaveChangesAsync();
             return OkResponse();
         }
     }

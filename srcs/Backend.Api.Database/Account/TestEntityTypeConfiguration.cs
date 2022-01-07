@@ -11,7 +11,7 @@ namespace Backend.Api.Database.Account
 
             builder.HasOne(x => x.AccountEntity)
                 .WithOne(x => x.TestEntity)
-                .HasForeignKey<AccountEntity>(x => x.TestId);
+                .HasForeignKey<TestEntity>(x => x.AccountId);
         }
     }
 }

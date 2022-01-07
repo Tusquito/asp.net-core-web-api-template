@@ -15,10 +15,10 @@ namespace Backend.Api.Database.Generic
 
     {
         private readonly IGenericMapper<TEntity, TDto> _mapper;
-        private readonly IDbContextFactory<WebContext> _contextFactory;
+        private readonly IDbContextFactory<BackendDbContext> _contextFactory;
         private readonly ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> _logger;
         
-        public GenericMappedAsyncUuidRepository(ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> logger, IDbContextFactory<WebContext> contextFactory, IGenericMapper<TEntity, TDto> mapper)
+        public GenericMappedAsyncUuidRepository(ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> logger, IDbContextFactory<BackendDbContext> contextFactory, IGenericMapper<TEntity, TDto> mapper)
         {
             _logger = logger;
             _contextFactory = contextFactory;
@@ -29,7 +29,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 return _mapper.Map(await context.Set<TEntity>().ToListAsync());
             }
             catch (Exception e)
@@ -43,7 +43,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 return _mapper.Map(await context.Set<TEntity>().FindAsync(id));
             }
             catch (Exception e)
@@ -57,7 +57,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 return _mapper.Map(await context.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToListAsync());
             }
             catch (Exception e)
@@ -71,7 +71,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 var tmp = context.Set<TEntity>().Update(_mapper.Map(obj));
                 await context.SaveChangesAsync();
                 return _mapper.Map(tmp.Entity);
@@ -87,7 +87,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 context.Set<TEntity>().UpdateRange(_mapper.Map(objs));
                 await context.SaveChangesAsync();
                 return objs;
@@ -103,7 +103,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 context.Set<TEntity>().Remove(await context.Set<TEntity>().FindAsync(id));
                 await context.SaveChangesAsync();
             }
@@ -117,7 +117,7 @@ namespace Backend.Api.Database.Generic
         {
             try
             {
-                await using var context = _contextFactory.CreateDbContext();
+                await using var context = await _contextFactory.CreateDbContextAsync();
                 context.Set<TEntity>().RemoveRange(context.Set<TEntity>().Where(x => ids.Contains(x.Id)));
                 await context.SaveChangesAsync();
             }

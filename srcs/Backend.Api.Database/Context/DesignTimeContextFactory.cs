@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace Backend.Api.Database.Context
 {
-    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<WebContext>
+    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<BackendDbContext>
     {
-        public WebContext CreateDbContext(string[] args)
+        public BackendDbContext CreateDbContext(string[] args)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<WebContext>();
-            optionsBuilder.UseNpgsql(new DatabaseConfiguration().ToString());
-            return new WebContext(optionsBuilder.Options);
+            var optionsBuilder = new DbContextOptionsBuilder<BackendDbContext>();
+            optionsBuilder.UseNpgsql(PgsqlDatabaseConfiguration.FromEnv().ToString());
+            return new BackendDbContext(optionsBuilder.Options);
         }
     }
 }

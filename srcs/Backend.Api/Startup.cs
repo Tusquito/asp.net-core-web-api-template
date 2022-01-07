@@ -1,13 +1,10 @@
 using System.Text.Json.Serialization;
-using Backend.Api.Database.Account;
 using Backend.Api.Database.Context;
 using Backend.Api.Database.Extensions;
-using Backend.Domain.Account;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -28,6 +25,7 @@ namespace Backend.Api
         {
             services.AddCors();
             services.AddOptions();
+            services.AddHttpContextAccessor();
             
             services.AddControllers()
                 .AddJsonOptions(x =>
@@ -48,7 +46,7 @@ namespace Backend.Api
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "Backend.Api", Version = "v1"});
             });
 
-            services.AddPgsqlDatabaseContext<WebContext>(Configuration);
+            services.AddPgsqlDatabaseContext<BackendDbContext>();
             services.AddDatabaseRepositories();
         }
 

@@ -12,11 +12,11 @@ namespace Backend.Api.Database.Account
     public class AccountDao : IAccountDao
     {
         private readonly IGenericMapper<AccountEntity, AccountDto> _mapper;
-        private readonly IDbContextFactory<WebContext> _contextFactory;
+        private readonly IDbContextFactory<BackendDbContext> _contextFactory;
         private readonly IGenericAsyncUuidRepository<AccountDto> _repository;
         private readonly ILogger<AccountDao> _logger;
 
-        public AccountDao(IGenericMapper<AccountEntity, AccountDto> mapper, IDbContextFactory<WebContext> contextFactory, IGenericAsyncUuidRepository<AccountDto> repository, ILogger<AccountDao> logger)
+        public AccountDao(IGenericMapper<AccountEntity, AccountDto> mapper, IDbContextFactory<BackendDbContext> contextFactory, IGenericAsyncUuidRepository<AccountDto> repository, ILogger<AccountDao> logger)
         {
             _mapper = mapper;
             _contextFactory = contextFactory;
@@ -28,12 +28,12 @@ namespace Backend.Api.Database.Account
         {
             try
             {
-                await using WebContext context = _contextFactory.CreateDbContext();
+                await using BackendDbContext context = await _contextFactory.CreateDbContextAsync();
                 return _mapper.Map(await context.Accounts.FirstOrDefaultAsync(x => x.Username.ToLower().Equals(username.ToLower())));
             }
             catch (Exception e)
             {
-                _logger.LogError($"GetAccountByUsernameAsync {e}");
+                _logger.LogError($"{nameof(GetAccountByUsernameAsync)} {e}");
                 return null;
             }
         }
@@ -42,12 +42,12 @@ namespace Backend.Api.Database.Account
         {
             try
             {
-                await using WebContext context = _contextFactory.CreateDbContext();
+                await using BackendDbContext context = await _contextFactory.CreateDbContextAsync();
                 return _mapper.Map(await context.Accounts.FirstOrDefaultAsync(x => x.Ip.Equals(ip)));
             }
             catch (Exception e)
             {
-                _logger.LogError($"GetAccountByIpAsync {e}");
+                _logger.LogError($"{nameof(GetAccountByIpAsync)} {e}");
                 return null;
             }
         }
@@ -56,12 +56,12 @@ namespace Backend.Api.Database.Account
         {
             try
             {
-                await using WebContext context = _contextFactory.CreateDbContext();
+                await using BackendDbContext context = await _contextFactory.CreateDbContextAsync();
                 return _mapper.Map(await context.Accounts.FirstOrDefaultAsync(x => x.Email.Equals(email.ToLower())));
             }
             catch (Exception e)
             {
-                _logger.LogError($"GetAccountByEmailAsync {e}");
+                _logger.LogError($"{nameof(GetAccountByEmailAsync)} {e}");
                 return null;
             }
         }

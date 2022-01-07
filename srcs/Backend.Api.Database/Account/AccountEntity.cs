@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Backend.Api.Database.Context;
 using Backend.Api.Database.Generic;
@@ -11,9 +13,13 @@ namespace Backend.Api.Database.Account
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        [Encrypted]
         public string Username { get; set; }
+        [Encrypted]
         public string Email { get; set; }
+        [Encrypted]
         public string Password { get; set; }
+        [Encrypted]
         public string Ip { get; set; }
         public Guid TestId { get; set; }
         public AuthorityType AuthorityType { get; set; }

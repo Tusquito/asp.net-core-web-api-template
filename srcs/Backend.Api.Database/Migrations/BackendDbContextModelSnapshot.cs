@@ -6,18 +6,21 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace Backend.Api.Database.Migrations
 {
-    [DbContext(typeof(WebContext))]
-    partial class WebContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BackendDbContext))]
+    partial class BackendDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.5")
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Backend.Api.Database.Account.AccountEntity", b =>
                 {
@@ -29,7 +32,7 @@ namespace Backend.Api.Database.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .HasColumnType("text");
@@ -44,15 +47,12 @@ namespace Backend.Api.Database.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Username")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TestId")
-                        .IsUnique();
 
                     b.ToTable("account", "account_scheme");
                 });
@@ -63,31 +63,37 @@ namespace Backend.Api.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId")
+                        .IsUnique();
 
                     b.ToTable("test", "account_scheme");
                 });
 
-            modelBuilder.Entity("Backend.Api.Database.Account.AccountEntity", b =>
+            modelBuilder.Entity("Backend.Api.Database.Account.TestEntity", b =>
                 {
-                    b.HasOne("Backend.Api.Database.Account.TestEntity", "TestEntity")
-                        .WithOne("AccountEntity")
-                        .HasForeignKey("Backend.Api.Database.Account.AccountEntity", "TestId")
+                    b.HasOne("Backend.Api.Database.Account.AccountEntity", "AccountEntity")
+                        .WithOne("TestEntity")
+                        .HasForeignKey("Backend.Api.Database.Account.TestEntity", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("TestEntity");
+                    b.Navigation("AccountEntity");
                 });
 
-            modelBuilder.Entity("Backend.Api.Database.Account.TestEntity", b =>
+            modelBuilder.Entity("Backend.Api.Database.Account.AccountEntity", b =>
                 {
-                    b.Navigation("AccountEntity");
+                    b.Navigation("TestEntity");
                 });
 #pragma warning restore 612, 618
         }
