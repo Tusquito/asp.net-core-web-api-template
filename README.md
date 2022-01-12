@@ -22,3 +22,10 @@ asp.net-core-web-api-template
 - [ ] Microservices Architecture
 - [ ] Fix All Bugs
 - [ ] Multi DB Support
+
+# How To Add This Template To Jetbrains Rider
+
+- Fork this repository
+- Clone it locally
+- Follow the following steps:
+<img src="https://cdn.discordapp.com/attachments/782327884818939907/930926681080868905/Untitled.png"> 
