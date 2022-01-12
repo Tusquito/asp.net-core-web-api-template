@@ -3,60 +3,59 @@ using Backend.Api.Database.Generic;
 using Backend.Domain;
 using Mapster;
 
-namespace Backend.Api.Database.Utils
+namespace Backend.Api.Database.Utils;
+
+public class MapsterMapper<TEntity, TDto> : IGenericMapper<TEntity, TDto> 
+    where TDto : class, IDto
+    where TEntity : class, IEntity
 {
-    public class MapsterMapper<TEntity, TDto> : IGenericMapper<TEntity, TDto> 
-        where TDto : class, IDto
-        where TEntity : class, IEntity
+    public TEntity Map(TDto input)
     {
-        public TEntity Map(TDto input)
-        {
-            return input?.Adapt<TEntity>();
-        }
+        return input?.Adapt<TEntity>();
+    }
 
-        public List<TEntity> Map(List<TDto> input)
-        {
-            return input?.Adapt<List<TEntity>>();
-        }
+    public List<TEntity> Map(List<TDto> input)
+    {
+        return input?.Adapt<List<TEntity>>();
+    }
 
-        public IEnumerable<TEntity> Map(IEnumerable<TDto> input)
-        {
-            return input?.Adapt<IEnumerable<TEntity>>();
-        }
+    public IEnumerable<TEntity> Map(IEnumerable<TDto> input)
+    {
+        return input?.Adapt<IEnumerable<TEntity>>();
+    }
 
-        public IReadOnlyList<TEntity> Map(IReadOnlyList<TDto> input)
-        {
-            return input?.Adapt<List<TEntity>>();
-        }
+    public IReadOnlyList<TEntity> Map(IReadOnlyList<TDto> input)
+    {
+        return input?.Adapt<List<TEntity>>();
+    }
 
-        public TDto Map(TEntity input)
-        {
-            return input?.Adapt<TDto>();
-        }
+    public TDto Map(TEntity input)
+    {
+        return input?.Adapt<TDto>();
+    }
 
-        public List<TDto> Map(List<TEntity> input)
-        {
-            return input?.Adapt<List<TDto>>();
-        }
+    public List<TDto> Map(List<TEntity> input)
+    {
+        return input?.Adapt<List<TDto>>();
+    }
 
-        public IEnumerable<TDto> Map(IEnumerable<TEntity> input)
-        {
-            return input?.Adapt<IEnumerable<TDto>>();
-        }
+    public IEnumerable<TDto> Map(IEnumerable<TEntity> input)
+    {
+        return input?.Adapt<IEnumerable<TDto>>();
+    }
 
-        public IReadOnlyList<TDto> Map(IReadOnlyList<TEntity> input)
-        {
-            return input?.Adapt<List<TDto>>();
-        }
+    public IReadOnlyList<TDto> Map(IReadOnlyList<TEntity> input)
+    {
+        return input?.Adapt<List<TDto>>();
+    }
 
-        public void Map(TDto input, TEntity output)
-        {
-            input.Adapt(output);
-        }
+    public void Map(TDto input, TEntity output)
+    {
+        input.Adapt(output);
+    }
 
-        public void Map(TEntity input, TDto output)
-        {
-            input.Adapt(output);
-        }
+    public void Map(TEntity input, TDto output)
+    {
+        input.Adapt(output);
     }
 }

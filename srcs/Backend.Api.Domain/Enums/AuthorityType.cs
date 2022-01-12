@@ -1,8 +1,7 @@
-﻿namespace Backend.Domain.Enums
+﻿namespace Backend.Domain.Enums;
+
+public enum AuthorityType
 {
-    public enum AuthorityType
-    {
-        User = 0,
-        Admin = 1
-    }
+    USER = 0,
+    ADMIN = 1
 }

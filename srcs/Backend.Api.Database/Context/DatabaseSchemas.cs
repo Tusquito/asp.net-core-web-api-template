@@ -1,7 +1,6 @@
-﻿namespace Backend.Api.Database.Context
+﻿namespace Backend.Api.Database.Context;
+
+public static class DatabaseSchemas
 {
-    public static class DatabaseSchemas
-    {
-        public const string ACCOUNTS = "account_scheme";
-    }
+    public const string ACCOUNTS = "account_scheme";
 }

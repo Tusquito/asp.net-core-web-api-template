@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.15.0" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.2" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     </ItemGroup>
@@ -14,10 +14,14 @@
     <ItemGroup>
       <ProjectReference Include="..\Backend.Api.Database\Backend.Api.Database.csproj" />
       <ProjectReference Include="..\Backend.Api.Models\Backend.Api.Models.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Cryptography\Backend.Libs.Cryptography.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Services" />
+      <Reference Include="Microsoft.AspNetCore.Authentication.JwtBearer, Version=6.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.authentication.jwtbearer\6.0.1\lib\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

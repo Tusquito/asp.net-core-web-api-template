@@ -10,6 +10,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Api.Models", "srcs\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Api.Tests", "srcs\Backend.Api.Tests\Backend.Api.Tests.csproj", "{EA734DE6-6412-4AB3-A2B2-20FE6240ECDB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{13D446E2-C869-40FB-A973-DC86BD8A9EC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Libs.Security", "srcs\Backend.Libs.Security\Backend.Libs.Security.csproj", "{962A9C4D-FEE5-4E78-A7DD-B3A827FE8706}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Libs.Cryptography", "srcs\Backend.Libs.Cryptography\Backend.Libs.Cryptography.csproj", "{CB7A9586-E718-45BE-88B0-145D0FA2F8B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +42,17 @@ Global
 		{EA734DE6-6412-4AB3-A2B2-20FE6240ECDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA734DE6-6412-4AB3-A2B2-20FE6240ECDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA734DE6-6412-4AB3-A2B2-20FE6240ECDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{962A9C4D-FEE5-4E78-A7DD-B3A827FE8706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{962A9C4D-FEE5-4E78-A7DD-B3A827FE8706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{962A9C4D-FEE5-4E78-A7DD-B3A827FE8706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{962A9C4D-FEE5-4E78-A7DD-B3A827FE8706}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB7A9586-E718-45BE-88B0-145D0FA2F8B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB7A9586-E718-45BE-88B0-145D0FA2F8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB7A9586-E718-45BE-88B0-145D0FA2F8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB7A9586-E718-45BE-88B0-145D0FA2F8B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{962A9C4D-FEE5-4E78-A7DD-B3A827FE8706} = {13D446E2-C869-40FB-A973-DC86BD8A9EC3}
+		{CB7A9586-E718-45BE-88B0-145D0FA2F8B2} = {13D446E2-C869-40FB-A973-DC86BD8A9EC3}
 	EndGlobalSection
 EndGlobal

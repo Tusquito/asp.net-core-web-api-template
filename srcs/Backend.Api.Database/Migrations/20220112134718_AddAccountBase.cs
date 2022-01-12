@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Backend.Api.Database.Migrations
 {
-    public partial class AddUserAccount : Migration
+    public partial class AddAccountBase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,6 +21,7 @@ namespace Backend.Api.Database.Migrations
                     Username = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
                     Password = table.Column<string>(type: "text", nullable: true),
+                    PasswordSalt = table.Column<string>(type: "text", nullable: true),
                     Ip = table.Column<string>(type: "text", nullable: true),
                     TestId = table.Column<Guid>(type: "uuid", nullable: false),
                     AuthorityType = table.Column<int>(type: "integer", nullable: false),

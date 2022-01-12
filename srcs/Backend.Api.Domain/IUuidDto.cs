@@ -1,9 +1,8 @@
 ﻿using System;
 
-namespace Backend.Domain
+namespace Backend.Domain;
+
+public interface IUuidDto : IDto
 {
-    public interface IUuidDto : IDto
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

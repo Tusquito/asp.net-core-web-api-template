@@ -3,21 +3,20 @@ using Backend.Api.Database.Utils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Backend.Api
+namespace Backend.Api;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static async Task Main(string[] args)
-        {
-            MapsterMapperRules.InitMappingRules();
-            IHost web = CreateHostBuilder(args).Build();
+        MapsterMapperRules.InitMappingRules();
+        IHost web = CreateHostBuilder(args).Build();
 
-            await web.StartAsync();
-            await web.WaitForShutdownAsync();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+        await web.StartAsync();
+        await web.WaitForShutdownAsync();
     }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 }

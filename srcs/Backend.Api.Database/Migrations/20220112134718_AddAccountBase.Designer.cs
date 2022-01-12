@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Api.Database.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    [Migration("20220107000818_AddUserAccount")]
-    partial class AddUserAccount
+    [Migration("20220112134718_AddAccountBase")]
+    partial class AddAccountBase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,9 @@ namespace Backend.Api.Database.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordSalt")
                         .HasColumnType("text");
 
                     b.Property<Guid>("TestId")

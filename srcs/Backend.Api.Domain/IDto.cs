@@ -1,4 +1,3 @@
-﻿namespace Backend.Domain
-{
-    public interface IDto { }
-}
+﻿namespace Backend.Domain;
+
+public interface IDto { }

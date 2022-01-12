@@ -43,6 +43,9 @@ namespace Backend.Api.Database.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
+                    b.Property<string>("PasswordSalt")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("TestId")
                         .HasColumnType("uuid");
 

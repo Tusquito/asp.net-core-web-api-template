@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Backend.Api.Database.Context
+namespace Backend.Api.Database.Context;
+
+public class DesignTimeContextFactory : IDesignTimeDbContextFactory<BackendDbContext>
 {
-    public class DesignTimeContextFactory : IDesignTimeDbContextFactory<BackendDbContext>
+    public BackendDbContext CreateDbContext(string[] args)
     {
-        public BackendDbContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<BackendDbContext>();
-            optionsBuilder.UseNpgsql(PgsqlDatabaseConfiguration.FromEnv().ToString());
-            return new BackendDbContext(optionsBuilder.Options);
-        }
+        var optionsBuilder = new DbContextOptionsBuilder<BackendDbContext>();
+        optionsBuilder.UseNpgsql(PgsqlDatabaseConfiguration.FromEnv().ToString());
+        return new BackendDbContext(optionsBuilder.Options);
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Backend.Api.Database.Utils
+﻿namespace Backend.Api.Database.Utils;
+
+public static class MapsterMapperRules
 {
-    public static class MapsterMapperRules
+    public static void InitMappingRules()
     {
-        public static void InitMappingRules()
-        {
-        }
     }
 }

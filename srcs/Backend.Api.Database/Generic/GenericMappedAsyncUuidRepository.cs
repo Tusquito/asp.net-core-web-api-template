@@ -7,124 +7,123 @@ using Backend.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Api.Database.Generic
+namespace Backend.Api.Database.Generic;
+
+public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuidRepository<TDto>
+    where TEntity : class, IUuidEntity
+    where TDto : class, IUuidDto
+
 {
-    public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuidRepository<TDto>
-        where TEntity : class, IUuidEntity
-        where TDto : class, IUuidDto
-
-    {
-        private readonly IGenericMapper<TEntity, TDto> _mapper;
-        private readonly IDbContextFactory<BackendDbContext> _contextFactory;
-        private readonly ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> _logger;
+    private readonly IGenericMapper<TEntity, TDto> _mapper;
+    private readonly IDbContextFactory<BackendDbContext> _contextFactory;
+    private readonly ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> _logger;
         
-        public GenericMappedAsyncUuidRepository(ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> logger, IDbContextFactory<BackendDbContext> contextFactory, IGenericMapper<TEntity, TDto> mapper)
-        {
-            _logger = logger;
-            _contextFactory = contextFactory;
-            _mapper = mapper;
-        }
+    public GenericMappedAsyncUuidRepository(ILogger<GenericMappedAsyncUuidRepository<TEntity, TDto>> logger, IDbContextFactory<BackendDbContext> contextFactory, IGenericMapper<TEntity, TDto> mapper)
+    {
+        _logger = logger;
+        _contextFactory = contextFactory;
+        _mapper = mapper;
+    }
 
-        public async Task<IEnumerable<TDto>> GetAllAsync()
+    public async Task<IEnumerable<TDto>> GetAllAsync()
+    {
+        try
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                return _mapper.Map(await context.Set<TEntity>().ToListAsync());
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("GetAllAsync " + e.Message);
-                return Array.Empty<TDto>();
-            }
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            return _mapper.Map(await context.Set<TEntity>().ToListAsync());
         }
-
-        public async Task<TDto> GetByIdAsync(Guid id)
+        catch (Exception e)
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                return _mapper.Map(await context.Set<TEntity>().FindAsync(id));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("GetByIdAsync " + e.Message);
-                return null;
-            }
+            _logger.LogError("GetAllAsync " + e.Message);
+            return Array.Empty<TDto>();
         }
+    }
 
-        public async Task<IEnumerable<TDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+    public async Task<TDto> GetByIdAsync(Guid id)
+    {
+        try
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                return _mapper.Map(await context.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToListAsync());
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("GetByIdsAsync " + e.Message);
-                return Array.Empty<TDto>();
-            }
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            return _mapper.Map(await context.Set<TEntity>().FindAsync(id));
         }
-
-        public async Task<TDto> SaveAsync(TDto obj)
+        catch (Exception e)
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                var tmp = context.Set<TEntity>().Update(_mapper.Map(obj));
-                await context.SaveChangesAsync();
-                return _mapper.Map(tmp.Entity);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("SaveAsync " + e.Message);
-                return null;
-            }
+            _logger.LogError("GetByIdAsync " + e.Message);
+            return null;
         }
+    }
 
-        public async Task<IEnumerable<TDto>> SaveAsync(IReadOnlyList<TDto> objs)
+    public async Task<IEnumerable<TDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+    {
+        try
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                context.Set<TEntity>().UpdateRange(_mapper.Map(objs));
-                await context.SaveChangesAsync();
-                return objs;
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("SaveAsync " + e.Message);
-                return Array.Empty<TDto>();
-            }
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            return _mapper.Map(await context.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToListAsync());
         }
-
-        public async Task DeleteByIdAsync(Guid id)
+        catch (Exception e)
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                context.Set<TEntity>().Remove(await context.Set<TEntity>().FindAsync(id));
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("DeleteByIdAsync " + e.Message);
-            }
+            _logger.LogError("GetByIdsAsync " + e.Message);
+            return Array.Empty<TDto>();
         }
+    }
 
-        public async Task DeleteByIdsAsync(IEnumerable<Guid> ids)
+    public async Task<TDto> SaveAsync(TDto obj)
+    {
+        try
         {
-            try
-            {
-                await using var context = await _contextFactory.CreateDbContextAsync();
-                context.Set<TEntity>().RemoveRange(context.Set<TEntity>().Where(x => ids.Contains(x.Id)));
-                await context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError("DeleteByIdsAsync " + e.Message);
-            }
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            var tmp = context.Set<TEntity>().Update(_mapper.Map(obj));
+            await context.SaveChangesAsync();
+            return _mapper.Map(tmp.Entity);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("SaveAsync " + e.Message);
+            return null;
+        }
+    }
+
+    public async Task<IEnumerable<TDto>> SaveAsync(IReadOnlyList<TDto> objs)
+    {
+        try
+        {
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            context.Set<TEntity>().UpdateRange(_mapper.Map(objs));
+            await context.SaveChangesAsync();
+            return objs;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("SaveAsync " + e.Message);
+            return Array.Empty<TDto>();
+        }
+    }
+
+    public async Task DeleteByIdAsync(Guid id)
+    {
+        try
+        {
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            context.Set<TEntity>().Remove(await context.Set<TEntity>().FindAsync(id));
+            await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("DeleteByIdAsync " + e.Message);
+        }
+    }
+
+    public async Task DeleteByIdsAsync(IEnumerable<Guid> ids)
+    {
+        try
+        {
+            await using var context = await _contextFactory.CreateDbContextAsync();
+            context.Set<TEntity>().RemoveRange(context.Set<TEntity>().Where(x => ids.Contains(x.Id)));
+            await context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("DeleteByIdsAsync " + e.Message);
         }
     }
 }
