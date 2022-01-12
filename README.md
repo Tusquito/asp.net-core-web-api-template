@@ -12,3 +12,11 @@ asp.net-core-web-api-template
 ## JWT Security
 - JWT_EXPIRY_TIME_IN_HOURS ?? "1"
 - JWT_SIGNATURE_KEY ?? "123456789"
+
+# Roadmap
+- [x] JWT Authentication
+- [x] Base Account Entity With Encrypted Fields
+- [x] Generic Responses For I18N
+- [ ] Login & Register Flow 
+- [ ] Microservices Architecture
+- [ ] Fix All Bugs
