@@ -14,9 +14,11 @@ asp.net-core-web-api-template
 - JWT_SIGNATURE_KEY ?? "123456789"
 
 # Roadmap
+- [x] PGSQL Support
 - [x] JWT Authentication With Authority Check
 - [x] Base Account Entity With Encrypted Fields
 - [x] Generic Responses For I18N
 - [ ] Login & Register Flow 
 - [ ] Microservices Architecture
 - [ ] Fix All Bugs
+- [ ] Multi DB Support
