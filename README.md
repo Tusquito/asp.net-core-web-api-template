@@ -23,6 +23,7 @@ asp.net-core-web-api-template
 - [ ] Fix All Bugs
 - [ ] Multi DB Support
 - [ ] Add 2FA Support
+- [ ] Add Logs through MongoDb
 
 # How To Add This Template To Jetbrains Rider
 
