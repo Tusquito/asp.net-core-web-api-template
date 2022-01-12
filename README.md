@@ -22,6 +22,7 @@ asp.net-core-web-api-template
 - [ ] Microservices Architecture
 - [ ] Fix All Bugs
 - [ ] Multi DB Support
+- [ ] Add 2FA Support
 
 # How To Add This Template To Jetbrains Rider
 
