@@ -1,19 +1,13 @@
-using System;
-using System.Text;
 using System.Text.Json.Serialization;
 using Backend.Api.Database.Context;
 using Backend.Api.Database.Extensions;
 using Backend.Api.Extensions;
 using Backend.Api.Services.Account;
 using Backend.Libs.Cryptography.Extensions;
-using Backend.Libs.Security.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 
 namespace Backend.Api;
 
@@ -38,7 +32,6 @@ public class Startup
         services.AddControllers()
             .AddJsonOptions(x =>
             {
-                x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
                 x.JsonSerializerOptions.Converters.Add(
                     new JsonStringEnumConverter());
             });

@@ -18,7 +18,7 @@ asp.net-core-web-api-template
 - [x] JWT Authentication With Authority Check
 - [x] Base Account Entity With Encrypted Fields
 - [x] Generic Responses For I18N
-- [ ] Login & Register Flow 
+- [x] Login & Register Flow 
 - [ ] Microservices Architecture
 - [ ] Fix All Bugs
 - [ ] Multi DB Support

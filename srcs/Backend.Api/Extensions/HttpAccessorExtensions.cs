@@ -40,8 +40,8 @@ internal static class HttpAccessorExtensions
 
         return ip;
     }
-    
-    internal static T GetHeaderValueAs<T>(this IHttpContextAccessor accessor, string headerName)
+
+    private static T GetHeaderValueAs<T>(this IHttpContextAccessor accessor, string headerName)
     {
         if (accessor.HttpContext == null || accessor.HttpContext.Request.Headers.TryGetValue(headerName, out StringValues values) == false)
         {
@@ -58,7 +58,7 @@ internal static class HttpAccessorExtensions
         return default;
     }
 
-    internal static List<string> SplitCsv(this string csvList, bool nullOrWhitespaceInputReturnsNull = false)
+    private static List<string> SplitCsv(this string csvList, bool nullOrWhitespaceInputReturnsNull = false)
     {
         if (string.IsNullOrWhiteSpace(csvList))
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Backend.Api.Models.Login;
 using Backend.Api.Services.Account;
 using Backend.Domain.Account;
