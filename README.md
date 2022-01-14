@@ -12,6 +12,8 @@ asp.net-core-web-api-template
 ## JWT Security
 - JWT_EXPIRY_TIME_IN_HOURS ?? "1"
 - JWT_SIGNATURE_KEY ?? "123456789"
+## Memory Cache
+- MEMORY_CACHE_LIFETIME_IN_HOURS ?? "1"
 
 # Roadmap
 - [x] PGSQL Support
