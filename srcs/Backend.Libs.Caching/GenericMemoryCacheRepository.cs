@@ -7,7 +7,8 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     private const string BaseKey = "backend-cache:";
     private readonly int _memoryCacheLifetimeInHours = Convert.ToInt32(Environment.GetEnvironmentVariable("MEMORY_CACHE_LIFETIME_IN_HOURS") ?? "1");
     private readonly IMemoryCache _memoryCache;
-    public GenericMemoryCacheRepository(IMemoryCache memoryCache)
+
+    protected GenericMemoryCacheRepository(IMemoryCache memoryCache)
     {
         _memoryCache = memoryCache;
     }
@@ -17,7 +18,22 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         return _memoryCache.Get<TObject>(ToCacheKey(key));
     }
 
+    public bool Exists(TKey key)
+    {
+        return _memoryCache.TryGetValue(key, out _);
+    }
+
+    public IEnumerable<TObject> GetMany(TKey key)
+    {
+        return _memoryCache.Get<IEnumerable<TObject>>(ToCacheKey(key));
+    }
+
     public void SetOrCreate(TKey key, TObject obj)
+    {
+        _memoryCache.Set(ToCacheKey(key), obj, TimeSpan.FromHours(_memoryCacheLifetimeInHours));
+    }
+
+    public void SetOrCreate(TKey key, List<TObject> obj)
     {
         _memoryCache.Set(ToCacheKey(key), obj, TimeSpan.FromHours(_memoryCacheLifetimeInHours));
     }
@@ -36,7 +52,25 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
+    public async Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, Func<Task<IEnumerable<TObject>>> func)
+    {
+        return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), async entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            return await func();
+        });
+    }
+
     public async Task<TObject> GetOrCreateAsync(TKey key, Func<TObject> func)
+    {
+        return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            return Task.FromResult(func());
+        });
+    }
+
+    public async Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, Func<IEnumerable<TObject>> func)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
@@ -54,7 +88,25 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
+    public async Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, IEnumerable<TObject> obj)
+    {
+        return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            return Task.FromResult(obj);
+        });
+    }
+
     public TObject GetOrCreate(TKey key, Func<TObject> func)
+    {
+        return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            return func();
+        });
+    }
+
+    public IEnumerable<TObject> GetOrCreate(TKey key, Func<IEnumerable<TObject>> func)
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
@@ -72,13 +124,29 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
+    public IEnumerable<TObject> GetOrCreate(TKey key, IEnumerable<TObject> obj)
+    {
+        return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
+        {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            return obj;
+        });
+    }
+
     private static string ToCacheKey(TKey key)
     {
-        if (key is null)
+        if (key == null)
         {
             throw new ArgumentException(nameof(key));
         }
+
+        string? keyToString = Convert.ToString(key);
+
+        if (string.IsNullOrWhiteSpace(keyToString))
+        {
+            throw new ArgumentException($"Can not convert {typeof(TKey)} to string");
+        }
         
-        return $"{BaseKey}{key.ToString().Trim().Replace(' ', '-')}";
+        return $"{BaseKey}{keyToString.Trim().Replace(' ', '-')}";
     }
 }
