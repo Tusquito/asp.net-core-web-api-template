@@ -1,18 +1,18 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 
 namespace Backend.Libs.Caching;
 
 public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRepository<TKey, TObject> where TObject : new()
 {
-    private const string BaseKey = "backend-cache:";
-    private readonly int _memoryCacheLifetimeInHours = Convert.ToInt32(Environment.GetEnvironmentVariable("MEMORY_CACHE_LIFETIME_IN_HOURS") ?? "1");
     private readonly IMemoryCache _memoryCache;
+    private readonly MemoryCacheOptions _memoryCacheOptions;
 
-    protected GenericMemoryCacheRepository(IMemoryCache memoryCache)
+    public GenericMemoryCacheRepository(IMemoryCache memoryCache, IOptions<MemoryCacheOptions> memoryCacheOptions)
     {
         _memoryCache = memoryCache;
+        _memoryCacheOptions = memoryCacheOptions.Value;
     }
-
     public TObject Get(TKey key)
     {
         return _memoryCache.Get<TObject>(ToCacheKey(key));
@@ -30,12 +30,22 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
 
     public void SetOrCreate(TKey key, TObject obj)
     {
-        _memoryCache.Set(ToCacheKey(key), obj, TimeSpan.FromHours(_memoryCacheLifetimeInHours));
+        _memoryCache.Set(ToCacheKey(key), obj, new MemoryCacheEntryOptions
+        {
+            Priority = CacheItemPriority.Normal,
+            AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration, 
+            SlidingExpiration = _memoryCacheOptions.SlidingExpiration
+        });
     }
 
     public void SetOrCreate(TKey key, List<TObject> obj)
     {
-        _memoryCache.Set(ToCacheKey(key), obj, TimeSpan.FromHours(_memoryCacheLifetimeInHours));
+        _memoryCache.Set(ToCacheKey(key), obj, new MemoryCacheEntryOptions
+        {
+            Priority = CacheItemPriority.Normal,
+            AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration, 
+            SlidingExpiration = _memoryCacheOptions.SlidingExpiration
+        });
     }
 
     public void Remove(TKey key)
@@ -47,7 +57,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), async entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return await func();
         });
     }
@@ -56,7 +68,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), async entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return await func();
         });
     }
@@ -65,7 +79,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return Task.FromResult(func());
         });
     }
@@ -74,7 +90,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return Task.FromResult(func());
         });
     }
@@ -83,7 +101,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return Task.FromResult(obj);
         });
     }
@@ -92,7 +112,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return Task.FromResult(obj);
         });
     }
@@ -101,7 +123,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return func();
         });
     }
@@ -110,7 +134,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return func();
         });
     }
@@ -119,7 +145,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return obj;
         });
     }
@@ -128,12 +156,14 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(_memoryCacheLifetimeInHours);
+            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
+            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
+            entry.Priority = CacheItemPriority.Normal;
             return obj;
         });
     }
 
-    private static string ToCacheKey(TKey key)
+    private string ToCacheKey(TKey key)
     {
         if (key == null)
         {
@@ -147,6 +177,6 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
             throw new ArgumentException($"Can not convert {typeof(TKey)} to string");
         }
         
-        return $"{BaseKey}{keyToString.Trim().Replace(' ', '-')}";
+        return $"{_memoryCacheOptions.RepositoryBaseKey}{keyToString.Trim().Replace(' ', '-')}";
     }
 }

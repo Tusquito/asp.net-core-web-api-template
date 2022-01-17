@@ -8,7 +8,7 @@ using Microsoft.OpenApi.Models;
 
 namespace Backend.Api.Extensions;
 
-public static class ServiceCollectionsExtensions
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAuthSwagger(this IServiceCollection services)
     {

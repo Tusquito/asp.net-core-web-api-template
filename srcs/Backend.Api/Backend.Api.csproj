@@ -15,6 +15,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Backend.Api.Database\Backend.Api.Database.csproj" />
       <ProjectReference Include="..\Backend.Api.Models\Backend.Api.Models.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Caching\Backend.Libs.Caching.csproj" />
       <ProjectReference Include="..\Backend.Libs.Cryptography\Backend.Libs.Cryptography.csproj" />
       <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
     </ItemGroup>

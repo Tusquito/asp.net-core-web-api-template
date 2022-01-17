@@ -67,7 +67,12 @@ public class AccountDao : IAccountDao
     }
 
     public async Task<IEnumerable<AccountDto>> GetAllAsync() => await _repository.GetAllAsync();
-    public async Task<AccountDto> GetByIdAsync(Guid id) => await _repository.GetByIdAsync(id);
+
+    public async Task<AccountDto> GetByIdAsync(Guid id)
+    {
+        _logger.LogInformation("GetByIdAsync called");
+        return await _repository.GetByIdAsync(id);
+    }
     public async Task<IEnumerable<AccountDto>> GetByIdsAsync(IEnumerable<Guid> ids) => await _repository.GetByIdsAsync(ids);
     public async Task<AccountDto> SaveAsync(AccountDto obj)
     {
