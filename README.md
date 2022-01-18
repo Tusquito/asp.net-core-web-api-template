@@ -26,12 +26,12 @@ asp.net-core-web-api-template
 - [ ] Multi DB Support
 - [ ] Add 2FA Support
 - [ ] Add Logs through MongoDb
-- [ ] Add Memory Caching
+- [x] Add Memory Caching
 - [ ] Add Response Data Pagination
 
 # How To Add This Template To Jetbrains Rider
 
 - Fork this repository
 - Clone it locally
-- Follow the following steps:
+- Follow steps bellow:
 <img src="https://cdn.discordapp.com/attachments/782327884818939907/930926681080868905/Untitled.png"> 

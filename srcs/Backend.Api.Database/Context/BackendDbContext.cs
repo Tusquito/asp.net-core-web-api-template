@@ -12,9 +12,10 @@ namespace Backend.Api.Database.Context;
 public class BackendDbContext : DbContext
 {
     private readonly IEncryptionProvider _encryptionProvider;
-    private readonly PgsqlDatabaseConfiguration _dbConfig = PgsqlDatabaseConfiguration.FromEnv();
-    public BackendDbContext(DbContextOptions<BackendDbContext> options) : base(options)
+    private readonly PgsqlDatabaseConfiguration _dbConfig;
+    public BackendDbContext(DbContextOptions<BackendDbContext> options, PgsqlDatabaseConfiguration configuration) : base(options)
     {
+        _dbConfig = configuration;
         byte[] encryptionKey = Convert.FromBase64String(_dbConfig.EncryptionKey ?? throw new ArgumentException("PGSQL_DATABASE_ENCRYPTION_KEY env variable missing"));
         byte[] encryptionIv = Convert.FromBase64String(_dbConfig.EncryptionIv ?? throw new ArgumentException("PGSQL_DATABASE_ENCRYPTION_IV env variable missing"));
         _encryptionProvider = new AesProvider(encryptionKey, encryptionIv);
