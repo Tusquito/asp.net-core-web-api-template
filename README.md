@@ -12,6 +12,8 @@ asp.net-core-web-api-template
 ## JWT Security
 - JWT_EXPIRY_TIME_IN_HOURS ?? "1"
 - JWT_SIGNATURE_KEY ?? "123456789"
+## Memory Cache
+- MEMORY_CACHE_LIFETIME_IN_HOURS ?? "1"
 
 # Roadmap
 - [x] PGSQL Support
@@ -24,12 +26,12 @@ asp.net-core-web-api-template
 - [ ] Multi DB Support
 - [ ] Add 2FA Support
 - [ ] Add Logs through MongoDb
-- [ ] Add Memory Caching
+- [x] Add Memory Caching
 - [ ] Add Response Data Pagination
 
 # How To Add This Template To Jetbrains Rider
 
 - Fork this repository
 - Clone it locally
-- Follow the following steps:
+- Follow steps bellow:
 <img src="https://cdn.discordapp.com/attachments/782327884818939907/930926681080868905/Untitled.png"> 

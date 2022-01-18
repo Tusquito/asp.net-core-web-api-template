@@ -3,6 +3,7 @@ using Backend.Api.Database.Context;
 using Backend.Api.Database.Extensions;
 using Backend.Api.Extensions;
 using Backend.Api.Services.Account;
+using Backend.Libs.Caching.Extensions;
 using Backend.Libs.Cryptography.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,7 +44,8 @@ public class Startup
         services.AddTransient<IAccountService, AccountService>();
             
         services.AddDatabaseRepositories();
-        services.AddCryptographyLibs();
+        services.AddCryptographyLib();
+        services.AddMemoryCachingLib(Configuration);
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
