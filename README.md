@@ -9,11 +9,20 @@ asp.net-core-web-api-template
 - PGSQL_DATABASE_PORT ?? "5432"
 - PGSQL_DATABASE_ENCRYPTION_KEY ?? "AAECAwQFBgcICQoLDA0ODw=="
 - PGSQL_DATABASE_ENCRYPTION_IV ?? "AAECAwQFBgcICQoLDA0ODw=="
-## JWT Security
+## JWT Security Lib
 - JWT_EXPIRY_TIME_IN_HOURS ?? "1"
 - JWT_SIGNATURE_KEY ?? "123456789"
-## Memory Cache
-- MEMORY_CACHE_LIFETIME_IN_HOURS ?? "1"
+
+## Memory Cache Lib
+
+```json
+{
+    "MemoryCacheOptions": {
+        "RepositoryBaseKey": "backend-repo:",
+        "AbsoluteExpirationInHours": 1
+    }
+}
+```
 
 # Roadmap
 - [x] PGSQL Support
