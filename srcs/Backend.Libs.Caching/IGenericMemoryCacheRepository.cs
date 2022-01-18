@@ -6,16 +6,14 @@ public interface IGenericMemoryCacheRepository<in TKey, TObject>
     bool Exists(TKey key);
     IEnumerable<TObject> GetMany(TKey key);
     void SetOrCreate(TKey key, TObject obj);
-    void SetOrCreate(TKey key, List<TObject> obj);
+    void SetOrCreate(TKey key, IEnumerable<TObject> objs);
     void Remove(TKey key);
-    Task<TObject> GetOrCreateAsync(TKey key, Func<Task<TObject>> func);    
-    Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, Func<Task<IEnumerable<TObject>>> func);
-    Task<TObject> GetOrCreateAsync(TKey key, Func<TObject> func);
-    Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, Func<IEnumerable<TObject>> func);
-    Task<TObject> GetOrCreateAsync(TKey key, TObject obj);
-    Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, IEnumerable<TObject> obj);
-    TObject GetOrCreate(TKey key, Func<TObject> func);
-    IEnumerable<TObject> GetOrCreate(TKey key, Func<IEnumerable<TObject>> func);
-    TObject GetOrCreate(TKey key, TObject obj);
-    IEnumerable<TObject> GetOrCreate(TKey key, IEnumerable<TObject> obj);
+    Task<TObject> SetOrCreateAsync(TKey key, Func<Task<TObject>> func);    
+    Task<IEnumerable<TObject>> SetOrCreateAsync(TKey key, Func<Task<IEnumerable<TObject>>> func);
+    Task<TObject> SetOrCreateAsync(TKey key, Func<TObject> func);
+    Task<IEnumerable<TObject>> SetOrCreateAsync(TKey key, Func<IEnumerable<TObject>> func);
+    Task<TObject> SetOrCreateAsync(TKey key, TObject obj);
+    Task<IEnumerable<TObject>> SetOrCreateAsync(TKey key, IEnumerable<TObject> objs);
+    TObject SetOrCreate(TKey key, Func<TObject> func);
+    IEnumerable<TObject> SetOrCreate(TKey key, Func<IEnumerable<TObject>> func);
 }

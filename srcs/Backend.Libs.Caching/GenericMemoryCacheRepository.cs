@@ -38,9 +38,9 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public void SetOrCreate(TKey key, List<TObject> obj)
+    public void SetOrCreate(TKey key, IEnumerable<TObject> objs)
     {
-        _memoryCache.Set(ToCacheKey(key), obj, new MemoryCacheEntryOptions
+        _memoryCache.Set(ToCacheKey(key), objs, new MemoryCacheEntryOptions
         {
             Priority = CacheItemPriority.Normal,
             AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration, 
@@ -53,7 +53,7 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         _memoryCache.Remove(ToCacheKey(key));
     }
 
-    public async Task<TObject> GetOrCreateAsync(TKey key, Func<Task<TObject>> func)
+    public async Task<TObject> SetOrCreateAsync(TKey key, Func<Task<TObject>> func)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), async entry =>
         {
@@ -64,7 +64,7 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public async Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, Func<Task<IEnumerable<TObject>>> func)
+    public async Task<IEnumerable<TObject>> SetOrCreateAsync(TKey key, Func<Task<IEnumerable<TObject>>> func)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), async entry =>
         {
@@ -75,7 +75,7 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public async Task<TObject> GetOrCreateAsync(TKey key, Func<TObject> func)
+    public async Task<TObject> SetOrCreateAsync(TKey key, Func<TObject> func)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
@@ -86,7 +86,7 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public async Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, Func<IEnumerable<TObject>> func)
+    public async Task<IEnumerable<TObject>> SetOrCreateAsync(TKey key, Func<IEnumerable<TObject>> func)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
@@ -97,7 +97,7 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public async Task<TObject> GetOrCreateAsync(TKey key, TObject obj)
+    public async Task<TObject> SetOrCreateAsync(TKey key, TObject obj)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
@@ -108,18 +108,18 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public async Task<IEnumerable<TObject>> GetOrCreateAsync(TKey key, IEnumerable<TObject> obj)
+    public async Task<IEnumerable<TObject>> SetOrCreateAsync(TKey key, IEnumerable<TObject> objs)
     {
         return await _memoryCache.GetOrCreateAsync(ToCacheKey(key), entry =>
         {
             entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
             entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
             entry.Priority = CacheItemPriority.Normal;
-            return Task.FromResult(obj);
+            return Task.FromResult(objs);
         });
     }
 
-    public TObject GetOrCreate(TKey key, Func<TObject> func)
+    public TObject SetOrCreate(TKey key, Func<TObject> func)
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
@@ -130,7 +130,7 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
         });
     }
 
-    public IEnumerable<TObject> GetOrCreate(TKey key, Func<IEnumerable<TObject>> func)
+    public IEnumerable<TObject> SetOrCreate(TKey key, Func<IEnumerable<TObject>> func)
     {
         return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
         {
@@ -140,29 +140,6 @@ public class GenericMemoryCacheRepository<TKey, TObject> : IGenericMemoryCacheRe
             return func();
         });
     }
-
-    public TObject GetOrCreate(TKey key, TObject obj)
-    {
-        return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
-            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
-            entry.Priority = CacheItemPriority.Normal;
-            return obj;
-        });
-    }
-
-    public IEnumerable<TObject> GetOrCreate(TKey key, IEnumerable<TObject> obj)
-    {
-        return _memoryCache.GetOrCreate(ToCacheKey(key), entry =>
-        {
-            entry.AbsoluteExpirationRelativeToNow = _memoryCacheOptions.AbsoluteExpiration;
-            entry.SlidingExpiration = _memoryCacheOptions.SlidingExpiration;
-            entry.Priority = CacheItemPriority.Normal;
-            return obj;
-        });
-    }
-
     private string ToCacheKey(TKey key)
     {
         if (key == null)

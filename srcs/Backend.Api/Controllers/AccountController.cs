@@ -31,7 +31,7 @@ public class AccountController : GenericController
     {
         if (query.Id != Guid.Empty)
         {
-            return OkResponse(new[] {_memoryCache.Get(query.Id) ?? await _memoryCache.GetOrCreateAsync(query.Id, await _accountDao.GetByIdAsync(query.Id))});
+            return OkResponse(new[] {_memoryCache.Get(query.Id) ?? await _memoryCache.SetOrCreateAsync(query.Id, await _accountDao.GetByIdAsync(query.Id))});
         }
 
         if (!string.IsNullOrEmpty(query.Username))
