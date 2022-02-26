@@ -1,7 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Backend.Domain.Account;
+using Backend.Libs.Cryptography.Extensions;
+using Backend.Libs.Database.Account;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Libs.Security.Extensions;
@@ -12,7 +13,7 @@ public static class JwtSecurityExtensions
     private static readonly byte[] JwtSignatureKey = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNATURE_KEY")?.ToSha512() ?? "123456789".ToSha512());
     private static readonly JwtSecurityTokenHandler TokenHandler = new();
     
-    public static string GenerateJwtToken(this AccountDto account)
+    public static string GenerateJwtToken(this AccountDTO account)
     {
         var tokenDescriptor = new SecurityTokenDescriptor
         {

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Backend.Api.Database.Account;
-using Backend.Api.Extensions;
-using Backend.Api.Models.Account;
-using Backend.Domain.Account;
-using Backend.Domain.Enums;
 using Backend.Libs.Cryptography.Services;
+using Backend.Libs.Database.Account;
+using Backend.Libs.Domain.Enums;
+using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Models.Account;
 using EmailValidation;
 using Mapster;
 using Microsoft.AspNetCore.Http;
@@ -19,9 +18,9 @@ public class RegisterController : GenericController
 {
     private readonly IPasswordHasherService _passwordHasherService;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IAccountDao _accountDao;
+    private readonly IAccountDAO _accountDao;
 
-    public RegisterController(IPasswordHasherService passwordHasherService, IHttpContextAccessor httpContextAccessor, IAccountDao accountDao)
+    public RegisterController(IPasswordHasherService passwordHasherService, IHttpContextAccessor httpContextAccessor, IAccountDAO accountDao)
     {
         _passwordHasherService = passwordHasherService;
         _httpContextAccessor = httpContextAccessor;
@@ -42,7 +41,7 @@ public class RegisterController : GenericController
             return BadRequestResponse(ResponseMessageKey.REGISTER_INVALID_EMAIL_FORMAT);
         }
 
-        AccountDto currentAccount = await _accountDao.GetAccountByUsernameAsync(form.Username);
+        AccountDTO currentAccount = await _accountDao.GetAccountByUsernameAsync(form.Username);
 
         if (currentAccount != null)
         {
@@ -58,13 +57,13 @@ public class RegisterController : GenericController
 
         try
         {
-            currentAccount = form.Adapt<AccountDto>();
+            currentAccount = form.Adapt<AccountDTO>();
             currentAccount.PasswordSalt = _passwordHasherService.GenerateRandomSalt();
             currentAccount.Password =
                 _passwordHasherService.HashPassword(form.Password, currentAccount.PasswordSalt);
             currentAccount.Ip = requesterIp;
-            currentAccount.AuthorityType = AuthorityType.USER;
-            await _accountDao.SaveAsync(currentAccount);
+            currentAccount.AuthorityType = AuthorityType.User;
+            await _accountDao.UpdateAsync(currentAccount);
         }
         catch (Exception e)
         {

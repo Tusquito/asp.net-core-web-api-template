@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package backend.libs.grpc.custom_types;
+
+message GuidValue {
+  string value = 1;
+}

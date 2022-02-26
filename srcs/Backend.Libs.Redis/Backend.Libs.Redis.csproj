@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Foundatio.JsonNet" Version="10.3.1" />
+      <PackageReference Include="Foundatio.Redis" Version="10.3.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0-preview.1.22076.8" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.1.22076.8" />
+      <PackageReference Include="StackExchange.Redis" Version="2.5.27-prerelease" />
+    </ItemGroup>
+
+</Project>

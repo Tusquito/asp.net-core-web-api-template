@@ -1,10 +1,7 @@
 using System.Text.Json.Serialization;
-using Backend.Api.Database.Context;
-using Backend.Api.Database.Extensions;
-using Backend.Api.Extensions;
-using Backend.Api.Services.Account;
-using Backend.Libs.Caching.Extensions;
 using Backend.Libs.Cryptography.Extensions;
+using Backend.Libs.Domain.Extensions;
+using Backend.Libs.gRPC.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,14 +35,9 @@ public class Startup
             });
 
         services.AddAuthSwagger();
+        services.AddGrpcDatabaseServerClients();
 
-        services.AddPgsqlDatabaseContext<BackendDbContext>();
-
-        services.AddTransient<IAccountService, AccountService>();
-            
-        services.AddDatabaseRepositories();
-        services.AddCryptographyLib();
-        services.AddMemoryCachingLib(Configuration);
+        services.AddCryptographyLibs();
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -5,7 +5,7 @@ namespace Backend.Libs.Cryptography.Extensions;
 
 public static class ServiceCollectionsExtension
 {
-    public static IServiceCollection AddCryptographyLib(this IServiceCollection services)
+    public static IServiceCollection AddCryptographyLibs(this IServiceCollection services)
     {
         // BcryptPasswordHasher
         services.AddTransient<IPasswordHasherService, BCryptPasswordHasherService>();

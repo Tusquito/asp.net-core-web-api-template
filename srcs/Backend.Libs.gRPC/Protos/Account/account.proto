@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package backend.libs.grpc.account;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+import "Protos/CustomTypes/enums.proto";
+import "Protos/CustomTypes/guid_value.proto";
+
+service GrpcAccountService {
+  rpc GetAccountById (GetAccountByIdRequest) returns (GetAccountByIdResponse);
+  rpc AddAccount (AddAccountRequest) returns (AddAccountResponse);
+}
+
+enum GrpcAuthorityType
+{
+  USER = 0;
+  ADMIN = 1;
+}
+
+message GrpcAccountDTO {
+  backend.libs.grpc.custom_types.GuidValue Id = 1;
+  string username = 2;
+  string email = 3;
+  string password = 4;
+  string password_salt = 5;
+  string ip = 6;
+  GrpcAuthorityType AuthorityType = 7;
+  google.protobuf.Timestamp CreatedOn = 8;
+  google.protobuf.Timestamp UpdatedOn = 9;
+}
+
+message AddAccountRequest {
+  GrpcAccountDTO grpc_account_dto = 1;
+}
+
+message AddAccountResponse {
+  GrpcAccountDTO grpc_account_dto = 1;
+  backend.libs.grpc.custom_types.GrpcResponseType ResponseType = 2;
+}
+
+message GetAccountByIdRequest {
+  backend.libs.grpc.custom_types.GuidValue Id = 1;
+}
+
+message GetAccountByIdResponse {
+  GrpcAccountDTO grpc_account_dto = 1;
+  backend.libs.grpc.custom_types.GrpcResponseType ResponseType = 2;
+}

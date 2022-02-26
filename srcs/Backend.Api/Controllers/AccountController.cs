@@ -1,11 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using Backend.Api.Database.Account;
-using Backend.Api.Models.Account;
-using Backend.Domain.Account;
-using Backend.Domain.Enums;
-using Backend.Libs.Caching.Repositories;
-using Backend.Libs.Security.Attributes;
+﻿using Backend.Libs.Cryptography.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Controllers;
@@ -14,24 +8,26 @@ namespace Backend.Api.Controllers;
 [ApiController]
 public class AccountController : GenericController
 {
-    private readonly IAccountDao _accountDao;
-    private readonly GuidMemoryCacheRepository<AccountDto> _memoryCache;
+    //private readonly IAccountDAO _accountDao;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IPasswordHasherService _passwordHasherService;
 
-    public AccountController(IAccountDao accountDao, GuidMemoryCacheRepository<AccountDto> memoryCache)
+    public AccountController( IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService)
     {
-        _accountDao = accountDao;
-        _memoryCache = memoryCache;
+
+        _httpContextAccessor = httpContextAccessor;
+        _passwordHasherService = passwordHasherService;
     }
 
     // GET api/accounts
     // GET api/accounts?Id=ddddd
-    [HttpGet]
+    /*[HttpGet]
     [AuthorityRequired(AuthorityType.USER)]
     public async Task<IActionResult> GetAccountsByQueryAsync([FromQuery] AccountRequestQuery query)
     {
         if (query.Id != Guid.Empty)
         {
-            return OkResponse(new[] {_memoryCache.Get(query.Id) ?? await _memoryCache.SetOrCreateAsync(query.Id, await _accountDao.GetByIdAsync(query.Id))});
+            return OkResponse(new[] {await _accountDao.GetByIdAsync(query.Id)});
         }
 
         if (!string.IsNullOrEmpty(query.Username))
@@ -50,5 +46,5 @@ public class AccountController : GenericController
         }
 
         return OkResponse(await _accountDao.GetAllAsync());
-    }
+    }*/
 }

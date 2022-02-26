@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Grpc.AspNetCore" Version="2.43.0" />
+      <PackageReference Include="Mapster" Version="7.3.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Protobuf Include="Protos\**\*.proto" GrpcServices="Both" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Backend.Libs.Database\Backend.Libs.Database.csproj" />
+    </ItemGroup>
+
+</Project>

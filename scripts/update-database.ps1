@@ -1,1 +1,1 @@
-dotnet ef database update --project srcs\Backend.Api.Database\
+dotnet ef database update --project srcs\Backend.Plugins.Database\

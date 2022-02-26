@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Backend.Api.Database.Utils;
+using Backend.Plugins.Database.Mapping;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 

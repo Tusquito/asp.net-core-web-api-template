@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using Backend.Api.Database.Account;
-using Backend.Api.Database.Context;
+using Backend.Libs.Cryptography.Services;
+using Backend.Libs.Database.Account;
+using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Grpc.Account;
+using Google.Protobuf.WellKnownTypes;
+using Mapster;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Controllers;
@@ -13,16 +15,48 @@ namespace Backend.Api.Controllers;
 [ApiController]
 public class TestController : GenericController
 {
-    private readonly BackendDbContext _backendDbContext;
-    private readonly Random _random = new(Guid.NewGuid().GetHashCode());
+    private readonly GrpcAccountService.GrpcAccountServiceClient _accountService;
+    private readonly IPasswordHasherService _passwordHasherService;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public TestController(BackendDbContext backendDbContext)
+    public TestController(GrpcAccountService.GrpcAccountServiceClient accountService, IPasswordHasherService passwordHasherService, IHttpContextAccessor contextAccessor)
     {
-        _backendDbContext = backendDbContext;
+        _accountService = accountService;
+        _passwordHasherService = passwordHasherService;
+        _contextAccessor = contextAccessor;
     }
-        
+
+    [HttpPost("get")]
+    public async Task<IActionResult> GetDefaultUser()
+    {
+        var response = await _accountService.GetAccountByIdAsync(new GetAccountByIdRequest { Id = Guid.Parse("b55888d7-e5ea-41bc-9159-eb3dabb46bd2") });
+
+        Guid test = response.GrpcAccountDto.Id;
+        return Ok(response.GrpcAccountDto.Adapt<AccountDTO>());
+    }
+    
+    [HttpPost("add")]
+    public async Task<IActionResult> AddDefaultUser()
+    {
+        string salt = _passwordHasherService.GenerateRandomSalt();
+        var response = await _accountService.AddAccountAsync(new AddAccountRequest
+        {
+            GrpcAccountDto = new GrpcAccountDTO
+            {
+                Id = Guid.Empty,
+                AuthorityType = GrpcAuthorityType.Admin,
+                Username = "admin",
+                Password = _passwordHasherService.HashPassword("test", salt),
+                Email = "admin@gmail.com",
+                Ip = _contextAccessor.GetRequestIp(),
+                PasswordSalt = salt
+            }
+        });
+        return Ok(response);
+    }
+
     // POST
-    [HttpPost("database")]
+    /*[HttpPost("database")]
     public async Task<IActionResult> CreateTestDatabaseAsync()
     {
         await _backendDbContext.Database.EnsureCreatedAsync();
@@ -47,11 +81,8 @@ public class TestController : GenericController
                 TestId = Guid.NewGuid()
             }
         };
-
-        var testEntities = accountEntities.Select(x => new TestEntity { Id = x.TestId }).ToList();
-        await _backendDbContext.AddRangeAsync(testEntities);
         await _backendDbContext.AddRangeAsync(accountEntities);
         await _backendDbContext.SaveChangesAsync();
         return OkResponse();
-    }
+    }*/
 }

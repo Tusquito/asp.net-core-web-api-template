@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Backend.Api.Models.Login;
 using Backend.Api.Services.Account;
-using Backend.Domain.Account;
-using Backend.Domain.Enums;
+using Backend.Libs.Database.Account;
+using Backend.Libs.Domain.Enums;
+using Backend.Libs.Models.Login;
 using Backend.Libs.Security.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +12,11 @@ namespace Backend.Api.Controllers.AnonymousControllers;
 [Route("/login")]
 public class LoginController : GenericController
 {
-    private readonly IAccountService _accountService;
+    private readonly IUserAuthenticationService _userAuthenticationService;
     
-    public LoginController(IAccountService accountService)
+    public LoginController(IUserAuthenticationService userAuthenticationService)
     {
-        _accountService = accountService;
+        _userAuthenticationService = userAuthenticationService;
     }
     
     [HttpPost]
@@ -32,7 +32,7 @@ public class LoginController : GenericController
             return BadRequestResponse(ResponseMessageKey.LOGIN_PASSWORD_CANT_BE_NULL);
         }
 
-        (AccountDto accountDto, AuthenticationResultType resultType) = await _accountService.AuthenticateAsync(form);
+        (AccountDTO accountDto, AuthenticationResultType resultType) = await _userAuthenticationService.AuthenticateAsync(form);
         
         switch (resultType)
         {

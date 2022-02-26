@@ -9,20 +9,11 @@ asp.net-core-web-api-template
 - PGSQL_DATABASE_PORT ?? "5432"
 - PGSQL_DATABASE_ENCRYPTION_KEY ?? "AAECAwQFBgcICQoLDA0ODw=="
 - PGSQL_DATABASE_ENCRYPTION_IV ?? "AAECAwQFBgcICQoLDA0ODw=="
-## JWT Security Lib
+## JWT Security
 - JWT_EXPIRY_TIME_IN_HOURS ?? "1"
 - JWT_SIGNATURE_KEY ?? "123456789"
-
-## Memory Cache Lib
-
-```json
-{
-    "MemoryCacheOptions": {
-        "RepositoryBaseKey": "backend-repo:",
-        "AbsoluteExpirationInHours": 1
-    }
-}
-```
+## Memory Cache
+- MEMORY_CACHE_LIFETIME_IN_HOURS ?? "1"
 
 # Roadmap
 - [x] PGSQL Support
@@ -35,12 +26,12 @@ asp.net-core-web-api-template
 - [ ] Multi DB Support
 - [ ] Add 2FA Support
 - [ ] Add Logs through MongoDb
-- [x] Add Memory Caching
+- [ ] Add Memory Caching
 - [ ] Add Response Data Pagination
 
 # How To Add This Template To Jetbrains Rider
 
 - Fork this repository
 - Clone it locally
-- Follow steps bellow:
+- Follow the following steps:
 <img src="https://cdn.discordapp.com/attachments/782327884818939907/930926681080868905/Untitled.png"> 
