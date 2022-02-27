@@ -1,4 +1,6 @@
-﻿namespace Backend.Libs.Grpc.CustomTypes;
+﻿using Backend.Libs.gRPC.Extensions;
+
+namespace Backend.Libs.Grpc.CustomTypes;
 
 public partial class GuidValue
 {
@@ -9,16 +11,16 @@ public partial class GuidValue
 
     public static implicit operator Guid(GuidValue guidValue)
     {
-        return Guid.Parse(guidValue.Value);
+        return guidValue.ToGuid();
     }
 
     public static implicit operator GuidValue(Guid guid)
     {
-        return new GuidValue(guid.ToString());
+        return guid.ToGuidValue();
     }
     
     public static implicit operator string(GuidValue guidValue)
     {
-        return Guid.Parse(guidValue.Value).ToString();
+        return Guid.TryParse(guidValue.Value, out Guid result) ? result.ToString() : string.Empty;
     }
 }

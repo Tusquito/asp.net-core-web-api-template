@@ -29,7 +29,7 @@ public class TestController : GenericController
     [HttpPost("get")]
     public async Task<IActionResult> GetDefaultUser()
     {
-        var response = await _accountService.GetAccountByIdAsync(new GetAccountByIdRequest { Id = Guid.Parse("b55888d7-e5ea-41bc-9159-eb3dabb46bd2") });
+        var response = await _accountService.GetAccountByIdAsync(new GetAccountByIdRequest { Id = Guid.Parse("59001090-b7f7-47aa-911b-cbccbdf6857c") });
 
         Guid test = response.GrpcAccountDto.Id;
         return Ok(response.GrpcAccountDto.Adapt<AccountDTO>());

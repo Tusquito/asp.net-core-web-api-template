@@ -15,8 +15,4 @@
     <ItemGroup>
       <PackageReference Include="Grpc.AspNetCore" Version="2.43.0" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Migrations" />
-    </ItemGroup>
 </Project>

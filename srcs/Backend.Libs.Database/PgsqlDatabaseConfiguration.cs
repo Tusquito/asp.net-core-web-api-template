@@ -17,7 +17,7 @@ public class PgsqlDatabaseConfiguration
         {
             Ip = Environment.GetEnvironmentVariable("PGSQL_DATABASE_IP") ?? "localhost",
             Username = Environment.GetEnvironmentVariable("PGSQL_DATABASE_USERNAME") ?? "postgres",
-            Password = Environment.GetEnvironmentVariable("PGSQL_DATABASE_PASSWORD") ?? "strong_pass2018",
+            Password = Environment.GetEnvironmentVariable("PGSQL_DATABASE_PASSWORD") ?? "postgres",
             Database = Environment.GetEnvironmentVariable("PGSQL_DATABASE_NAME") ?? "postgres",
             Port = ushort.Parse(Environment.GetEnvironmentVariable("PGSQL_DATABASE_PORT") ?? "5432"),
             EncryptionKey = Environment.GetEnvironmentVariable("PGSQL_DATABASE_ENCRYPTION_KEY") ?? "AAECAwQFBgcICQoLDA0ODw==",

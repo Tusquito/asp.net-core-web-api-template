@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Backend.Libs.Database\Backend.Libs.Database.csproj" />
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
       <ProjectReference Include="..\Backend.Libs.Database\Backend.Libs.Database.csproj" />
       <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />

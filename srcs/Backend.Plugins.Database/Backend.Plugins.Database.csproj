@@ -23,7 +23,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Backend.Libs.Database\Backend.Libs.Database.csproj" />
       <ProjectReference Include="..\Backend.Libs.Database\Backend.Libs.Database.csproj" />
       <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
     </ItemGroup>

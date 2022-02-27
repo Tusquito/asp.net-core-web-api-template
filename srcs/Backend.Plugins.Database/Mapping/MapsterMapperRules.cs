@@ -1,5 +1,7 @@
 ﻿using Backend.Libs.Database.Account;
 using Backend.Libs.Grpc.Account;
+using Backend.Libs.Grpc.CustomTypes;
+using Backend.Libs.gRPC.Extensions;
 using Mapster;
 
 namespace Backend.Plugins.Database.Mapping;
@@ -10,6 +12,11 @@ public static class MapsterMapperRules
     {
         TypeAdapterConfig<GrpcAccountDTO, AccountDTO>
             .NewConfig()
-            .Map(dest => dest.Id, src => (Guid)src.Id);
+            .Map(dest => dest.Id, src => src.Id.ToGuid())
+            .PreserveReference(true);
+        TypeAdapterConfig<AccountDTO, GrpcAccountDTO>
+            .NewConfig()
+            .Map(dest => dest.Id, src => src.Id.ToGuidValue())
+            .PreserveReference(true);
     }
 }
