@@ -4,7 +4,7 @@ using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Models.Login;
 
-namespace Backend.Api.Services.Account;
+namespace Backend.Api.Authentication.Services.Account;
 
 public class UserAuthenticationService : IUserAuthenticationService
 {
@@ -17,10 +17,10 @@ public class UserAuthenticationService : IUserAuthenticationService
         _passwordHasherService = passwordHasherService;
     }
 
-    public async Task<(AccountDTO, AuthenticationResultType)> AuthenticateAsync(LoginForm form)
+    public async Task<(AccountDTO, AuthenticationResultType)> AuthenticateAsync(LoginRequest request)
     {
-        AccountDTO accountByEmail = await _accountDao.GetAccountByEmailAsync(form.Login);
-        AccountDTO accountByUsername = await _accountDao.GetAccountByUsernameAsync(form.Login);
+        AccountDTO accountByEmail = await _accountDao.GetByEmailAsync(request.Login);
+        AccountDTO accountByUsername = await _accountDao.GetByUsernameAsync(request.Login);
         
         if (accountByEmail == null && accountByUsername == null)
         {
@@ -28,7 +28,7 @@ public class UserAuthenticationService : IUserAuthenticationService
         }
 
         AccountDTO currentAccount = accountByEmail ?? accountByUsername;
-        return currentAccount.Password != _passwordHasherService.HashPassword(form.Password, currentAccount.PasswordSalt)
+        return currentAccount.Password != _passwordHasherService.HashPassword(request.Password, currentAccount.PasswordSalt)
             ? (null, AuthenticationResultType.INVALID_PASSWORD) 
             : (currentAccount, AuthenticationResultType.SUCCESS);
     }

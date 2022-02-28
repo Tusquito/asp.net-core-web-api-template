@@ -9,8 +9,12 @@ import "Protos/CustomTypes/enums.proto";
 import "Protos/CustomTypes/guid_value.proto";
 
 service GrpcAccountService {
-  rpc GetAccountById (GetAccountByIdRequest) returns (GetAccountByIdResponse);
-  rpc AddAccount (AddAccountRequest) returns (AddAccountResponse);
+  rpc GetAccountById (GetAccountByIdRequest) returns (AccountResponse);
+  rpc GetAccountByEmail (GetAccountByStringRequest) returns (AccountResponse);
+  rpc GetAccountByUsername(GetAccountByStringRequest) returns (AccountResponse);
+  
+  rpc AddAccount (AddAccountRequest) returns (AccountResponse);
+  rpc UpdateAccount (SaveAccountRequest) returns (AccountResponse);
 }
 
 enum GrpcAuthorityType
@@ -31,20 +35,22 @@ message GrpcAccountDTO {
   google.protobuf.Timestamp UpdatedOn = 9;
 }
 
+message GetAccountByStringRequest {
+  string search = 1;
+}
 message AddAccountRequest {
   GrpcAccountDTO grpc_account_dto = 1;
-}
-
-message AddAccountResponse {
-  GrpcAccountDTO grpc_account_dto = 1;
-  backend.libs.grpc.custom_types.GrpcResponseType ResponseType = 2;
 }
 
 message GetAccountByIdRequest {
   backend.libs.grpc.custom_types.GuidValue Id = 1;
 }
 
-message GetAccountByIdResponse {
+message SaveAccountRequest{
+  GrpcAccountDTO grpc_account_dto = 1;
+}
+
+message AccountResponse {
   GrpcAccountDTO grpc_account_dto = 1;
   backend.libs.grpc.custom_types.GrpcResponseType ResponseType = 2;
 }

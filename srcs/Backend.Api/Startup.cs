@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Backend.Api;
 
@@ -25,7 +26,7 @@ public class Startup
         services.AddOptions();
         services.AddHttpContextAccessor();
 
-        services.AddJwtAuthentication();
+        services.AddEndpointsApiExplorer();
 
         services.AddControllers()
             .AddJsonOptions(x =>
@@ -34,7 +35,7 @@ public class Startup
                     new JsonStringEnumConverter());
             });
 
-        services.AddAuthSwagger();
+        services.AddAuthSwagger("Backend.Api");
         services.AddGrpcDatabaseServerClients();
 
         services.AddCryptographyLibs();
@@ -48,14 +49,17 @@ public class Startup
             s.AllowAnyMethod();
             s.AllowAnyOrigin();
         });
-
-        app.UseDeveloperExceptionPage();
-        app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend.Api v1"));
+        
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend.Api.Authentication v1"));
+        }
 
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseAuthorization();
+
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }

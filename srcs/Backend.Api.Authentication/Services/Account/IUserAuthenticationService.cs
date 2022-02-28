@@ -3,9 +3,9 @@ using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Models.Login;
 
-namespace Backend.Api.Services.Account;
+namespace Backend.Api.Authentication.Services.Account;
 
 public interface IUserAuthenticationService
 {
-    Task<(AccountDTO, AuthenticationResultType)> AuthenticateAsync(LoginForm form);
+    Task<(AccountDTO, AuthenticationResultType)> AuthenticateAsync(LoginRequest request);
 }

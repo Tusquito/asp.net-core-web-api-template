@@ -22,7 +22,7 @@ public class AccountDAO : IAccountDAO
         _logger = logger;
     }
         
-    public async Task<AccountDTO?> GetAccountByUsernameAsync(string username)
+    public async Task<AccountDTO?> GetByUsernameAsync(string username)
     {
         try
         {
@@ -31,7 +31,7 @@ public class AccountDAO : IAccountDAO
         }
         catch (Exception e)
         {
-            _logger.LogError(e,$"[{nameof(GetAccountByUsernameAsync)}]");
+            _logger.LogError(e,$"[{nameof(GetByUsernameAsync)}]");
             return null;
         }
     }
@@ -50,7 +50,7 @@ public class AccountDAO : IAccountDAO
         }
     }
 
-    public async Task<AccountDTO?> GetAccountByEmailAsync(string email)
+    public async Task<AccountDTO?> GetByEmailAsync(string email)
     {
         try
         {
@@ -59,7 +59,7 @@ public class AccountDAO : IAccountDAO
         }
         catch (Exception e)
         {
-            _logger.LogError(e,$"[{nameof(GetAccountByEmailAsync)}]");
+            _logger.LogError(e,$"[{nameof(GetByEmailAsync)}]");
             return null;
         }
     }

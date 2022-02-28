@@ -10,14 +10,14 @@ namespace Backend.Libs.Domain.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddAuthSwagger(this IServiceCollection services)
+    public static IServiceCollection AddAuthSwagger(this IServiceCollection services, string apiName, string version = "v1")
     {
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Backend.Api",
-                Version = "v1"
+                Title = apiName,
+                Version = version
             });
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {

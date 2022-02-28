@@ -4,7 +4,7 @@ namespace Backend.Libs.Database.Account;
 
 public interface IAccountDAO : IGenericAsyncUuidRepository<AccountDTO>
 {
-    Task<AccountDTO?> GetAccountByUsernameAsync(string username);
+    Task<AccountDTO?> GetByUsernameAsync(string username);
     Task<AccountDTO?> GetAccountByIpAsync(string ip);
-    Task<AccountDTO?> GetAccountByEmailAsync(string email);
+    Task<AccountDTO?> GetByEmailAsync(string email);
 }

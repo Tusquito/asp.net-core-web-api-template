@@ -1,6 +1,6 @@
 ﻿namespace Backend.Libs.Models.Account;
 
-public class AccountRegisterForm
+public class RegisterRequest
 {
     public string Username { get; init; }
     public string Password { get; init; }
