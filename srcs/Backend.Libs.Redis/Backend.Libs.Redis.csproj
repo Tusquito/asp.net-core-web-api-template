@@ -7,12 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Foundatio.JsonNet" Version="10.3.1" />
-      <PackageReference Include="Foundatio.Redis" Version="10.3.0" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0-preview.1.22076.8" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.1.22076.8" />
+      <PackageReference Include="Foundatio.JsonNet" Version="10.4.0" />
+      <PackageReference Include="Foundatio.Redis" Version="10.4.0" />
       <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
-      <PackageReference Include="StackExchange.Redis" Version="2.5.27-prerelease" />
+      <PackageReference Include="StackExchange.Redis" Version="2.5.43" />
     </ItemGroup>
 
     <ItemGroup>
