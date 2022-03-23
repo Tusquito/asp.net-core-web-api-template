@@ -27,6 +27,7 @@ public class Startup
         services.AddCors();
         services.AddOptions();
         services.AddHttpContextAccessor();
+        services.AddJwtAuthentication();
 
         services.AddEndpointsApiExplorer();
         services.AddRabbitMqClientFactoryFromEnv(Configuration);
@@ -61,10 +62,11 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend.Api.Authentication v1"));
         }
-
+        
         app.UseHttpsRedirection();
         app.UseRouting();
-
+        app.UseAuthorization();
+        app.UseAuthentication();
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }

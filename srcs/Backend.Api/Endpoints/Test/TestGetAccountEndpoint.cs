@@ -5,10 +5,12 @@ using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.gRPC.Account;
+using Backend.Libs.Security.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Endpoints.Test;
 
+[AuthorityRequired(AuthorityType.Admin)]
 public class TestGetAccountEndpoint : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult

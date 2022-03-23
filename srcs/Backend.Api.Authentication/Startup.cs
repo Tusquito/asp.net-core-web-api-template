@@ -1,12 +1,10 @@
 using System.Text.Json.Serialization;
-using Backend.Api.Authentication.Services.Account;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 namespace Backend.Api.Authentication

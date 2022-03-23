@@ -52,7 +52,7 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls("http://*:6661");
+                webBuilder.UseUrls("https://*:6661");
             });
         return host;
     }

@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using Backend.Libs.gRPC.Services;
 using Backend.Plugins.Database.Extensions;
 using Microsoft.AspNetCore.Builder;

@@ -6,9 +6,7 @@ using Backend.Libs.Domain;
 using Backend.Libs.RabbitMQ.Producers;
 using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
-
 namespace Backend.Api.Endpoints.Test;
 
 public class TestRabbitMqEndpoint : EndpointBaseAsync

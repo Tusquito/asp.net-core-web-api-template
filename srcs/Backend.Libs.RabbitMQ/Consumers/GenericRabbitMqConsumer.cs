@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using System.Threading.Channels;
 using Backend.Libs.RabbitMQ.Attributes;
 using Backend.Libs.RabbitMQ.Events;
 using Microsoft.Extensions.Hosting;
