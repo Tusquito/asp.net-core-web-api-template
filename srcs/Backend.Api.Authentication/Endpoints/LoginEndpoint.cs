@@ -22,7 +22,7 @@ public class LoginEndpoint : EndpointBaseAsync
         _userAuthenticationService = userAuthenticationService;
     }
 
-    [HttpPost("login")]
+    [HttpPost("/login")]
     public override async Task<ActionResult> HandleAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = new())
     {
         if (string.IsNullOrWhiteSpace(request.Login))

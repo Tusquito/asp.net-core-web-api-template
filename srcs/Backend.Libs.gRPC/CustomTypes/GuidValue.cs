@@ -1,6 +1,6 @@
 ﻿using Backend.Libs.gRPC.Extensions;
 
-namespace Backend.Libs.Grpc.CustomTypes;
+namespace Backend.Libs.gRPC.CustomTypes;
 
 public partial class GuidValue
 {
@@ -21,6 +21,6 @@ public partial class GuidValue
     
     public static implicit operator string(GuidValue guidValue)
     {
-        return Guid.TryParse(guidValue.Value, out Guid result) ? result.ToString() : string.Empty;
+        return Guid.TryParse((string?)guidValue.Value, out Guid result) ? result.ToString() : string.Empty;
     }
 }

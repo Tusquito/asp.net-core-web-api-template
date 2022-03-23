@@ -1,7 +1,7 @@
 ﻿using Backend.Libs.Database.Account;
 using Mapster;
 
-namespace Backend.Libs.Grpc.Account;
+namespace Backend.Libs.gRPC.Account;
 
 public partial class GrpcAccountDTO
 {

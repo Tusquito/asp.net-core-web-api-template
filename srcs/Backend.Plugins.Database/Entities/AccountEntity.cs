@@ -11,16 +11,20 @@ public class AccountEntity : IUuidEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
+
+    [Encrypted] 
+    public string Username { get; set; } = string.Empty;
     [Encrypted]
-    public string Username { get; set; }
+    public string Email { get; set; } = string.Empty;
+
     [Encrypted]
-    public string Email { get; set; }
+    public string Password { get; set; } = string.Empty;
+
     [Encrypted]
-    public string Password { get; set; }
-    [Encrypted]
-    public string PasswordSalt { get; set; }
-    [Encrypted]
-    public string Ip { get; set; }
+    public string PasswordSalt { get; set; } = string.Empty;
+
+    [Encrypted] 
+    public string Ip { get; set; } = string.Empty;
     public AuthorityType AuthorityType { get; set; }
     public DateTime CreatedOn { get; set; }
     public DateTime UpdatedOn { get; set; }

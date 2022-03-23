@@ -23,13 +23,8 @@ public class Startup
         services.AddCors();
         services.AddGrpc();
 
-        services.AddControllers()
-            .AddJsonOptions(x =>
-            {
-                x.JsonSerializerOptions.Converters.Add(
-                    new JsonStringEnumConverter());
-            });
-        
+        services.AddControllers();
+
         services.AddBackendDatabasePlugin();
     }
     

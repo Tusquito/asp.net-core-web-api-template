@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 using Backend.Libs.Cryptography.Extensions;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Extensions;
+using Backend.Plugins.RabbitMQ.Extensions;
+using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,9 @@ public class Startup
         services.AddHttpContextAccessor();
 
         services.AddEndpointsApiExplorer();
+        services.AddRabbitMqClientFactoryFromEnv(Configuration);
+
+        services.AddRabbitMqProducer<TestMessage>();
 
         services.AddControllers()
             .AddJsonOptions(x =>
@@ -36,7 +41,7 @@ public class Startup
             });
 
         services.AddAuthSwagger("Backend.Api");
-        services.AddGrpcDatabaseServerClients();
+        services.AddGrpcDatabaseServices(Configuration);
 
         services.AddCryptographyLibs();
     }

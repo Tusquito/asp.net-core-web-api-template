@@ -1,20 +1,15 @@
-﻿using Backend.Libs.Grpc.Account;
+﻿using Backend.Libs.gRPC.Account;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Libs.gRPC.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    private const string DefaultIp = "localhost";
-    private const string DefaultPort = "99999";
-    
-    private static void AddGrpcClientService<T>(this IServiceCollection services, string serverIpEnv, string serverPortEnv, string? portDefault = null) where T : class
+    private static void AddGrpcClientService<T>(this IServiceCollection services, string serviceName, IConfiguration configuration, int defaultPort) where T : class
     {
         services.AddGrpcClient<T>(o =>
         {
-            string ip = Environment.GetEnvironmentVariable(serverIpEnv) ?? DefaultIp;
-            int port = Convert.ToInt32(Environment.GetEnvironmentVariable(serverPortEnv) ?? portDefault ?? DefaultPort);
-            
             o.ChannelOptionsActions.Add(co =>
             {
                 co.MaxReceiveMessageSize = null;
@@ -22,15 +17,13 @@ public static class ServiceCollectionExtensions
                 co.MaxRetryAttempts = 3;
             });
 
-            o.Address = new Uri($"http://{ip}:{port}");
+            o.Address = configuration.GetServiceUri(serviceName) ?? new Uri($"http://localhost:{defaultPort}");
         });
     }
     
-    public static IServiceCollection AddGrpcDatabaseServerClients(this IServiceCollection services)
+    public static IServiceCollection AddGrpcDatabaseServices(this IServiceCollection services, IConfiguration configuration)
     {
-        const string defaultPort = "19999";
-        services.AddGrpcClientService<GrpcAccountService.GrpcAccountServiceClient>(
-            nameof(GrpcEnvironmentType.GRPC_ACCOUNT_IP), nameof(GrpcEnvironmentType.GRPC_ACCOUNT_PORT), defaultPort);
+        services.AddGrpcClientService<GrpcAccountService.GrpcAccountServiceClient>(GrpcServicesNames.Database, configuration, 7771);
         return services;
     }
 }

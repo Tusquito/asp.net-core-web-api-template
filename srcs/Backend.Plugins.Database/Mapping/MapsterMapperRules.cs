@@ -1,5 +1,5 @@
 ﻿using Backend.Libs.Database.Account;
-using Backend.Libs.Grpc.Account;
+using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Extensions;
 using Mapster;
 

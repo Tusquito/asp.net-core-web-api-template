@@ -19,7 +19,6 @@ namespace Backend.Api.Authentication
         }
 
         private IConfiguration Configuration { get; }
-
         
         public void ConfigureServices(IServiceCollection services)
         {
@@ -37,9 +36,9 @@ namespace Backend.Api.Authentication
                 });
 
             services.AddAuthSwagger("Backend.Api.Authentication");
-            services.AddGrpcDatabaseServerClients();
+            services.AddGrpcDatabaseServices(Configuration);
 
-            services.TryAddTransient<IUserAuthenticationService, UserAuthenticationService>();
+            //services.TryAddTransient<IUserAuthenticationService, UserAuthenticationService>();
 
         }
         

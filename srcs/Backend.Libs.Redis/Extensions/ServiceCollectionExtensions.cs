@@ -1,5 +1,7 @@
-﻿using Foundatio.Caching;
+﻿using Backend.Libs.gRPC;
+using Foundatio.Caching;
 using Foundatio.Serializer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using StackExchange.Redis;
@@ -8,34 +10,23 @@ namespace Backend.Libs.Redis.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-        public static IConnectionMultiplexer GetConnectionMultiplexer(this RedisConfiguration redisConfiguration) =>
+        private static IConnectionMultiplexer GetConnectionMultiplexer(this IConfiguration configuration) =>
             ConnectionMultiplexer.Connect(new ConfigurationOptions
             {
-                Password = redisConfiguration.Password,
-                EndPoints = { $"{redisConfiguration.Host}:{redisConfiguration.Port}" }
+                Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD"),
+                EndPoints = { 
+                    string.IsNullOrEmpty(configuration.GetConnectionString(GrpcServicesNames.Redis))
+                        ? "http://localhost:5672"
+                        : configuration.GetConnectionString(GrpcServicesNames.Redis)
+                }
             });
-    
-        public static void TryAddConfigurationFromEnv(this IServiceCollection services)
+
+        private static void TryAddConnectionMultiplexer(this IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddSingleton(s => RedisConfiguration.FromEnv());
-        }
-        
-        internal static void TryAddConnectionMultiplexer(this IServiceCollection services)
-        {
-            services.TryAddSingleton(s => s.GetService<RedisConfiguration>().GetConnectionMultiplexer());
+            services.TryAddSingleton(_ => configuration.GetConnectionMultiplexer());
         }
 
-        /// <summary>
-        ///     Registers the Connection Multiplexer
-        /// </summary>
-        /// <param name="services"></param>
-        public static void TryAddConnectionMultiplexerFromEnv(this IServiceCollection services)
-        {
-            services.TryAddConfigurationFromEnv();
-            services.TryAddConnectionMultiplexer();
-        }
-
-        public static void TryAddRedisCacheClient(this IServiceCollection services)
+        private static void TryAddRedisCacheClient(this IServiceCollection services)
         {
             services.TryAddSingleton(s => new RedisCacheClient(new RedisCacheClientOptions
             {
@@ -45,9 +36,9 @@ public static class ServiceCollectionExtensions
             services.TryAddSingleton<ICacheClient>(s => s.GetRequiredService<RedisCacheClient>());
         }
         
-        public static void TryAddRedisKeyValueStorageFromEnv(this IServiceCollection services)
+        public static void TryAddRedisKeyValueStorage(this IServiceCollection services, IConfiguration configuration)
         {
-            services.TryAddConnectionMultiplexerFromEnv();
+            services.TryAddConnectionMultiplexer(configuration);
             services.TryAddRedisCacheClient();
             services.TryAddSingleton(typeof(IKeyValueAsyncStorage<,>), typeof(RedisGenericKeyValueAsyncStorage<,>));
         }

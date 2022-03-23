@@ -5,9 +5,10 @@ using Ardalis.ApiEndpoints;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.Grpc.Account;
+using Backend.Libs.gRPC.Account;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GrpcAccountDTO = Backend.Libs.gRPC.Account.GrpcAccountDTO;
 
 namespace Backend.Api.Endpoints.Test;
 

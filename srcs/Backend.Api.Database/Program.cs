@@ -1,9 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Backend.Plugins.Database.Context;
 using Backend.Plugins.Database.Mapping;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Backend.Api.Database;
 
@@ -14,7 +20,30 @@ public class Program
         MapsterMapperRules.InitMappingRules();
         IHost web = CreateHostBuilder(args).Build();
 
+        var logger = web.Services.GetRequiredService<ILogger<Program>>();
+        
+        var tmp = web.Services.GetRequiredService<IDbContextFactory<BackendDbContext>>();
+        await using BackendDbContext context = await tmp.CreateDbContextAsync();
+        try
+        {
+            IEnumerable<string> pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+            IEnumerable<string> appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
+
+            await context.Database.MigrateAsync();
+            IEnumerable<string> pendingMigrationsAfter = await context.Database.GetPendingMigrationsAsync();
+            logger.LogWarning("Database migration executed: {pendingMigrationsCountBefore} => {pendingMigrationsCountAfter} | totalMigrations: {appliedMigrationsCount}",
+                pendingMigrations.Count().ToString(), pendingMigrationsAfter.Count().ToString(), appliedMigrations.Count().ToString());
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Migration failed");
+            throw;
+        }
+
+        logger.LogWarning("Starting...");
         await web.StartAsync();
+        
+        logger.LogWarning("Running!");
         await web.WaitForShutdownAsync();
     }
 
@@ -25,10 +54,13 @@ public class Program
             {
                 webBuilder.ConfigureKestrel(s =>
                 {
-                    s.ListenAnyIP(short.Parse(Environment.GetEnvironmentVariable("DATABASE_SERVER_PORT") ?? "19999"), 
-                        options => { options.Protocols = HttpProtocols.Http2; });
+                    s.ConfigureEndpointDefaults(co =>
+                    {
+                        co.Protocols = HttpProtocols.Http2;
+                    });
                 });
                 webBuilder.UseStartup<Startup>();
+                webBuilder.UseUrls("http://*:7771");
             });
         return host;
     }

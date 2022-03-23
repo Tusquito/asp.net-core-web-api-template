@@ -7,8 +7,8 @@ using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.Grpc.Account;
-using Backend.Libs.Grpc.CustomTypes;
+using Backend.Libs.gRPC.Account;
+using Backend.Libs.gRPC.CustomTypes;
 using Backend.Libs.Models.Account;
 using EmailValidation;
 using Mapster;
@@ -35,6 +35,7 @@ public class RegisterEndpoint : EndpointBaseAsync
         _accountService = accountService;
     }
 
+    [HttpPost("/register")]
     public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = new CancellationToken())
     {
         string requesterIp = _httpContextAccessor.GetRequestIp();

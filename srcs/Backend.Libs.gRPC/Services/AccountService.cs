@@ -1,8 +1,9 @@
 ﻿using Backend.Libs.Database.Account;
-using Backend.Libs.Grpc.Account;
-using Backend.Libs.Grpc.CustomTypes;
+using Backend.Libs.gRPC.Account;
+using Backend.Libs.gRPC.CustomTypes;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
+using GrpcAccountDTO = Backend.Libs.gRPC.Account.GrpcAccountDTO;
 
 namespace Backend.Libs.gRPC.Services;
 

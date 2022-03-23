@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
-using Backend.Libs.Grpc.Account;
+using Backend.Libs.gRPC.Account;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Endpoints.Test;

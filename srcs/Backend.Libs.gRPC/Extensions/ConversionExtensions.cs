@@ -1,4 +1,4 @@
-﻿using Backend.Libs.Grpc.CustomTypes;
+﻿using GuidValue = Backend.Libs.gRPC.CustomTypes.GuidValue;
 
 namespace Backend.Libs.gRPC.Extensions;
 
