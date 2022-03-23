@@ -64,18 +64,18 @@ public class AccountDAO : IAccountDAO
         }
     }
 
-    public async Task<List<AccountDTO>> GetAllAsync() => await _repository.GetAllAsync();
+    public async Task<List<AccountDTO?>?> GetAllAsync() => await _repository.GetAllAsync();
     public async Task<AccountDTO?> GetByIdAsync(Guid id) => await _repository.GetByIdAsync(id);
-    public async Task<List<AccountDTO>> GetByIdsAsync(IEnumerable<Guid> ids) => await _repository.GetByIdsAsync(ids);
-    public async Task<AccountDTO?> AddAsync(AccountDTO? obj) => await _repository.AddAsync(obj);
-    public async Task<List<AccountDTO>> AddRangeAsync(IEnumerable<AccountDTO> objs) => await _repository.AddRangeAsync(objs);
+    public async Task<List<AccountDTO?>?> GetByIdsAsync(IEnumerable<Guid> ids) => await _repository.GetByIdsAsync(ids);
+    public async Task<AccountDTO?> AddAsync(AccountDTO obj) => await _repository.AddAsync(obj);
+    public async Task<List<AccountDTO>?> AddRangeAsync(IEnumerable<AccountDTO> objs) => await _repository.AddRangeAsync(objs);
     public async Task<AccountDTO?> UpdateAsync(AccountDTO obj)
     {
         obj.Username = obj.Username.ToLowerInvariant();
         obj.Email = obj.Email.ToLowerInvariant();
         return await _repository.UpdateAsync(obj);
     } 
-    public async Task<List<AccountDTO>> UpdateRangeAsync(IEnumerable<AccountDTO> objs)
+    public async Task<List<AccountDTO>?> UpdateRangeAsync(IEnumerable<AccountDTO> objs)
     {
         foreach (var accountDto in objs)
         {

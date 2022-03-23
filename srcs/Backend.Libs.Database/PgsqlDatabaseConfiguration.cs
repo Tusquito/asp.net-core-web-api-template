@@ -2,13 +2,13 @@
 
 public class PgsqlDatabaseConfiguration
 {
-    public string Ip { get; init; }
-    public string Username { get; init; }
-    public string Password { get; init; }
-    public string Database { get; init; }
+    public string Ip { get; init; } = string.Empty;
+    public string Username { get; init; } = string.Empty;
+    public string Password { get; init; } = string.Empty;
+    public string Database { get; init; } = string.Empty;
     public ushort Port { get; init; }
-    public string EncryptionKey{ get; init; }
-    public string EncryptionIv{ get; init; }
+    public string EncryptionKey{ get; init; } = string.Empty;
+    public string EncryptionIv{ get; init; } = string.Empty;
 
 
     public static PgsqlDatabaseConfiguration FromEnv()

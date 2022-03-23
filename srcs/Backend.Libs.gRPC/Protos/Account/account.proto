@@ -5,7 +5,6 @@ option csharp_namespace = "Backend.Libs.gRPC.Account";
 package backend.libs.grpc.account;
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/struct.proto";
 
 import "Protos/CustomTypes/enums.proto";
 import "Protos/CustomTypes/guid_value.proto";

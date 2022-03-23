@@ -22,7 +22,7 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         _mapper = mapper;
     }
 
-    public async Task<List<TDto>> GetAllAsync()
+    public async Task<List<TDto?>?> GetAllAsync()
     {
         try
         {
@@ -32,7 +32,7 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GetAllAsync));
-            return new List<TDto>();
+            return new List<TDto?>();
         }
     }
 
@@ -50,7 +50,7 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<List<TDto>> GetByIdsAsync(IEnumerable<Guid> ids)
+    public async Task<List<TDto?>?> GetByIdsAsync(IEnumerable<Guid> ids)
     {
         try
         {
@@ -60,7 +60,7 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GetByIdsAsync));
-            return new List<TDto>();
+            return new List<TDto?>();
         }
     }
     
@@ -86,12 +86,17 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<List<TDto>> AddRangeAsync(IEnumerable<TDto> objs)
+    public async Task<List<TDto>?> AddRangeAsync(IEnumerable<TDto> objs)
     {
         try
         {
             await using var context = await _contextFactory.CreateDbContextAsync();
-            await context.Set<TEntity>().AddRangeAsync(_mapper.Map(objs));
+            var tmp = _mapper.Map(objs);
+            if (tmp == null)
+            {
+                return new List<TDto>();
+            }
+            await context.Set<TEntity>().AddRangeAsync(tmp);
             await context.SaveChangesAsync();
             return objs.ToList();
         }
@@ -123,7 +128,7 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<List<TDto>> UpdateRangeAsync(IEnumerable<TDto> objs)
+    public async Task<List<TDto>?> UpdateRangeAsync(IEnumerable<TDto> objs)
     {
         try
         {
