@@ -1,7 +1,7 @@
-name: stnoks-backend
+name: backend
 registry: tuskkdev
 services:
-- name: stnoks-backend-api-core
+- name: backend-api-core
   project: srcs\Backend.Api\Backend.Api.csproj
   bindings:
     - port: 6661
@@ -10,7 +10,7 @@ services:
       value: 1  
     - name: JWT_SIGNATURE_KEY
       value: 123456789
-- name: stnoks-backend-api-db
+- name: backend-api-db
   project: srcs\Backend.Api.Database\Backend.Api.Database.csproj
   bindings:
     - port: 7771
@@ -25,11 +25,11 @@ services:
       value: AAECAwQFBgcICQoLDA0ODw==
     - name: PGSQL_DATABASE_ENCRYPTION_KEY
       value: AAECAwQFBgcICQoLDA0ODw==
-- name: stnoks-backend-api-auth
+- name: backend-api-auth
   project: srcs\Backend.Api.Authentication\Backend.Api.Authentication.csproj
   bindings:
     - port: 8881
-- name: stnoks-backend-rabbitmq-server
+- name: backend-rabbitmq-server
   project: srcs\Backend.Server.RabbitMQ\Backend.Server.RabbitMQ.csproj
   bindings:
     - port: 9991
@@ -38,7 +38,7 @@ services:
       value: user
     - name: RABBITMQ_USERNAME
       value: bitnami
-- name: stnoks-postgres
+- name: postgres
   image: postgres:latest
   bindings:
     - port: 5432
@@ -47,7 +47,7 @@ services:
       value: postgres
     - name: POSTGRES_PASSWORD
       value: postgres
-- name: stnoks-redis
+- name: redis
   image: redis:latest
   bindings:
     - port: 6379
@@ -55,7 +55,7 @@ services:
   env:
     - name: REDIS_PASSWORD
       value: redis
-- name: stnoks-rabbitmq
+- name: rabbitmq
   image: bitnami/rabbitmq:latest
   bindings:
     - port: 5672

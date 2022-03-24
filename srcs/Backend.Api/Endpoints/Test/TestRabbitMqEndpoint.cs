@@ -7,6 +7,7 @@ using Backend.Libs.RabbitMQ.Producers;
 using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+
 namespace Backend.Api.Endpoints.Test;
 
 public class TestRabbitMqEndpoint : EndpointBaseAsync
@@ -22,7 +23,7 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
         _producer = producer;
     }
     [HttpGet("api/test/rabbitmq")]
-    public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
         try
         {
