@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-option csharp_namespace = "Backend.Libs.gRPC.CustomTypes";
-package backend.libs.grpc.custom_types;
-
-message GuidValue {
-  string value = 1;
-}

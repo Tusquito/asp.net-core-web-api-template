@@ -7,10 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Foundatio.JsonNet" Version="10.4.0" />
-      <PackageReference Include="Foundatio.Redis" Version="10.4.0" />
-      <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
-      <PackageReference Include="StackExchange.Redis" Version="2.5.43" />
+      <PackageReference Include="Foundatio.JsonNet" Version="10.5.0" />
+      <PackageReference Include="Foundatio.Redis" Version="10.5.0" />
+      <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
     </ItemGroup>
 
     <ItemGroup>

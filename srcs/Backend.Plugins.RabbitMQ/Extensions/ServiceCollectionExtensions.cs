@@ -30,14 +30,12 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddRabbitMqClientFactoryFromEnv(this IServiceCollection services, IConfiguration configuration)
     {
-        var serviceUri = configuration.GetServiceUri("stnoks-rabbitmq");
-        
         services.TryAddSingleton(_ => new ConnectionFactory
         {
             Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "bitnami",
             UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "user",
-            HostName = serviceUri == null ? "localhost" : serviceUri.Host,
-            Port = serviceUri == null ? 5672 : serviceUri.Port,
+            HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost",
+            Port = short.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672"),
             DispatchConsumersAsync = true
         });
 

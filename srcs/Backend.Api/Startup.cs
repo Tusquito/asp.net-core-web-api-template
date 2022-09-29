@@ -42,7 +42,7 @@ public class Startup
             });
 
         services.AddAuthSwagger("Backend.Api");
-        services.AddGrpcDatabaseServices(Configuration);
+        services.AddGrpcDatabaseServices();
 
         services.AddCryptographyLibs();
     }

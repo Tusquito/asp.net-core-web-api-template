@@ -7,9 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.AspNetCore" Version="2.44.0" />
+      <PackageReference Include="Grpc.Net.ClientFactory" Version="2.49.0" />
       <PackageReference Include="Mapster" Version="7.3.0" />
-      <PackageReference Include="Microsoft.Tye.Extensions.Configuration" Version="0.10.0-alpha.21420.1" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Protobuf.Grpc.ClientFactory" Version="1.0.170" />
+      <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />
     </ItemGroup>
     
     <ItemGroup>

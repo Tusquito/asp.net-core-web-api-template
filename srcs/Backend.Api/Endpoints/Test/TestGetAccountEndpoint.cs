@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.gRPC.Account;
+using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.Security.Attributes;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +16,9 @@ public class TestGetAccountEndpoint : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult
 {
-    private readonly GrpcAccountService.GrpcAccountServiceClient _accountService;
+    private readonly IAccountService _accountService;
 
-    public TestGetAccountEndpoint(GrpcAccountService.GrpcAccountServiceClient accountService)
+    public TestGetAccountEndpoint(IAccountService accountService)
     {
         _accountService = accountService;
     }
@@ -25,10 +26,10 @@ public class TestGetAccountEndpoint : EndpointBaseAsync
     [HttpGet("api/tests/account")]
     public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
-        var response = await _accountService.GetAccountByIdAsync(new GetAccountByIdRequest
+        var response = await _accountService.GetAccountByIdAsync(new GrpcGetAccountByIdRequest
         {
             Id = Guid.Parse("59001090-b7f7-47aa-911b-cbccbdf6857c")
         }, cancellationToken: cancellationToken);
-        return GenericResponses.Ok((AccountDTO)response.GrpcAccountDto);
+        return EndpointResult.Ok(response.AccountDto);
     }
 }

@@ -3,24 +3,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Libs.Cryptography.Services;
+using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Account;
+using Backend.Libs.gRPC.Account.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using GrpcAccountDTO = Backend.Libs.gRPC.Account.GrpcAccountDTO;
 
 namespace Backend.Api.Endpoints.Test;
 
 public class TestCreateAccountEndpoint : EndpointBaseAsync
     .WithoutRequest
-    .WithActionResult
+    .WithoutResult
 {
-    private readonly GrpcAccountService.GrpcAccountServiceClient _accountService;
+    private readonly IAccountService _accountService;
     private readonly IPasswordHasherService _passwordHasherService;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TestCreateAccountEndpoint(GrpcAccountService.GrpcAccountServiceClient accountService, IPasswordHasherService passwordHasherService, IHttpContextAccessor httpContextAccessor)
+    public TestCreateAccountEndpoint(IAccountService accountService, IPasswordHasherService passwordHasherService, IHttpContextAccessor httpContextAccessor)
     {
         _accountService = accountService;
         _passwordHasherService = passwordHasherService;
@@ -28,23 +29,23 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
     }
     
     [HttpPost("api/tests/account")]
-    public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new())
+    public override async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
         string salt = _passwordHasherService.GenerateRandomSalt();
-        var response = await _accountService.AddAccountAsync(new AddAccountRequest
+        var response = await _accountService.AddAccountAsync(new GrpcSaveAccountRequest
         {
-            GrpcAccountDto = new GrpcAccountDTO
+            AccountDto = new AccountDTO
             {
                 Id = Guid.NewGuid(),
-                AuthorityType = GrpcAuthorityType.Admin,
+                AuthorityType = AuthorityType.Admin,
                 Username = "admin",
                 Password = _passwordHasherService.HashPassword("test", salt),
                 Email = "admin@gmail.com",
                 Ip = _httpContextAccessor.GetRequestIp(),
                 PasswordSalt = salt
             }
-        });
+        }, cancellationToken);
 
-        return GenericResponses.Ok(response);
+        return EndpointResult.Ok(response);
     }
 }

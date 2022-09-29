@@ -36,7 +36,6 @@ public static class ServiceCollectionExtensions
                 .UseNpgsql(dbConfig, providerOptions =>
                 {
                     providerOptions.EnableRetryOnFailure();
-                    providerOptions.MigrationsHistoryTable("migrations", "_migrations");
                 })
                 .ConfigureWarnings(s => s.Log(
                     (RelationalEventId.CommandExecuting, LogLevel.Debug),
@@ -51,7 +50,6 @@ public static class ServiceCollectionExtensions
                 .UseNpgsql(dbConfig, providerOptions =>
                 {
                     providerOptions.EnableRetryOnFailure();
-                    providerOptions.MigrationsHistoryTable("migrations", "_migrations");
                 })
                 .ConfigureWarnings(s => s.Log(
                     (RelationalEventId.CommandExecuting, LogLevel.Debug),

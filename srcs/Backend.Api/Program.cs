@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Backend.Libs.gRPC.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
@@ -52,7 +53,7 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls("https://*:6661");
+                webBuilder.UseUrls($"http://*:{(short)GrpcServiceType.CORE_API_HOST}");
             });
         return host;
     }

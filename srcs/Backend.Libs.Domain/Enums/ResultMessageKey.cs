@@ -1,6 +1,6 @@
 ﻿namespace Backend.Libs.Domain.Enums;
 
-public enum ResponseMessageKey
+public enum ResultMessageKey
 {
     /**
      * Default

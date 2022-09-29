@@ -17,6 +17,8 @@ public static class JwtSecurityExtensions
     {
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Issuer = "backend",
+            Audience = "backend",
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
@@ -25,28 +27,21 @@ public static class JwtSecurityExtensions
             Expires = DateTime.UtcNow.AddHours(JwtExpiryTime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(JwtSignatureKey), SecurityAlgorithms.HmacSha256Signature)
         };
-        var token = TokenHandler.CreateToken(tokenDescriptor);
-        return TokenHandler.WriteToken(token);
+        return TokenHandler.WriteToken(TokenHandler.CreateToken(tokenDescriptor));
     }
 
-    public static JwtSecurityToken? ValidateToken(this string token)
+    public static JwtSecurityToken ValidateToken(this string token)
     {
-        try
+        TokenHandler.ValidateToken(token, new TokenValidationParameters
         {
-            TokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(JwtSignatureKey),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero
-            }, out SecurityToken validatedToken);
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(JwtSignatureKey),
+            ValidateIssuer = true,
+            ValidAlgorithms = new []{SecurityAlgorithms.HmacSha256Signature},
+            ValidateAudience = true,
+            ClockSkew = TimeSpan.Zero
+        }, out SecurityToken validatedToken);
 
-            return (JwtSecurityToken)validatedToken;
-        }
-        catch
-        {
-            return null;
-        }
+        return (JwtSecurityToken)validatedToken;
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.Libs.gRPC.Enums;
 using Backend.Plugins.Database.Context;
 using Backend.Plugins.Database.Mapping;
 using Microsoft.AspNetCore.Hosting;
@@ -60,7 +61,7 @@ public class Program
                     });
                 });
                 webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls("http://*:7771");
+                webBuilder.UseUrls($"http://*:{(short)GrpcServiceType.DATABASE_SERVICE_HOST}");
             });
         return host;
     }

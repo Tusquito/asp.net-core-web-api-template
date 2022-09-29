@@ -27,12 +27,12 @@ public class LoginEndpoint : EndpointBaseAsync
     {
         if (string.IsNullOrWhiteSpace(request.Login))
         {
-            return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_NULL_LOGIN);
+            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_NULL_LOGIN);
         }
 
         if (string.IsNullOrWhiteSpace(request.Password))
         {
-            return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_NULL_PASSWORD);
+            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_NULL_PASSWORD);
         }
 
         (AccountDTO accountDto, AuthenticationResultType resultType) = await _userAuthenticationService.AuthenticateAsync(request);
@@ -40,12 +40,12 @@ public class LoginEndpoint : EndpointBaseAsync
         switch (resultType)
         {
             case AuthenticationResultType.INVALID_LOGIN:
-                return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_INVALID_LOGIN);
+                return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_LOGIN);
             case AuthenticationResultType.INVALID_PASSWORD:
-                return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_INVALID_PASSWORD);
+                return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_PASSWORD);
             default:
             case AuthenticationResultType.SUCCESS:
-                return GenericResponses.Ok(new LoginResponseModel
+                return EndpointResult.Ok(new LoginResponseModel
                 {
                     AccessToken = accountDto.GenerateJwtToken()
                 });

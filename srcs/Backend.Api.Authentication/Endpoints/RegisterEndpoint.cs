@@ -8,7 +8,9 @@ using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Account;
-using Backend.Libs.gRPC.CustomTypes;
+using Backend.Libs.gRPC.Account.Request;
+using Backend.Libs.gRPC.Account.Responses;
+using Backend.Libs.gRPC.Enums;
 using Backend.Libs.Models.Account;
 using EmailValidation;
 using Mapster;
@@ -24,10 +26,10 @@ public class RegisterEndpoint : EndpointBaseAsync
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IPasswordHasherService _passwordHasherService;
-    private readonly GrpcAccountService.GrpcAccountServiceClient _accountService;
+    private readonly IAccountService _accountService;
     private readonly ILogger<RegisterEndpoint> _logger;
 
-    public RegisterEndpoint(IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService, ILogger<RegisterEndpoint> logger, GrpcAccountService.GrpcAccountServiceClient accountService)
+    public RegisterEndpoint(IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService, ILogger<RegisterEndpoint> logger, IAccountService accountService)
     {
         _httpContextAccessor = httpContextAccessor;
         _passwordHasherService = passwordHasherService;
@@ -36,37 +38,37 @@ public class RegisterEndpoint : EndpointBaseAsync
     }
 
     [HttpPost("/register")]
-    public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = new CancellationToken())
+    public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = new())
     {
         string requesterIp = _httpContextAccessor.GetRequestIp();
         if (request.Password != request.PasswordConfirmation)
         {
-            return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION);
+            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION);
         }
 
         if (!EmailValidator.Validate(request.Email))
         {
-            return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_INVALID_EMAIL_FORMAT);
+            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_EMAIL_FORMAT);
         }
 
-        AccountResponse accountResponse = await _accountService.GetAccountByUsernameAsync(new GetAccountByStringRequest
+        GrpcAccountResponse accountResponse = await _accountService.GetAccountByUsernameAsync(new GrpcGetAccountByStringRequest
         {
             Search = request.Username
-        }, cancellationToken: cancellationToken);
+        }, cancellationToken);
 
-        if (accountResponse.ResponseType == GrpcResponseType.Success)
+        if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, new []{request.Username});
+            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, new []{request.Username});
         }
 
-        accountResponse = await _accountService.GetAccountByEmailAsync(new GetAccountByStringRequest
+        accountResponse = await _accountService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest
         {
             Search = request.Email
         }, cancellationToken: cancellationToken);
 
-        if (accountResponse.ResponseType == GrpcResponseType.Success)
+        if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return GenericResponses.BadRequest(ResponseMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, new []{request.Email});
+            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, new []{request.Email});
         }
 
         try
@@ -76,17 +78,17 @@ public class RegisterEndpoint : EndpointBaseAsync
             accountDto.Password = _passwordHasherService.HashPassword(request.Password, accountDto.PasswordSalt);
             accountDto.Ip = requesterIp;
             accountDto.AuthorityType = AuthorityType.User;
-            await _accountService.UpdateAccountAsync(new SaveAccountRequest
+            await _accountService.UpdateAccountAsync(new GrpcSaveAccountRequest
             {
-                GrpcAccountDto = accountDto
-            }, cancellationToken: cancellationToken);
+                AccountDto = accountDto
+            }, cancellationToken);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(RegisterEndpoint));
-            return GenericResponses.InternalServerError(ResponseMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, new[] { nameof(AccountDTO) });
+            return EndpointResult.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, new[] { nameof(AccountDTO) });
         }
             
-        return GenericResponses.Ok();
+        return EndpointResult.Ok();
     }
 }

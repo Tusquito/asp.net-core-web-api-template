@@ -3,7 +3,6 @@ using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -11,13 +10,6 @@ namespace Backend.Api.Authentication
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        private IConfiguration Configuration { get; }
-        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
@@ -34,7 +26,7 @@ namespace Backend.Api.Authentication
                 });
 
             services.AddAuthSwagger("Backend.Api.Authentication");
-            services.AddGrpcDatabaseServices(Configuration);
+            services.AddGrpcDatabaseServices();
 
             //services.TryAddTransient<IUserAuthenticationService, UserAuthenticationService>();
 
