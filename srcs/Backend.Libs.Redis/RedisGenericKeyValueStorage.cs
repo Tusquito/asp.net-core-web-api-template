@@ -42,14 +42,18 @@ public sealed class RedisGenericKeyValueAsyncStorage<TObject, TKey> : IKeyValueA
             return (await _cacheClient.GetAllAsync<TObject>(ids.Select(ToKey))).Select(s => s.Value.Value);
         }
 
-        public async Task RegisterAsync(TKey id, TObject obj, TimeSpan? lifeTime = null)
+        public async Task RegisterAsync(TKey id, TObject obj, TimeSpan? lifeTime = null, bool keepTtl = false)
         {
+            if (keepTtl)
+            {
+                lifeTime = await _cacheClient.GetExpirationAsync(ToKey(id));
+            }
             await RegisterKeyAsync(new[] { id }, lifeTime).ConfigureAwait(false);
             await _cacheClient.SetAsync(ToKey(id), obj, lifeTime).ConfigureAwait(false);
         }
 
 
-        public async Task RegisterAsync(IEnumerable<(TKey, TObject)> objs, TimeSpan? lifeTime = null)
+        public async Task RegisterAsync(IEnumerable<(TKey, TObject)> objs, TimeSpan? lifeTime = null, bool keepTtl = false)
         {
             await RegisterKeyAsync(objs.Select(s => s.Item1), lifeTime).ConfigureAwait(false);
             await _cacheClient.SetAllAsync(objs.ToDictionary(s => ToKey(s.Item1), o => o), lifeTime).ConfigureAwait(false);
