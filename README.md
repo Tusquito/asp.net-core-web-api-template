@@ -1,14 +1,12 @@
 # Roadmap
 - [x] PGSQL Support
-- [x] JWT Authentication With Authority Check
+- [ ] JWT Authentication With Authority Check
 - [x] Base Account Entity With Encrypted Fields
 - [x] Generic Responses For I18N
 - [x] Login & Register Flow 
-- [x] Microservices Architecture with gRPC
+- [ ] Microservices Architecture with gRPC
 - [x] Add Redis Caching
-- [x] Use Tye for microservices handling
-- [ ] Fix All Bugs
-- [ ] Multi DB Support
+- [ ] i18n Support
 - [ ] Add 2FA Support
 - [ ] Add Logs through MongoDb
 - [ ] Add Response Data Pagination
