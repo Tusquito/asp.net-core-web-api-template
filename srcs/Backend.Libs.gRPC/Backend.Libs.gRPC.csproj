@@ -7,10 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.Net.ClientFactory" Version="2.49.0" />
       <PackageReference Include="Mapster" Version="7.3.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-      <PackageReference Include="Protobuf.Grpc.ClientFactory" Version="1.0.170" />
+      <PackageReference Include="protobuf-net.Grpc" Version="1.0.177" />
+      <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.177" />
+      <PackageReference Include="protobuf-net.Grpc.ClientFactory" Version="1.0.177" />
       <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />
     </ItemGroup>
     

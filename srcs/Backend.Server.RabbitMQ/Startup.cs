@@ -20,7 +20,7 @@ namespace Backend.Server.RabbitMQ
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRabbitMqClientFactoryFromEnv(Configuration);
+            services.AddRabbitMqClientFactoryFromEnv();
 
             services.AddControllers();
             

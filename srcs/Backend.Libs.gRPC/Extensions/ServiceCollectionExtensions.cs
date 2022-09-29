@@ -11,20 +11,23 @@ public static class ServiceCollectionExtensions
 {
     private static void AddGrpcClientService<T>(this IServiceCollection services, GrpcServiceType serviceType) where T : class
     {
-        string ip = Environment.GetEnvironmentVariable(serviceType.ToString()) ?? "localhost";
-        services.AddScoped<T>(s => GrpcChannel.ForAddress($"http://{ip}:{(short)serviceType}", new GrpcChannelOptions
+        services.AddScoped<T>(s =>
         {
-            MaxRetryAttempts = 3,
-            MaxSendMessageSize = null,
-            MaxReceiveMessageSize = null,
-            LoggerFactory = s.GetRequiredService<ILoggerFactory>(),
-            ServiceProvider = s
-        }).CreateGrpcService<T>());
+            string ip = Environment.GetEnvironmentVariable(serviceType.ToString()) ?? "localhost";
+            int port = Convert.ToInt32(serviceType);
+            return GrpcChannel.ForAddress($"http://{ip}:{port}", new GrpcChannelOptions
+            {
+                MaxReceiveMessageSize = null,
+                MaxSendMessageSize = null,
+                MaxRetryAttempts = 3,
+                LoggerFactory = s.GetRequiredService<ILoggerFactory>()
+            }).CreateGrpcService<T>();
+        });
     }
     
     public static IServiceCollection AddGrpcDatabaseServices(this IServiceCollection services)
     {
-        services.AddGrpcClientService<IAccountService>(GrpcServiceType.DATABASE_SERVICE_HOST);
+        services.AddGrpcClientService<IAccountService>(GrpcServiceType.DATABASE_SERVER_HOST);
         return services;
     }
 }

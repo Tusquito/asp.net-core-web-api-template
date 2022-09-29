@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProtoBuf.Grpc.Server;
 
 namespace Backend.Api.Database;
 
@@ -20,11 +21,17 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCors();
-        services.AddGrpc();
 
         services.AddControllers();
 
         services.AddBackendDatabasePlugin();
+        
+        services.AddCodeFirstGrpc(config =>
+        {
+            config.MaxReceiveMessageSize = null;
+            config.MaxSendMessageSize = null;
+            config.EnableDetailedErrors = true;
+        });
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -38,7 +45,6 @@ public class Startup
 
         app.UseDeveloperExceptionPage();
         
-        app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>

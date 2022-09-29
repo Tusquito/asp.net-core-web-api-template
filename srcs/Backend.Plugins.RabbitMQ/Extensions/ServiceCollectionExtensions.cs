@@ -2,7 +2,6 @@
 using Backend.Libs.RabbitMQ.Consumers;
 using Backend.Libs.RabbitMQ.Events;
 using Backend.Libs.RabbitMQ.Producers;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RabbitMQ.Client;
@@ -28,7 +27,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddRabbitMqClientFactoryFromEnv(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddRabbitMqClientFactoryFromEnv(this IServiceCollection services)
     {
         services.TryAddSingleton(_ => new ConnectionFactory
         {

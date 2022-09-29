@@ -30,7 +30,7 @@ public class Startup
         services.AddJwtAuthentication();
 
         services.AddEndpointsApiExplorer();
-        services.AddRabbitMqClientFactoryFromEnv(Configuration);
+        services.AddRabbitMqClientFactoryFromEnv();
 
         services.AddRabbitMqProducer<TestMessage>();
 
@@ -42,6 +42,7 @@ public class Startup
             });
 
         services.AddAuthSwagger("Backend.Api");
+
         services.AddGrpcDatabaseServices();
 
         services.AddCryptographyLibs();
@@ -60,13 +61,17 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend.Api.Authentication v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend.Api v1"));
         }
         
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthorization();
         app.UseAuthentication();
-        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
     }
 }

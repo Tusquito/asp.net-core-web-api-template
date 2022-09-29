@@ -11,8 +11,4 @@
       <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
       <ProjectReference Include="..\Backend.Plugins.Database\Backend.Plugins.Database.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
-    </ItemGroup>
 </Project>

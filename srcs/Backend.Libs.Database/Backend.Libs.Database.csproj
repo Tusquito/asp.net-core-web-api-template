@@ -8,6 +8,6 @@
     
     <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
-      <PackageReference Include="protobuf-net" Version="2.4.6" />
+      <PackageReference Include="protobuf-net" Version="3.1.22" />
     </ItemGroup>
 </Project>
