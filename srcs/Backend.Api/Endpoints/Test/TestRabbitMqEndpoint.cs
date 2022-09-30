@@ -32,9 +32,9 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(TestRabbitMqEndpoint));
-            return EndpointResult.InternalServerError();
+            return DomainResults.InternalServerError();
         }
 
-        return EndpointResult.Ok();
+        return DomainResults.Ok();
     }
 }

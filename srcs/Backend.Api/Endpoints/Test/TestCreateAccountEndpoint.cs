@@ -17,13 +17,13 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
     .WithoutRequest
     .WithoutResult
 {
-    private readonly IAccountService _accountService;
+    private readonly IGrpcAccountService _grpcAccountService;
     private readonly IPasswordHasherService _passwordHasherService;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TestCreateAccountEndpoint(IAccountService accountService, IPasswordHasherService passwordHasherService, IHttpContextAccessor httpContextAccessor)
+    public TestCreateAccountEndpoint(IGrpcAccountService grpcAccountService, IPasswordHasherService passwordHasherService, IHttpContextAccessor httpContextAccessor)
     {
-        _accountService = accountService;
+        _grpcAccountService = grpcAccountService;
         _passwordHasherService = passwordHasherService;
         _httpContextAccessor = httpContextAccessor;
     }
@@ -32,7 +32,7 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
     public override async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
         string salt = _passwordHasherService.GenerateRandomSalt();
-        var response = await _accountService.AddAccountAsync(new GrpcSaveAccountRequest
+        var response = await _grpcAccountService.AddAccountAsync(new GrpcSaveAccountRequest
         {
             AccountDto = new AccountDTO
             {
@@ -46,6 +46,6 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
             }
         }, cancellationToken);
 
-        return EndpointResult.Ok(response);
+        return DomainResults.Ok(response);
     }
 }

@@ -22,12 +22,12 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         _mapper = mapper;
     }
 
-    public async Task<List<TDto?>?> GetAllAsync()
+    public async Task<List<TDto?>?> GetAllAsync(CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
-            return _mapper.Map(await context.Set<TEntity>().ToListAsync());
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            return _mapper.Map(await context.Set<TEntity>().ToListAsync(cancellationToken));
         }
         catch (Exception e)
         {
@@ -36,11 +36,11 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<TDto?> GetByIdAsync(Guid id)
+    public async Task<TDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
             return _mapper.Map(await context.Set<TEntity>().FindAsync(id));
         }
         catch (Exception e)
@@ -50,12 +50,12 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<List<TDto?>?> GetByIdsAsync(IEnumerable<Guid> ids)
+    public async Task<List<TDto?>?> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
-            return _mapper.Map(await context.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToListAsync());
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            return _mapper.Map(await context.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken));
         }
         catch (Exception e)
         {
@@ -64,19 +64,19 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
     
-    public async Task<TDto?> AddAsync(TDto obj)
+    public async Task<TDto?> AddAsync(TDto obj, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
 
-            var map = _mapper.Map(obj);
+            TEntity? map = _mapper.Map(obj);
             if (map == null)
             {
                 return null;
             }
-            EntityEntry<TEntity> tmp = await context.Set<TEntity>().AddAsync(map);
-            await context.SaveChangesAsync();
+            EntityEntry<TEntity> tmp = await context.Set<TEntity>().AddAsync(map, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
             return _mapper.Map(tmp.Entity);
         }
         catch (Exception e)
@@ -86,19 +86,20 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<List<TDto>?> AddRangeAsync(IEnumerable<TDto> objs)
+    public async Task<List<TDto>?> AddRangeAsync(IEnumerable<TDto> objs, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
-            var tmp = _mapper.Map(objs);
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            TDto[] uuidDtos = objs as TDto[] ?? objs.ToArray();
+            IReadOnlyList<TEntity>? tmp = _mapper.Map(uuidDtos);
             if (tmp == null)
             {
                 return new List<TDto>();
             }
-            await context.Set<TEntity>().AddRangeAsync(tmp);
-            await context.SaveChangesAsync();
-            return objs.ToList();
+            await context.Set<TEntity>().AddRangeAsync(tmp, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
+            return uuidDtos.ToList();
         }
         catch (Exception e)
         {
@@ -107,18 +108,18 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<TDto?> UpdateAsync(TDto obj)
+    public async Task<TDto?> UpdateAsync(TDto obj, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
-            var map = _mapper.Map(obj);
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            TEntity? map = _mapper.Map(obj);
             if (map == null)
             {
                 return null;
             }
             EntityEntry<TEntity> tmp = context.Set<TEntity>().Update(map);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
             return _mapper.Map(tmp.Entity);
         }
         catch (Exception e)
@@ -128,19 +129,20 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task<List<TDto>?> UpdateRangeAsync(IEnumerable<TDto> objs)
+    public async Task<List<TDto>?> UpdateRangeAsync(IEnumerable<TDto> objs, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
-            var tmp = _mapper.Map(objs);
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            TDto[] uuidDtos = objs as TDto[] ?? objs.ToArray();
+            IReadOnlyList<TEntity>? tmp = _mapper.Map(uuidDtos);
             if (tmp == null)
             {
                 return new List<TDto>();
             }
             context.Set<TEntity>().UpdateRange();
-            await context.SaveChangesAsync();
-            return objs.ToList();
+            await context.SaveChangesAsync(cancellationToken);
+            return uuidDtos.ToList();
         }
         catch (Exception e)
         {
@@ -149,18 +151,18 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task DeleteByIdAsync(Guid id)
+    public async Task DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
-            var tmp = await context.Set<TEntity>().FindAsync(id);
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            TEntity? tmp = await context.Set<TEntity>().FindAsync(id);
             if (tmp == null)
             {
                 return;
             }
             context.Set<TEntity>().Remove(tmp);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception e)
         {
@@ -168,13 +170,13 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
         }
     }
 
-    public async Task DeleteByIdsAsync(IEnumerable<Guid> ids)
+    public async Task DeleteByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
     {
         try
         {
-            await using var context = await _contextFactory.CreateDbContextAsync();
+            await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
             context.Set<TEntity>().RemoveRange(context.Set<TEntity>().Where(x => ids.Contains(x.Id)));
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
         }
         catch (Exception e)
         {

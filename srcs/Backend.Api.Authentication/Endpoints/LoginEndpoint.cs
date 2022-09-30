@@ -7,6 +7,7 @@ using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Models.Login;
 using Backend.Libs.Security.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Authentication.Endpoints;
@@ -27,25 +28,25 @@ public class LoginEndpoint : EndpointBaseAsync
     {
         if (string.IsNullOrWhiteSpace(request.Login))
         {
-            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_NULL_LOGIN);
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_NULL_LOGIN);
         }
 
         if (string.IsNullOrWhiteSpace(request.Password))
         {
-            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_NULL_PASSWORD);
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_NULL_PASSWORD);
         }
 
-        (AccountDTO accountDto, AuthenticationResultType resultType) = await _userAuthenticationService.AuthenticateAsync(request);
+        (AccountDTO accountDto, AuthenticationResultType resultType) = await _userAuthenticationService.AuthenticateAsync(request, cancellationToken);
     
         switch (resultType)
         {
             case AuthenticationResultType.INVALID_LOGIN:
-                return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_LOGIN);
+                return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_LOGIN);
             case AuthenticationResultType.INVALID_PASSWORD:
-                return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_PASSWORD);
+                return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_PASSWORD);
             default:
             case AuthenticationResultType.SUCCESS:
-                return EndpointResult.Ok(new LoginResponseModel
+                return DomainResults.Ok(new LoginResponseModel
                 {
                     AccessToken = accountDto.GenerateJwtToken()
                 });

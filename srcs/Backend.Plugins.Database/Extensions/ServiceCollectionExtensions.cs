@@ -65,7 +65,7 @@ public static class ServiceCollectionExtensions
         services.AddPgsqlDatabaseContext<BackendDbContext>();
 
         services.TryAddMappedAsyncUuidRepository<AccountEntity, AccountDTO>();
-        services.TryAddTransient<IAccountDAO, AccountDAO>();
+        services.TryAddTransient<IAccountRepository, AccountRepository>();
 
         return services;
     }

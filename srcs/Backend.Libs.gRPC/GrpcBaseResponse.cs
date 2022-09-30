@@ -7,5 +7,5 @@ namespace Backend.Libs.gRPC;
 public class GrpcBaseResponse
 {
     [ProtoMember(1)] 
-    public GrpcResponseType Type { get; set; }
+    public GrpcResponseType Type { get; init; }
 }

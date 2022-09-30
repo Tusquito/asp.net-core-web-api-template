@@ -26,15 +26,15 @@ public class RegisterEndpoint : EndpointBaseAsync
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IPasswordHasherService _passwordHasherService;
-    private readonly IAccountService _accountService;
+    private readonly IGrpcAccountService _grpcAccountService;
     private readonly ILogger<RegisterEndpoint> _logger;
 
-    public RegisterEndpoint(IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService, ILogger<RegisterEndpoint> logger, IAccountService accountService)
+    public RegisterEndpoint(IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService, ILogger<RegisterEndpoint> logger, IGrpcAccountService grpcAccountService)
     {
         _httpContextAccessor = httpContextAccessor;
         _passwordHasherService = passwordHasherService;
         _logger = logger;
-        _accountService = accountService;
+        _grpcAccountService = grpcAccountService;
     }
 
     [HttpPost("/register")]
@@ -43,32 +43,32 @@ public class RegisterEndpoint : EndpointBaseAsync
         string requesterIp = _httpContextAccessor.GetRequestIp();
         if (request.Password != request.PasswordConfirmation)
         {
-            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION);
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION);
         }
 
         if (!EmailValidator.Validate(request.Email))
         {
-            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_EMAIL_FORMAT);
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_EMAIL_FORMAT);
         }
 
-        GrpcAccountResponse accountResponse = await _accountService.GetAccountByUsernameAsync(new GrpcGetAccountByStringRequest
+        GrpcAccountResponse accountResponse = await _grpcAccountService.GetAccountByUsernameAsync(new GrpcGetAccountByStringRequest
         {
             Search = request.Username
         }, cancellationToken);
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, new []{request.Username});
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, new []{request.Username});
         }
 
-        accountResponse = await _accountService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest
+        accountResponse = await _grpcAccountService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest
         {
             Search = request.Email
         }, cancellationToken: cancellationToken);
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return EndpointResult.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, new []{request.Email});
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, new []{request.Email});
         }
 
         try
@@ -78,7 +78,7 @@ public class RegisterEndpoint : EndpointBaseAsync
             accountDto.Password = _passwordHasherService.HashPassword(request.Password, accountDto.PasswordSalt);
             accountDto.Ip = requesterIp;
             accountDto.AuthorityType = AuthorityType.User;
-            await _accountService.UpdateAccountAsync(new GrpcSaveAccountRequest
+            await _grpcAccountService.UpdateAccountAsync(new GrpcSaveAccountRequest
             {
                 AccountDto = accountDto
             }, cancellationToken);
@@ -86,9 +86,9 @@ public class RegisterEndpoint : EndpointBaseAsync
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(RegisterEndpoint));
-            return EndpointResult.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, new[] { nameof(AccountDTO) });
+            return DomainResults.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, new[] { nameof(AccountDTO) });
         }
             
-        return EndpointResult.Ok();
+        return DomainResults.Ok();
     }
 }

@@ -1,4 +1,4 @@
-using Backend.Libs.gRPC.Services;
+using Backend.Libs.gRPC.Account;
 using Backend.Plugins.Database.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,7 +49,7 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapGrpcService<AccountService>();
+            endpoints.MapGrpcService<GrpcAccountService>();
         });
     }
 }

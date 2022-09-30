@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Enums;
@@ -8,19 +9,19 @@ namespace Backend.Api.Authentication.Services.Account;
 
 public class UserAuthenticationService : IUserAuthenticationService
 {
-    private readonly IAccountDAO _accountDao;
+    private readonly IAccountRepository _accountRepository;
     private readonly IPasswordHasherService _passwordHasherService;
 
-    public UserAuthenticationService(IAccountDAO accountDao, IPasswordHasherService passwordHasherService)
+    public UserAuthenticationService(IAccountRepository accountRepository, IPasswordHasherService passwordHasherService)
     {
-        _accountDao = accountDao;
+        _accountRepository = accountRepository;
         _passwordHasherService = passwordHasherService;
     }
 
-    public async Task<(AccountDTO, AuthenticationResultType)> AuthenticateAsync(LoginRequest request)
+    public async Task<(AccountDTO, AuthenticationResultType)> AuthenticateAsync(LoginRequest request, CancellationToken cancellationToken)
     {
-        AccountDTO accountByEmail = await _accountDao.GetByEmailAsync(request.Login);
-        AccountDTO accountByUsername = await _accountDao.GetByUsernameAsync(request.Login);
+        AccountDTO accountByEmail = await _accountRepository.GetByEmailAsync(request.Login, cancellationToken);
+        AccountDTO accountByUsername = await _accountRepository.GetByUsernameAsync(request.Login, cancellationToken);
         
         if (accountByEmail == null && accountByUsername == null)
         {

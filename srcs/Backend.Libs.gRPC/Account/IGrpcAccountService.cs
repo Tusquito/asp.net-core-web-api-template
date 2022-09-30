@@ -5,7 +5,7 @@ using Backend.Libs.gRPC.Account.Responses;
 namespace Backend.Libs.gRPC.Account;
 
 [ServiceContract]
-public interface IAccountService
+public interface IGrpcAccountService
 {
     [OperationContract]
     Task<GrpcAccountResponse> GetAccountByIdAsync(GrpcGetAccountByIdRequest request, CancellationToken cancellationToken);

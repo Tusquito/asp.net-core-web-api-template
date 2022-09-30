@@ -16,20 +16,20 @@ public class TestGetAccountEndpoint : EndpointBaseAsync
     .WithoutRequest
     .WithActionResult
 {
-    private readonly IAccountService _accountService;
+    private readonly IGrpcAccountService _grpcAccountService;
 
-    public TestGetAccountEndpoint(IAccountService accountService)
+    public TestGetAccountEndpoint(IGrpcAccountService grpcAccountService)
     {
-        _accountService = accountService;
+        _grpcAccountService = grpcAccountService;
     }
     
     [HttpGet("api/tests/account")]
     public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
-        var response = await _accountService.GetAccountByIdAsync(new GrpcGetAccountByIdRequest
+        var response = await _grpcAccountService.GetAccountByIdAsync(new GrpcGetAccountByIdRequest
         {
             Id = Guid.Parse("59001090-b7f7-47aa-911b-cbccbdf6857c")
         }, cancellationToken: cancellationToken);
-        return EndpointResult.Ok(response.AccountDto);
+        return DomainResults.Ok(response.AccountDto);
     }
 }

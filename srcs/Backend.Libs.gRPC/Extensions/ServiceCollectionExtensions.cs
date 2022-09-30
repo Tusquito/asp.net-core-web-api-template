@@ -27,7 +27,7 @@ public static class ServiceCollectionExtensions
     
     public static IServiceCollection AddGrpcDatabaseServices(this IServiceCollection services)
     {
-        services.AddGrpcClientService<IAccountService>(GrpcServiceType.DATABASE_SERVER_HOST);
+        services.AddGrpcClientService<IGrpcAccountService>(GrpcServiceType.DATABASE_SERVER_HOST);
         return services;
     }
 }

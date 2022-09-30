@@ -18,8 +18,8 @@ public class BackendDbContext : DbContext
         byte[] encryptionIv = Convert.FromBase64String(_dbConfig.EncryptionIv ?? throw new ArgumentException("PGSQL_DATABASE_ENCRYPTION_IV env variable missing"));
         _encryptionProvider = new AesProvider(encryptionKey, encryptionIv);
     }
-        
-    public DbSet<AccountEntity> Accounts { get; set; }
+
+    public DbSet<AccountEntity> Accounts { get; set; } = null!;
 
     public override int SaveChanges(bool acceptAllChangesOnSuccess)
     {

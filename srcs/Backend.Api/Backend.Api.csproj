@@ -22,11 +22,4 @@
       <ProjectReference Include="..\Backend.Plugins.Database\Backend.Plugins.Database.csproj" />
       <ProjectReference Include="..\Backend.Plugins.RabbitMQ\Backend.Plugins.RabbitMQ.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Authentication.JwtBearer, Version=6.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>..\..\..\..\..\.nuget\packages\microsoft.aspnetcore.authentication.jwtbearer\6.0.1\lib\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>
