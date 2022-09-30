@@ -1,12 +1,17 @@
+# Features
+- PGSQL Support
+- Redis Support
+- Base Account Entity
+- Generic Responses
+- Pub/Sub [RabbitMQ](https://www.rabbitmq.com/dotnet.html)
+- Repository Pattern
+- Scoped [ApiEndpoints](https://github.com/ardalis/ApiEndpoints)
+- Microservices architecture with [code-first gRPC](https://github.com/protobuf-net/protobuf-net.Grpc) communication
+
 # Roadmap
-- [x] PGSQL Support
-- [ ] JWT Authentication With Authority Check
-- [x] Base Account Entity With Encrypted Fields
-- [x] Generic Responses For I18N
-- [x] Login & Register Flow 
-- [ ] Microservices Architecture with gRPC
-- [x] Add Redis Caching
-- [ ] i18n Support
-- [ ] Add 2FA Support
-- [ ] Add Logs through MongoDb
-- [ ] Add Response Data Pagination
+- Full JWT Auth flow (register, login, logout, refresh)
+- i18n Support
+- Paginated Responses
+- gRPC responses cached
+- MongoDB Support
+- Logs through MongoDB
