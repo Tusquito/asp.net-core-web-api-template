@@ -1,9 +1,9 @@
 {
-    "author": "Hugo Pagniez",
-    "name": "Backend Base Solution",
-    "description": "",
-    "identity": "HugoPagniez.Backend.1.0",
-    "shortName": "backendapi",
+    "author": "Tusquito",
+    "name": "ASP.NET Core Web API Template",
+    "description": "A ASP.NET Core web API Template using clean microservices architecture, repository pattern, scoped api endpoints...",
+    "identity": "Tusquito.asp.net-core-web-api-template.1.0",
+    "shortName": "asp.net-core-web-api-template",
     "tags": {
       "language": "C#",
       "type": "solution"
