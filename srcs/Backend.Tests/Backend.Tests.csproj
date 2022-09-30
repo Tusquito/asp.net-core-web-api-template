@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Api.Database\Backend.Api.Database.csproj" />
+      <ProjectReference Include="..\Backend.Server.Database\Backend.Server.Database.csproj" />
       <ProjectReference Include="..\Backend.Api\Backend.Api.csproj" />
     </ItemGroup>
 

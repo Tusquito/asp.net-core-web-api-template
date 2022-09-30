@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Api.Database", "srcs\Backend.Api.Database\Backend.Api.Database.csproj", "{295C0CD0-24BA-47D4-A610-FD71A1AD0E2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Server.Database", "srcs\Backend.Server.Database\Backend.Server.Database.csproj", "{295C0CD0-24BA-47D4-A610-FD71A1AD0E2C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend.Api", "srcs\Backend.Api\Backend.Api.csproj", "{AA8CBFB1-0F90-40A7-9A13-C2C03E5497A3}"
 EndProject
