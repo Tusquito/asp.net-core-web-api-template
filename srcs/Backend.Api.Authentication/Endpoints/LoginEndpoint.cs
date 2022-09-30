@@ -7,7 +7,6 @@ using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Models.Login;
 using Backend.Libs.Security.Extensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Authentication.Endpoints;
