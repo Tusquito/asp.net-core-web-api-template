@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
       <ProjectReference Include="..\Backend.Server.Database\Backend.Server.Database.csproj" />
       <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
       <ProjectReference Include="..\Backend.Libs.Cryptography\Backend.Libs.Cryptography.csproj" />

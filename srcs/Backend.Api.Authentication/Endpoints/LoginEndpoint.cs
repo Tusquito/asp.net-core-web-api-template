@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Api.Authentication.Services.Account;
 using Backend.Libs.Database.Account;
-using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Models.Login;
 using Backend.Libs.Security.Extensions;
+using Backend.Plugins.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Authentication.Endpoints;

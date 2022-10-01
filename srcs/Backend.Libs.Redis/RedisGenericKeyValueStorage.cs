@@ -35,7 +35,7 @@ public sealed class RedisGenericKeyValueAsyncStorage<TObject, TKey> : IKeyValueA
         }
 
 
-        public async Task<TObject> GetByIdAsync(TKey id) => (await _cacheClient.GetAsync<TObject>(ToKey(id)).ConfigureAwait(false)).Value;
+        public async Task<TObject?> GetByIdAsync(TKey id) => (await _cacheClient.GetAsync<TObject>(ToKey(id)).ConfigureAwait(false)).Value;
 
         public async Task<IEnumerable<TObject>> GetByIdsAsync(IEnumerable<TKey> ids)
         {

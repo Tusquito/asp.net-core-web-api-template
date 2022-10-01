@@ -3,14 +3,14 @@ using Backend.Libs.Domain.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Libs.Domain;
+namespace Backend.Plugins.Domain;
 
-internal record GenericResult(int Status, object Data, GenericResultMessage Message);
+internal record GenericResult(int Status, object? Data, GenericResultMessage Message);
 internal record GenericResultMessage(ResultMessageKey Key, int Code, params object[] Args);
     
 public static class DomainResults
 {
-    public static OkObjectResult Ok(object data = null, ResultMessageKey messageKey = ResultMessageKey.SUCCESS, params object[] args)
+    public static OkObjectResult Ok(object? data = null, ResultMessageKey messageKey = ResultMessageKey.SUCCESS, params object[] args)
     {
         return new OkObjectResult(new GenericResult(StatusCodes.Status200OK, data, new GenericResultMessage(messageKey, (int)messageKey, args)));
     }

@@ -6,7 +6,7 @@ namespace Backend.Libs.gRPC.Enums;
 public enum GrpcResponseType
 {
     Success,
-    Failed,
+    Failure,
     NotFound,
     RequestError,
     UnknownError

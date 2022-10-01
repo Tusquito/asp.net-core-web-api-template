@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 using Backend.Libs.Cryptography.Extensions;
-using Backend.Libs.Domain.Extensions;
-using Backend.Libs.gRPC.Extensions;
+using Backend.Libs.Redis.Extensions;
+using Backend.Plugins.Domain.Extensions;
+using Backend.Plugins.gRPC.Extensions;
 using Backend.Plugins.RabbitMQ.Extensions;
 using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -14,14 +14,6 @@ namespace Backend.Api;
 
 public class Startup
 {
-    public Startup(IConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
-
-    private IConfiguration Configuration { get; }
-
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCors();
@@ -31,6 +23,7 @@ public class Startup
 
         services.AddEndpointsApiExplorer();
         services.AddRabbitMqClientFactoryFromEnv();
+        services.TryAddRedisKeyValueStorage();
 
         services.AddRabbitMqProducer<TestMessage>();
 

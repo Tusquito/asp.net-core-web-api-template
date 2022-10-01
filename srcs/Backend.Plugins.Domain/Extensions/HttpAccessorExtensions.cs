@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace Backend.Libs.Domain.Extensions;
+namespace Backend.Plugins.Domain.Extensions;
 
 public static class HttpAccessorExtensions
 {
     public static Guid GetAccountId(this IHttpContextAccessor accessor)
     {
-        Claim claim = accessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
+        Claim? claim = accessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
         if (claim == null)
         {
             return Guid.Empty;
@@ -20,9 +17,9 @@ public static class HttpAccessorExtensions
         return !Guid.TryParse(claim.Value, out Guid id) ? Guid.Empty : id;
     }
     
-    public static string GetRequestIp(this IHttpContextAccessor accessor, bool tryUseXForwardHeader = true)
+    public static string GetRequestIpOrThrow(this IHttpContextAccessor accessor, bool tryUseXForwardHeader = true)
     {
-        string ip = null;
+        string? ip = null;
         if (tryUseXForwardHeader)
         {
             ip = accessor.GetHeaderValueAs<string>("X-Forwarded-For").SplitCsv().FirstOrDefault();
@@ -38,10 +35,10 @@ public static class HttpAccessorExtensions
             ip = accessor.GetHeaderValueAs<string>("REMOTE_ADDR");
         }
 
-        return ip;
+        return ip ?? throw new ArgumentException("Can not retrieve request ip from headers.");
     }
 
-    private static T GetHeaderValueAs<T>(this IHttpContextAccessor accessor, string headerName)
+    private static T? GetHeaderValueAs<T>(this IHttpContextAccessor accessor, string headerName)
     {
         if (accessor.HttpContext == null || accessor.HttpContext.Request.Headers.TryGetValue(headerName, out StringValues values) == false)
         {
@@ -58,11 +55,11 @@ public static class HttpAccessorExtensions
         return default;
     }
 
-    private static List<string> SplitCsv(this string csvList, bool nullOrWhitespaceInputReturnsNull = false)
+    private static List<string> SplitCsv(this string? csvList, bool nullOrWhitespaceInputReturnsNull = false)
     {
         if (string.IsNullOrWhiteSpace(csvList))
         {
-            return nullOrWhitespaceInputReturnsNull ? null : new List<string>();
+            return nullOrWhitespaceInputReturnsNull ? null : new List<string?>();
         }
 
         return csvList

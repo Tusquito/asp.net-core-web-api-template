@@ -7,14 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Foundatio.JsonNet" Version="10.5.0" />
-      <PackageReference Include="Foundatio.Redis" Version="10.5.0" />
-      <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
-      <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Redis\Backend.Libs.Redis.csproj" />
     </ItemGroup>
 
 </Project>

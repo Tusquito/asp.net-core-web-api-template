@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
-using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
-using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.gRPC.Account.Responses;
 using Backend.Libs.gRPC.Enums;
 using Backend.Libs.Models.Account;
+using Backend.Plugins.Domain;
+using Backend.Plugins.Domain.Extensions;
 using EmailValidation;
 using Mapster;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +40,7 @@ public class RegisterEndpoint : EndpointBaseAsync
     [HttpPost("/register")]
     public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = new())
     {
-        string requesterIp = _httpContextAccessor.GetRequestIp();
+        string requesterIp = _httpContextAccessor.GetRequestIpOrThrow();
         if (request.Password != request.PasswordConfirmation)
         {
             return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION);
@@ -58,7 +58,7 @@ public class RegisterEndpoint : EndpointBaseAsync
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, new []{request.Username});
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, request.Username);
         }
 
         accountResponse = await _grpcAccountService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest
@@ -68,7 +68,7 @@ public class RegisterEndpoint : EndpointBaseAsync
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, new []{request.Email});
+            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, request.Email);
         }
 
         try
@@ -86,7 +86,7 @@ public class RegisterEndpoint : EndpointBaseAsync
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(RegisterEndpoint));
-            return DomainResults.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, new[] { nameof(AccountDTO) });
+            return DomainResults.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, nameof(AccountDTO));
         }
             
         return DomainResults.Ok();

@@ -5,7 +5,7 @@ using Backend.Plugins.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Plugins.Database.DAOs;
+namespace Backend.Plugins.Database.Repositories;
 
 public class AccountRepository : IAccountRepository
 {

@@ -3,10 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
-using Backend.Libs.Domain;
 using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.Security.Attributes;
+using Backend.Plugins.Domain;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Endpoints.Test;

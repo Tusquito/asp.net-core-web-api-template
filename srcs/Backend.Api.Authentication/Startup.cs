@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using Backend.Libs.Domain.Extensions;
-using Backend.Libs.gRPC.Extensions;
+using Backend.Plugins.Domain.Extensions;
+using Backend.Plugins.gRPC.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

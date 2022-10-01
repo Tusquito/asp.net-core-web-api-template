@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Backend.Libs.Domain;
 using Backend.Libs.RabbitMQ.Producers;
+using Backend.Plugins.Domain;
 using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

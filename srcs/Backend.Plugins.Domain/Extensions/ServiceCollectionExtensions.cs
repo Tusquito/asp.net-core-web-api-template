@@ -1,12 +1,11 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Backend.Libs.Cryptography.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
-namespace Backend.Libs.Domain.Extensions;
+namespace Backend.Plugins.Domain.Extensions;
 
 public static class ServiceCollectionExtensions
 {

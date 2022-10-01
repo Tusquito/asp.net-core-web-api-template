@@ -1,11 +1,13 @@
-﻿using Backend.Libs.gRPC.Account;
+﻿using Backend.Libs.Domain.Services.Account;
+using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Enums;
+using Backend.Plugins.Domain.Services.Account;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProtoBuf.Grpc.Client;
 
-namespace Backend.Libs.gRPC.Extensions;
+namespace Backend.Plugins.gRPC.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -27,6 +29,7 @@ public static class ServiceCollectionExtensions
     
     public static IServiceCollection AddGrpcDatabaseServices(this IServiceCollection services)
     {
+        services.AddTransient<IAccountService, AccountService>();
         services.AddGrpcClientService<IGrpcAccountService>(GrpcServiceType.DATABASE_SERVER_HOST);
         return services;
     }

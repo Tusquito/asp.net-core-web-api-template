@@ -1,10 +1,11 @@
 ﻿using Backend.Libs.Database.Account;
+using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.gRPC.Account.Responses;
 using Backend.Libs.gRPC.Enums;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Libs.gRPC.Account;
+namespace Backend.Plugins.gRPC.Account;
 
 public class GrpcAccountService : IGrpcAccountService
 {
@@ -103,7 +104,7 @@ public class GrpcAccountService : IGrpcAccountService
             return new GrpcAccountResponse
             {
                 AccountDto = accountDto,
-                Type = accountDto == null ? GrpcResponseType.Failed : GrpcResponseType.Success
+                Type = accountDto == null ? GrpcResponseType.Failure : GrpcResponseType.Success
             };
         }
         catch (Exception e)
@@ -127,7 +128,7 @@ public class GrpcAccountService : IGrpcAccountService
             return new GrpcAccountResponse
             {
                 AccountDto = accountDto,
-                Type = accountDto == null ? GrpcResponseType.Failed : GrpcResponseType.Success
+                Type = accountDto == null ? GrpcResponseType.Failure : GrpcResponseType.Success
             };
         }
         catch (Exception e)
