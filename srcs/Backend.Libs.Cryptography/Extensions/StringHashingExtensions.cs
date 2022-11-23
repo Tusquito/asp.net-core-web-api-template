@@ -12,8 +12,8 @@ public static class StringHashingExtensions
         return string.Concat(hash.ComputeHash(Encoding.UTF8.GetBytes(str)).Select(item => item.ToString("x2")));
     }
     
-    public static string ToJwtRole(this AuthorityType authorityType)
+    public static string ToJwtRole(this RoleType roleType)
     {
-        return ((int)authorityType).ToString();
+        return ((int)roleType).ToString();
     }
 }

@@ -9,5 +9,5 @@ public class AccountRequestQuery
     public string Username { get; set; }
     public string Email { get; set; }
     public string Ip { get; set; }
-    public AuthorityType AuthorityType { get; set; } 
+    public RoleType RoleType { get; set; } 
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -14,6 +15,7 @@ using Backend.Plugins.Domain;
 using Backend.Plugins.Domain.Extensions;
 using EmailValidation;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -29,7 +31,8 @@ public class RegisterEndpoint : EndpointBaseAsync
     private readonly IGrpcAccountService _grpcAccountService;
     private readonly ILogger<RegisterEndpoint> _logger;
 
-    public RegisterEndpoint(IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService, ILogger<RegisterEndpoint> logger, IGrpcAccountService grpcAccountService)
+    public RegisterEndpoint(IHttpContextAccessor httpContextAccessor, IPasswordHasherService passwordHasherService,
+        ILogger<RegisterEndpoint> logger, IGrpcAccountService grpcAccountService)
     {
         _httpContextAccessor = httpContextAccessor;
         _passwordHasherService = passwordHasherService;
@@ -37,8 +40,10 @@ public class RegisterEndpoint : EndpointBaseAsync
         _grpcAccountService = grpcAccountService;
     }
 
+    [AllowAnonymous]
     [HttpPost("/register")]
-    public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = new())
+    public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request,
+        CancellationToken cancellationToken = new())
     {
         string requesterIp = _httpContextAccessor.GetRequestIpOrThrow();
         if (request.Password != request.PasswordConfirmation)
@@ -51,10 +56,11 @@ public class RegisterEndpoint : EndpointBaseAsync
             return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_EMAIL_FORMAT);
         }
 
-        GrpcAccountResponse accountResponse = await _grpcAccountService.GetAccountByUsernameAsync(new GrpcGetAccountByStringRequest
-        {
-            Search = request.Username
-        }, cancellationToken);
+        GrpcAccountResponse accountResponse = await _grpcAccountService.GetAccountByUsernameAsync(
+            new GrpcGetAccountByStringRequest
+            {
+                Search = request.Username
+            }, cancellationToken);
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
@@ -77,7 +83,7 @@ public class RegisterEndpoint : EndpointBaseAsync
             accountDto.PasswordSalt = _passwordHasherService.GenerateRandomSalt();
             accountDto.Password = _passwordHasherService.HashPassword(request.Password, accountDto.PasswordSalt);
             accountDto.Ip = requesterIp;
-            accountDto.AuthorityType = AuthorityType.User;
+            accountDto.Roles = new List<RoleType> { RoleType.User };
             await _grpcAccountService.UpdateAccountAsync(new GrpcSaveAccountRequest
             {
                 AccountDto = accountDto
@@ -86,9 +92,10 @@ public class RegisterEndpoint : EndpointBaseAsync
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(RegisterEndpoint));
-            return DomainResults.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR, nameof(AccountDTO));
+            return DomainResults.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR,
+                nameof(AccountDTO));
         }
-            
+
         return DomainResults.Ok();
     }
 }

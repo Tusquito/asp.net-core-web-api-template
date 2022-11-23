@@ -8,9 +8,9 @@ namespace Backend.Libs.Security.Attributes;
 
 public class AuthorityRequiredAttribute : AuthorizeAttribute
 {
-    public AuthorityRequiredAttribute(AuthorityType authorityType)
+    public AuthorityRequiredAttribute(RoleType roleType)
     {
-        IEnumerable<AuthorityType> enums = Enum.GetValues(typeof(AuthorityType)).Cast<AuthorityType>().Where(s => s >= authorityType);
+        IEnumerable<RoleType> enums = Enum.GetValues(typeof(RoleType)).Cast<RoleType>().Where(s => s >= roleType);
         Roles = string.Join(",", enums.Select(s => s.ToJwtRole()));
         AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme;
     }

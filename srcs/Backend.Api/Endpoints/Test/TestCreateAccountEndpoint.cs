@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using AuthPermissions.AspNetCore;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
+using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Services.Account;
 using Backend.Plugins.Domain;
 using Backend.Plugins.Domain.Extensions;
@@ -35,7 +38,7 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
         var response = await _accountService.AddAsync(new AccountDTO
         {
             Id = Guid.NewGuid(),
-            AuthorityType = AuthorityType.Admin,
+            Roles = new List<RoleType> { RoleType.Root },
             Username = "admin",
             Password = _passwordHasherService.HashPassword("test", salt),
             Email = "admin@gmail.com",

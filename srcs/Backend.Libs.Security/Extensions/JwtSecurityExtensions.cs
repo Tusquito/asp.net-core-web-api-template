@@ -22,7 +22,7 @@ public static class JwtSecurityExtensions
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                new Claim(ClaimTypes.Role, account.AuthorityType.ToJwtRole())
+                new Claim(ClaimTypes.Role, account.Roles.Aggregate("", (x, y) => $"{x},{y.ToJwtRole()}"))
             }),
             Expires = DateTime.UtcNow.AddHours(JwtExpiryTime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(JwtSignatureKey), SecurityAlgorithms.HmacSha256Signature)

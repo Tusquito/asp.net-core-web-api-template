@@ -7,6 +7,7 @@ using Backend.Libs.Domain.Enums;
 using Backend.Libs.Models.Login;
 using Backend.Libs.Security.Extensions;
 using Backend.Plugins.Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Authentication.Endpoints;
@@ -22,6 +23,7 @@ public class LoginEndpoint : EndpointBaseAsync
         _userAuthenticationService = userAuthenticationService;
     }
 
+    [AllowAnonymous]
     [HttpPost("/login")]
     public override async Task<ActionResult> HandleAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = new())
     {

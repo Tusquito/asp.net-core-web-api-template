@@ -18,8 +18,8 @@ public class AccountDTO : IUuidDTO
     [ProtoMember(5)]
     [JsonIgnore]
     public string Ip { get; set; } = string.Empty;
-    [ProtoMember(6)]
-    public AuthorityType AuthorityType { get; set; }
+    [ProtoMember(6)] 
+    public List<RoleType> Roles { get; set; } = new();
     [JsonIgnore]
     [ProtoMember(7)]
     public string PasswordSalt { get; set; } = string.Empty;

@@ -12,10 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Enums" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Microsoft.AspNetCore.Mvc.Core, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
         <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.1\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
       </Reference>

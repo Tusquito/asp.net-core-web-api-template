@@ -25,7 +25,8 @@ public class AccountEntity : IUuidEntity
 
     [Encrypted] 
     public string Ip { get; set; } = string.Empty;
-    public AuthorityType AuthorityType { get; set; }
+
+    public List<RoleType> Roles { get; set; } = new();
     public DateTime CreatedOn { get; set; }
     public DateTime UpdatedOn { get; set; }
 }
