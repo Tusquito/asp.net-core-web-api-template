@@ -1,3 +1,0 @@
-INSERT INTO account_scheme.account(
-	"Id", "Username", "Email", "Password", "PasswordSalt", "Ip", "Roles", "CreatedOn", "UpdatedOn")
-	VALUES (, ?, ?, ?, ?, ?, ?, ?, ?);
