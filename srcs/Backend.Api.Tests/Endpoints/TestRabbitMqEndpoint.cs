@@ -1,14 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
+﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
 using Backend.Libs.RabbitMQ.Producers;
 using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace Backend.Api.Endpoints.Test;
+namespace Backend.Api.Tests.Endpoints;
 
 public class TestRabbitMqEndpoint : EndpointBaseAsync
     .WithoutRequest

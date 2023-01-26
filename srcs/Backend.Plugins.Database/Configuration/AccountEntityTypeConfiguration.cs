@@ -9,5 +9,7 @@ public class AccountEntityTypeConfiguration : IEntityTypeConfiguration<AccountEn
     public void Configure(EntityTypeBuilder<AccountEntity> builder)
     {
         builder.HasKey(x => x.Id);
-    }
+        builder.HasIndex(x => new { x.Username, x.Email })
+            .IsUnique();
+}
 }

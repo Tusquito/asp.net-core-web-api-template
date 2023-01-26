@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backend.Plugins.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class _0 : Migration
+    public partial class MigrationBase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,6 +33,13 @@ namespace Backend.Plugins.Database.Migrations
                 {
                     table.PrimaryKey("PK_account", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_account_Username_Email",
+                schema: "account_scheme",
+                table: "account",
+                columns: new[] { "Username", "Email" },
+                unique: true);
         }
 
         /// <inheritdoc />

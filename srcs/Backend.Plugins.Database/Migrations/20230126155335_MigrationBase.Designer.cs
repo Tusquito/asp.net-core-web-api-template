@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Plugins.Database.Migrations
 {
     [DbContext(typeof(BackendDbContext))]
-    [Migration("20230123102636_[0]")]
-    partial class _0
+    [Migration("20230126155335_MigrationBase")]
+    partial class MigrationBase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -62,6 +62,9 @@ namespace Backend.Plugins.Database.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username", "Email")
+                        .IsUnique();
 
                     b.ToTable("account", "account_scheme");
                 });

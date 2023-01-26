@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Backend.Libs.Cryptography.Extensions;
 using Backend.Libs.Domain.Abstractions;
+using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Redis.Extensions;
 using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
@@ -56,6 +57,8 @@ namespace Backend.Api.Authentication
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseRequesterIpMiddleware();
+            app.UseRequesterCultureMiddleware();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

@@ -60,6 +60,9 @@ namespace Backend.Plugins.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Username", "Email")
+                        .IsUnique();
+
                     b.ToTable("account", "account_scheme");
                 });
 #pragma warning restore 612, 618

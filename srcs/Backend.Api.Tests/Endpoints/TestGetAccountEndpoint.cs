@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
+﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Attributes;
@@ -10,7 +7,7 @@ using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Domain.Services.Account;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Api.Endpoints.Test;
+namespace Backend.Api.Tests.Endpoints;
 
 public class TestGetAccountEndpoint : EndpointBaseAsync
     .WithoutRequest

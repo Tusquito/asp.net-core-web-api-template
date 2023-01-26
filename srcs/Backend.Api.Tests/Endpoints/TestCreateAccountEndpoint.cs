@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
+﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Commands.Account;
 using Backend.Libs.Domain.Extensions;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Backend.Api.Endpoints.Test;
+namespace Backend.Api.Tests.Endpoints;
 
 public class TestCreateAccountEndpoint : EndpointBaseAsync
     .WithoutRequest

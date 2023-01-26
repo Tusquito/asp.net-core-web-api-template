@@ -25,4 +25,8 @@
       <ProjectReference Include="..\Backend.Plugins.Database\Backend.Plugins.Database.csproj" />
       <ProjectReference Include="..\Backend.Plugins.RabbitMQ\Backend.Plugins.RabbitMQ.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Endpoints" />
+    </ItemGroup>
 </Project>
