@@ -27,7 +27,7 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDTO? accountDto = await _accountRepository.GetByIdAsync(request.Id, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.GetByIdAsync(request.Id, cancellationToken);
 
             return new GrpcAccountResponse
             {
@@ -51,7 +51,7 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDTO? accountDto = await _accountRepository.GetByEmailAsync(request.Search, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.GetByEmailAsync(request.Search, cancellationToken);
 
             return new GrpcAccountResponse
             {
@@ -75,7 +75,7 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDTO? accountDto = await _accountRepository.GetByUsernameAsync(request.Search, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.GetByUsernameAsync(request.Search, cancellationToken);
 
             return new GrpcAccountResponse
             {
@@ -99,7 +99,7 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDTO? accountDto = await _accountRepository.UpdateAsync(request.AccountDto, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.UpdateAsync(request.AccountDto, cancellationToken);
 
             return new GrpcAccountResponse
             {
@@ -123,7 +123,7 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDTO? accountDto = await _accountRepository.AddAsync(request.AccountDto, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.AddAsync(request.AccountDto, cancellationToken);
 
             return new GrpcAccountResponse
             {

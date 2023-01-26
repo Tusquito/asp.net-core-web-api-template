@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using AuthPermissions.AspNetCore;
-using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
-using Backend.Libs.Domain.Enums;
-using Backend.Libs.Domain.Services.Account;
-using Backend.Plugins.Domain;
-using Backend.Plugins.Domain.Extensions;
+using Backend.Libs.Domain;
+using Backend.Libs.Domain.Commands.Account;
+using Backend.Libs.Domain.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,33 +17,27 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
     .WithoutRequest
     .WithoutResult
 {
-    private readonly IAccountService _accountService;
-    private readonly IPasswordHasherService _passwordHasherService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TestCreateAccountEndpoint(IAccountService accountService, IPasswordHasherService passwordHasherService,
-        IHttpContextAccessor httpContextAccessor)
+    private readonly ISender _sender;
+    public TestCreateAccountEndpoint(ISender sender)
     {
-        _accountService = accountService;
-        _passwordHasherService = passwordHasherService;
-        _httpContextAccessor = httpContextAccessor;
+        _sender = sender;
     }
 
     [HttpPost("api/tests/account")]
+    [ProducesResponseType(typeof(GenericResult), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GenericResult), StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(GenericResult), StatusCodes.Status503ServiceUnavailable)]
+    [Produces("application/json")]
     public override async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
-        string salt = _passwordHasherService.GenerateRandomSalt();
-        var response = await _accountService.AddAsync(new AccountDTO
+        CreateAccountCommand command = new CreateAccountCommand("tester", "tester", "tester@.gmail.com", new List<RoleType>
         {
-            Id = Guid.NewGuid(),
-            Roles = new List<RoleType> { RoleType.Root },
-            Username = "admin",
-            Password = _passwordHasherService.HashPassword("test", salt),
-            Email = "admin@gmail.com",
-            Ip = _httpContextAccessor.GetRequestIpOrThrow(),
-            PasswordSalt = salt
-        }, cancellationToken);
+            RoleType.Tester
+        }, Guid.Parse("59001090-b7f7-47aa-911b-cbccbdf6857c"));
+        
+        Result result = await _sender.Send(command, cancellationToken);
 
-        return DomainResults.Ok(response);
+        return result.ToActionResult();
     }
 }

@@ -17,7 +17,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection TryAddMappedAsyncUuidRepository<TEntity, TDto>(this IServiceCollection services)
         where TEntity : class, IUuidEntity
-        where TDto : class, IUuidDTO
+        where TDto : class, IUuidDto
     {
         services.AddTransient<IGenericMapper<TEntity, TDto>, GenericMapsterMapper<TEntity, TDto>>();
         services.AddTransient<IGenericAsyncUuidRepository<TDto>, GenericMappedAsyncUuidRepository<TEntity, TDto>>();
@@ -64,7 +64,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddPgsqlDatabaseContext<BackendDbContext>();
 
-        services.TryAddMappedAsyncUuidRepository<AccountEntity, AccountDTO>();
+        services.TryAddMappedAsyncUuidRepository<AccountEntity, AccountDto>();
         services.TryAddTransient<IAccountRepository, AccountRepository>();
 
         return services;

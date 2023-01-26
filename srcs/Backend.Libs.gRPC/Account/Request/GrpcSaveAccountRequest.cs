@@ -7,5 +7,5 @@ namespace Backend.Libs.gRPC.Account.Request;
 public class GrpcSaveAccountRequest
 {
     [ProtoMember(1)]
-    public AccountDTO? AccountDto { get; init; }
+    public AccountDto? AccountDto { get; init; }
 }

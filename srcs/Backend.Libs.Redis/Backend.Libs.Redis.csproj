@@ -1,15 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Foundatio.JsonNet" Version="10.5.0" />
-      <PackageReference Include="Foundatio.Redis" Version="10.5.0" />
-      <PackageReference Include="StackExchange.Redis" Version="2.6.66" />
+      <PackageReference Include="Foundatio.JsonNet" Version="10.6.0" />
+      <PackageReference Include="Foundatio.Redis" Version="10.6.0" />
+      <PackageReference Include="StackExchange.Redis" Version="2.6.90" />
     </ItemGroup>
 
     <ItemGroup>

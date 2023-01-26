@@ -13,7 +13,7 @@ public static class JwtSecurityExtensions
     private static readonly byte[] JwtSignatureKey = Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_SIGNATURE_KEY")?.ToSha512() ?? "123456789".ToSha512());
     private static readonly JwtSecurityTokenHandler TokenHandler = new();
     
-    public static string GenerateJwtToken(this AccountDTO account)
+    public static string GenerateJwtToken(this AccountDto account)
     {
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -22,7 +22,7 @@ public static class JwtSecurityExtensions
             Subject = new ClaimsIdentity(new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
-                new Claim(ClaimTypes.Role, account.Roles.Aggregate("", (x, y) => $"{x},{y.ToJwtRole()}"))
+                new Claim(ClaimTypes.Role, string.Join(",", account.Roles.Select(s => s.ToString())))
             }),
             Expires = DateTime.UtcNow.AddHours(JwtExpiryTime),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(JwtSignatureKey), SecurityAlgorithms.HmacSha256Signature)

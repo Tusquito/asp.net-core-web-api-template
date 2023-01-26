@@ -8,7 +8,7 @@ namespace Backend.Plugins.Database;
 
 public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuidRepository<TDto>
     where TEntity : class, IUuidEntity
-    where TDto : class, IUuidDTO
+    where TDto : class, IUuidDto
 
 {
     private readonly IGenericMapper<TEntity, TDto?> _mapper;

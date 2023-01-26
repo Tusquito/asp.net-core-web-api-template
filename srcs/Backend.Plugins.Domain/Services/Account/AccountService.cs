@@ -1,4 +1,5 @@
 ﻿using Backend.Libs.Database.Account;
+using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Services.Account;
 using Backend.Libs.gRPC.Account;
@@ -12,28 +13,30 @@ namespace Backend.Plugins.Domain.Services.Account;
 
 public class AccountService : IAccountService
 {
-    private readonly IKeyValueAsyncStorage<AccountDTO, Guid> _accountByIdStorage;
+    private readonly IKeyValueAsyncStorage<AccountDto, Guid> _accountByIdStorage;
+    private readonly IKeyValueAsyncStorage<AccountDto, string> _accountByLoginStorage;
     private readonly ILogger<AccountService> _logger;
     private readonly IGrpcAccountService _grpcService;
     private readonly TimeSpan _cacheTtl = TimeSpan.FromHours(2);
 
-    public AccountService(IKeyValueAsyncStorage<AccountDTO, Guid> accountByIdStorage, ILogger<AccountService> logger, IGrpcAccountService grpcService)
+    public AccountService(IKeyValueAsyncStorage<AccountDto, Guid> accountByIdStorage, ILogger<AccountService> logger, IGrpcAccountService grpcService, IKeyValueAsyncStorage<AccountDto, string> accountByLoginStorage)
     {
         _accountByIdStorage = accountByIdStorage;
         _logger = logger;
         _grpcService = grpcService;
+        _accountByLoginStorage = accountByLoginStorage;
     }
 
-    public async Task<ServiceResult<AccountDTO?>> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool forceRefresh = false)
+    public async Task<Result<AccountDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool forceRefresh = false)
     {
         try
         {
             if (!forceRefresh)
             {
-                AccountDTO? accountDto = await _accountByIdStorage.GetByIdAsync(id);
+                AccountDto? accountDto = await _accountByIdStorage.GetByIdAsync(id);
                 if (accountDto != default)
                 {
-                    return new ServiceResult<AccountDTO?>(accountDto);
+                    return Result<AccountDto?>.Ok(accountDto);
                 }
             }
 
@@ -41,26 +44,26 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.RequestError or GrpcResponseType.UnknownError)
             {
-                return new ServiceResult<AccountDTO?>(ServiceResultType.Error);
+                return Result<AccountDto?>.BadRequest();
             }
 
             if (response.Type == GrpcResponseType.NotFound || response.AccountDto == null)
             {
-                return new ServiceResult<AccountDTO?>(ServiceResultType.NotFound);
+                return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountById);
             }
 
             await _accountByIdStorage.RegisterAsync(id, response.AccountDto, _cacheTtl);
 
-            return new ServiceResult<AccountDTO?>(response.AccountDto);
+            return Result<AccountDto?>.Ok(response.AccountDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GetByIdAsync));
-            return new ServiceResult<AccountDTO?>(ServiceResultType.Maintenance);
+            return Result<AccountDto?>.Maintenance();
         }
     }
 
-    public async Task<ServiceResult> UpdateAsync(AccountDTO obj, CancellationToken cancellationToken)
+    public async Task<Result> UpdateAsync(AccountDto obj, CancellationToken cancellationToken)
     {
         try
         {
@@ -68,26 +71,28 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.UnknownError or GrpcResponseType.RequestError)
             {
-                return new ServiceResult(ServiceResultType.Error);
+                return Result.Failure();
             }
 
             if (response.Type == GrpcResponseType.Failure || response.AccountDto == null)
             {
-                return new ServiceResult(ServiceResultType.Failure);
+                return Result.NotFound();
             }
 
             await _accountByIdStorage.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
+            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
+            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
 
-            return new ServiceResult();
+            return Result.NoContent();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(UpdateAsync));
-            return new ServiceResult<AccountDTO?>(ServiceResultType.Maintenance);
+            return Result.Maintenance();
         }
     }
 
-    public async Task<ServiceResult<AccountDTO?>> AddAsync(AccountDTO obj, CancellationToken cancellationToken)
+    public async Task<Result<AccountDto?>> AddAsync(AccountDto obj, CancellationToken cancellationToken)
     {
         try
         {
@@ -95,27 +100,101 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.UnknownError or GrpcResponseType.RequestError)
             {
-                return new ServiceResult<AccountDTO?>(ServiceResultType.Error);
+                return Result<AccountDto?>.BadRequest();
             }
 
             if (response.Type == GrpcResponseType.Failure || response.AccountDto == null)
             {
-                return new ServiceResult<AccountDTO?>(ServiceResultType.NotFound);
+                return Result<AccountDto?>.Failed();
             }
 
             await _accountByIdStorage.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
+            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
+            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
 
-            return new ServiceResult<AccountDTO?>(response.AccountDto);
+            return Result<AccountDto?>.Created(response.AccountDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(AddAsync));
-            return new ServiceResult<AccountDTO?>(ServiceResultType.Maintenance);
+            return Result<AccountDto?>.Maintenance();
         }
     }
 
-    public Task<ServiceResult> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
+    public Task<Result> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<Result<AccountDto?>> GetByEmailAsync(string email, CancellationToken cancellationToken, bool forceRefresh = false)
+    {
+        try
+        {
+            if (!forceRefresh)
+            {
+                AccountDto? accountDto = await _accountByLoginStorage.GetByIdAsync(email);
+                if (accountDto != default)
+                {
+                    return Result<AccountDto?>.Ok(accountDto);
+                }
+            }
+
+            GrpcAccountResponse response = await _grpcService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest { Search = email }, cancellationToken);
+
+            if (response.Type is GrpcResponseType.RequestError or GrpcResponseType.UnknownError)
+            {
+                return Result<AccountDto?>.BadRequest();
+            }
+
+            if (response.Type == GrpcResponseType.NotFound || response.AccountDto == null)
+            {
+                return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountById);
+            }
+
+            await _accountByLoginStorage.RegisterAsync(email, response.AccountDto, _cacheTtl);
+
+            return Result<AccountDto?>.Ok(response.AccountDto);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "[{Scope}]", nameof(GetByEmailAsync));
+            return Result<AccountDto?>.Maintenance();
+        }
+    }
+
+    public async Task<Result<AccountDto?>> GetByUsernameAsync(string username, CancellationToken cancellationToken, bool forceRefresh = false)
+    {
+        try
+        {
+            if (!forceRefresh)
+            {
+                AccountDto? accountDto = await _accountByLoginStorage.GetByIdAsync(username);
+                if (accountDto != default)
+                {
+                    return Result<AccountDto?>.Ok(accountDto);
+                }
+            }
+
+            GrpcAccountResponse response = await _grpcService.GetAccountByUsernameAsync(new GrpcGetAccountByStringRequest { Search = username }, cancellationToken);
+
+            if (response.Type is GrpcResponseType.RequestError or GrpcResponseType.UnknownError)
+            {
+                return Result<AccountDto?>.BadRequest();
+            }
+
+            if (response.Type == GrpcResponseType.NotFound || response.AccountDto == null)
+            {
+                return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountByLogin);
+            }
+
+            await _accountByLoginStorage.RegisterAsync(username, response.AccountDto, _cacheTtl);
+
+            return Result<AccountDto?>.Ok(response.AccountDto);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "[{Scope}]", nameof(GetByUsernameAsync));
+            return Result<AccountDto?>.Maintenance();
+        }
     }
 }

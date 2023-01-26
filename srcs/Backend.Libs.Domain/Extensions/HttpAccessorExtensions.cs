@@ -1,8 +1,11 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 
-namespace Backend.Plugins.Domain.Extensions;
+namespace Backend.Libs.Domain.Extensions;
 
 public static class HttpAccessorExtensions
 {
@@ -55,11 +58,11 @@ public static class HttpAccessorExtensions
         return default;
     }
 
-    private static List<string> SplitCsv(this string? csvList, bool nullOrWhitespaceInputReturnsNull = false)
+    private static List<string> SplitCsv(this string? csvList)
     {
         if (string.IsNullOrWhiteSpace(csvList))
         {
-            return nullOrWhitespaceInputReturnsNull ? null : new List<string?>();
+            return new List<string>();
         }
 
         return csvList

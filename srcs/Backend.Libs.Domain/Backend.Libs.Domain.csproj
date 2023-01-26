@@ -1,21 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Ardalis.ApiEndpoints" Version="4.0.1" />
-      <PackageReference Include="AuthPermissions.AspNetCore" Version="3.4.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.9" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+      <PackageReference Include="MediatR" Version="11.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Cryptography\Backend.Libs.Cryptography.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
     </ItemGroup>
 
 </Project>

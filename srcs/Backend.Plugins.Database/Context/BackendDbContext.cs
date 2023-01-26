@@ -1,6 +1,5 @@
 ﻿using Backend.Libs.Database;
 using Backend.Libs.Database.Generic;
-using Backend.Plugins.Database.Configuration;
 using Backend.Plugins.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DataEncryption;
@@ -66,6 +65,6 @@ public class BackendDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseEncryption(_encryptionProvider);
-        modelBuilder.ApplyConfiguration(new AccountEntityTypeConfiguration());
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(BackendDbContext).Assembly);
     }
 }

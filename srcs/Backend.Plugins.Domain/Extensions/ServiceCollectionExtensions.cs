@@ -23,7 +23,8 @@ public static class ServiceCollectionExtensions
                 In = ParameterLocation.Header,
                 Description = "Please insert JWT with Bearer into field",
                 Name = "Authorization",
-                Type = SecuritySchemeType.Http
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -60,10 +61,14 @@ public static class ServiceCollectionExtensions
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                     Environment.GetEnvironmentVariable("JWT_SIGNATURE_KEY")?.ToSha512() ?? "123456789".ToSha512())),
                 ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidIssuer = "backend",
+                ValidAudience = "backend",
+                ClockSkew = TimeSpan.Zero
             };
         });
+
         return services;
     }
 }

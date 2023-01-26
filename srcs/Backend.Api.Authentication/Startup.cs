@@ -1,6 +1,10 @@
 using System.Text.Json.Serialization;
+using Backend.Libs.Cryptography.Extensions;
+using Backend.Libs.Domain.Abstractions;
+using Backend.Libs.Redis.Extensions;
 using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +19,7 @@ namespace Backend.Api.Authentication
             services.AddCors();
             services.AddOptions();
             services.AddHttpContextAccessor();
+            services.AddMediatR(typeof(ICommand));
 
             services.AddEndpointsApiExplorer();
 
@@ -28,8 +33,9 @@ namespace Backend.Api.Authentication
             services.AddAuthSwagger("Backend.Api.Authentication");
             services.AddGrpcDatabaseServices();
 
-            //services.TryAddTransient<IUserAuthenticationService, UserAuthenticationService>();
+            services.AddCryptographyLibs();
 
+            services.TryAddRedisKeyValueStorage();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,14 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
       <ProjectReference Include="..\Backend.Libs.Redis\Backend.Libs.Redis.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\Authentication" />
     </ItemGroup>
 
 </Project>

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Backend.Libs.Domain.Results;
+namespace Backend.Libs.Domain.ObjectResults;
 
 [DefaultStatusCode(DefaultStatusCode)]
 public class InternalServerErrorObjectResult : ObjectResult

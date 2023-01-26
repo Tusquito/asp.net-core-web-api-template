@@ -2,7 +2,7 @@
 
 namespace Backend.Libs.RabbitMQ;
 
-public interface IRabbitMQClientService
+public interface IRabbitMqClientService
 {
     IModel GetChannel();
     IModel Get();

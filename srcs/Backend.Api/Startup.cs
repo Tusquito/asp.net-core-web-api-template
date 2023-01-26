@@ -1,10 +1,15 @@
 using System.Text.Json.Serialization;
 using Backend.Libs.Cryptography.Extensions;
+using Backend.Libs.Database.Account;
+using Backend.Libs.Domain.Abstractions;
+using Backend.Libs.Domain.Enums;
+using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Redis.Extensions;
 using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
 using Backend.Plugins.RabbitMQ.Extensions;
 using Backend.Plugins.RabbitMQ.Messages;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +25,7 @@ public class Startup
         services.AddOptions();
         services.AddHttpContextAccessor();
         services.AddJwtAuthentication();
+        services.AddPermissionBasedAuthorization<PermissionType, RoleType>();
 
         services.AddEndpointsApiExplorer();
         services.AddRabbitMqClientFactoryFromEnv();
@@ -35,10 +41,9 @@ public class Startup
             });
 
         services.AddAuthSwagger("Backend.Api");
-
         services.AddGrpcDatabaseServices();
-
         services.AddCryptographyLibs();
+        services.AddMediatR(typeof(ICommand).Assembly);
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,12 +64,10 @@ public class Startup
         
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseAuthorization();
-        app.UseAuthentication();
         
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }

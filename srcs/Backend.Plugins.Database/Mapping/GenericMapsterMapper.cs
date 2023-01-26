@@ -4,7 +4,7 @@ using Mapster;
 namespace Backend.Plugins.Database.Mapping;
 
 public class GenericMapsterMapper<TEntity, TDto> : IGenericMapper<TEntity, TDto> 
-    where TDto : class, IDTO
+    where TDto : class, IDto
     where TEntity : class, IEntity
 {
     public TEntity? Map(TDto? input)

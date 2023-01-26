@@ -7,5 +7,5 @@ namespace Backend.Libs.gRPC.Account.Responses;
 public class GrpcAccountResponse : GrpcBaseResponse
 {
     [ProtoMember(1)]
-    public AccountDTO? AccountDto { get; init; }
+    public AccountDto? AccountDto { get; init; }
 }

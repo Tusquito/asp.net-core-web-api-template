@@ -1,5 +1,5 @@
-﻿using Foundatio.Caching;
-using Foundatio.Serializer;
+﻿using Backend.Libs.Redis.Serializers;
+using Foundatio.Caching;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using StackExchange.Redis;
@@ -31,7 +31,7 @@ public static class ServiceCollectionExtensions
             services.TryAddSingleton(s => new RedisCacheClient(new RedisCacheClientOptions
             {
                 ConnectionMultiplexer = s.GetRequiredService<IConnectionMultiplexer>(),
-                Serializer = new JsonNetSerializer()
+                Serializer = new ProtoSerializer()
             }));
             services.TryAddSingleton<ICacheClient>(s => s.GetRequiredService<RedisCacheClient>());
         }

@@ -1,4 +1,4 @@
-﻿namespace Backend.Libs.Models.Login;
+﻿namespace Backend.Libs.Models.Authentication;
 
 public class LoginRequest
 {

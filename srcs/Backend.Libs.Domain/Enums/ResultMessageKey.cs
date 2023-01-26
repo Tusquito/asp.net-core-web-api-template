@@ -1,32 +1,62 @@
-﻿namespace Backend.Libs.Domain.Enums;
+﻿using Backend.Libs.Domain.Attributes;
+
+namespace Backend.Libs.Domain.Enums;
 
 public enum ResultMessageKey
 {
     /**
      * Default
      */
-    SUCCESS = 200001,
-    BAD_REQUEST = 400001,
-    UNAUTHORIZED = 401001,
-    NOT_FOUND = 404001,
-    INTERNAL_SERVER_ERROR = 500001,
+    [ResultMessageType(ResultType.Ok)]
+    Ok = 200001,
+    [ResultMessageType(ResultType.Created)]
+    Created = 201001,
+    [ResultMessageType(ResultType.NoContent)]
+    NoContent = 204001,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequest = 400001,
+    [ResultMessageType(ResultType.UnknownError)]
+    Unauthorized = 401001,
+    [ResultMessageType(ResultType.NotFound)]
+    NotFound = 404001,
+    [ResultMessageType(ResultType.UnknownError)]
+    InternalServerError = 500001,
+    [ResultMessageType(ResultType.Maintenance)]
+    ServiceUnavailable = 503001,
     
     /**
      * Bad request
      */
-    BAD_REQUEST_NULL_LOGIN = 400002,
-    BAD_REQUEST_NULL_PASSWORD = 400003,
-    BAD_REQUEST_INVALID_LOGIN = 400004,
-    BAD_REQUEST_INVALID_PASSWORD = 400005,
-    BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION = 400006,
-    BAD_REQUEST_INVALID_EMAIL_FORMAT = 400007,
-    BAD_REQUEST_UNAVAILABLE_USERNAME = 400008,
-    BAD_REQUEST_UNAVAILABLE_EMAIL = 400009,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestNullLogin = 400002,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestNullPassword = 400003,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestInvalidLogin = 400004,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestInvalidPassword = 400005,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestDifferentPasswordConfirmation = 400006,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestInvalidEmailFormat = 400007,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestUnavailableUsername = 400008,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestUnavailableEmail = 400009,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestWrongPassword = 400010,
+
+    /**
+     * Not Found
+     */
+    [ResultMessageType(ResultType.NotFound)]
+    NotFoundAccountById = 404002,
+    [ResultMessageType(ResultType.NotFound)]
+    NotFoundAccountByLogin = 404003,
     
     /**
      * Internal server error
      */
-        
-    INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR = 500002
-
+    [ResultMessageType(ResultType.UnknownError)]
+    InternalServerErrorEntitySaveError = 500002,
 }

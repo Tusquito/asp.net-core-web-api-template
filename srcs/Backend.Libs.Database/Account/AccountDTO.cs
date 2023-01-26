@@ -4,7 +4,7 @@ using ProtoBuf;
 
 namespace Backend.Libs.Database.Account;
 [ProtoContract]
-public class AccountDTO : IUuidDTO
+public class AccountDto : IUuidDto
 {
     [ProtoMember(1)]
     public Guid Id { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace Backend.Libs.Database.Generic;
 
-public interface IUuidDTO : IDTO
+public interface IUuidDto : IDto
 {
     public Guid Id { get; set; }
 }

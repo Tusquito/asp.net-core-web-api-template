@@ -9,13 +9,13 @@ namespace Backend.Plugins.Database.Repositories;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly IGenericMapper<AccountEntity, AccountDTO?> _mapper;
+    private readonly IGenericMapper<AccountEntity, AccountDto?> _mapper;
     private readonly IDbContextFactory<BackendDbContext> _contextFactory;
-    private readonly IGenericAsyncUuidRepository<AccountDTO> _repository;
+    private readonly IGenericAsyncUuidRepository<AccountDto> _repository;
     private readonly ILogger<AccountRepository> _logger;
 
-    public AccountRepository(IGenericMapper<AccountEntity, AccountDTO?> mapper, IDbContextFactory<BackendDbContext> contextFactory,
-        IGenericAsyncUuidRepository<AccountDTO> repository, ILogger<AccountRepository> logger)
+    public AccountRepository(IGenericMapper<AccountEntity, AccountDto?> mapper, IDbContextFactory<BackendDbContext> contextFactory,
+        IGenericAsyncUuidRepository<AccountDto> repository, ILogger<AccountRepository> logger)
     {
         _mapper = mapper;
         _contextFactory = contextFactory;
@@ -23,7 +23,7 @@ public class AccountRepository : IAccountRepository
         _logger = logger;
     }
 
-    public async Task<AccountDTO?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
+    public async Task<AccountDto?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
     {
         try
         {
@@ -37,7 +37,7 @@ public class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<AccountDTO?> GetAccountByIpAsync(string ip, CancellationToken cancellationToken)
+    public async Task<AccountDto?> GetAccountByIpAsync(string ip, CancellationToken cancellationToken)
     {
         try
         {
@@ -51,7 +51,7 @@ public class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<AccountDTO?> GetByEmailAsync(string email, CancellationToken cancellationToken)
+    public async Task<AccountDto?> GetByEmailAsync(string email, CancellationToken cancellationToken)
     {
         try
         {
@@ -65,25 +65,25 @@ public class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<List<AccountDTO?>?> GetAllAsync(CancellationToken cancellationToken) => await _repository.GetAllAsync(cancellationToken);
-    public async Task<AccountDTO?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _repository.GetByIdAsync(id, cancellationToken);
+    public async Task<List<AccountDto?>?> GetAllAsync(CancellationToken cancellationToken) => await _repository.GetAllAsync(cancellationToken);
+    public async Task<AccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _repository.GetByIdAsync(id, cancellationToken);
 
-    public async Task<List<AccountDTO?>?> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
+    public async Task<List<AccountDto?>?> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
         await _repository.GetByIdsAsync(ids, cancellationToken);
 
-    public async Task<AccountDTO?> AddAsync(AccountDTO obj, CancellationToken cancellationToken) => await _repository.AddAsync(obj, cancellationToken);
+    public async Task<AccountDto?> AddAsync(AccountDto obj, CancellationToken cancellationToken) => await _repository.AddAsync(obj, cancellationToken);
 
-    public async Task<List<AccountDTO>?> AddRangeAsync(IEnumerable<AccountDTO> objs, CancellationToken cancellationToken) =>
+    public async Task<List<AccountDto>?> AddRangeAsync(IEnumerable<AccountDto> objs, CancellationToken cancellationToken) =>
         await _repository.AddRangeAsync(objs, cancellationToken);
 
-    public async Task<AccountDTO?> UpdateAsync(AccountDTO obj, CancellationToken cancellationToken)
+    public async Task<AccountDto?> UpdateAsync(AccountDto obj, CancellationToken cancellationToken)
     {
         obj.Username = obj.Username.ToLowerInvariant();
         obj.Email = obj.Email.ToLowerInvariant();
         return await _repository.UpdateAsync(obj, cancellationToken);
     }
 
-    public async Task<List<AccountDTO>?> UpdateRangeAsync(IEnumerable<AccountDTO> objs, CancellationToken cancellationToken)
+    public async Task<List<AccountDto>?> UpdateRangeAsync(IEnumerable<AccountDto> objs, CancellationToken cancellationToken)
     {
         foreach (var accountDto in objs)
         {

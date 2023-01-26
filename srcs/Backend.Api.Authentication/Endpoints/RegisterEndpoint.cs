@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
+using Backend.Libs.Domain;
 using Backend.Libs.Domain.Enums;
+using Backend.Libs.Domain.Extensions;
 using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.gRPC.Account.Responses;
 using Backend.Libs.gRPC.Enums;
 using Backend.Libs.Models.Account;
-using Backend.Plugins.Domain;
-using Backend.Plugins.Domain.Extensions;
 using EmailValidation;
 using Mapster;
 using Microsoft.AspNetCore.Authorization;
@@ -48,12 +48,12 @@ public class RegisterEndpoint : EndpointBaseAsync
         string requesterIp = _httpContextAccessor.GetRequestIpOrThrow();
         if (request.Password != request.PasswordConfirmation)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_DIFFERENT_PASSWORD_CONFIRMATION);
+            return DomainResults.BadRequest(ResultMessageKey.BadRequestDifferentPasswordConfirmation);
         }
 
         if (!EmailValidator.Validate(request.Email))
         {
-            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_INVALID_EMAIL_FORMAT);
+            return DomainResults.BadRequest(ResultMessageKey.BadRequestInvalidEmailFormat);
         }
 
         GrpcAccountResponse accountResponse = await _grpcAccountService.GetAccountByUsernameAsync(
@@ -64,7 +64,7 @@ public class RegisterEndpoint : EndpointBaseAsync
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_USERNAME, request.Username);
+            return DomainResults.BadRequest(ResultMessageKey.BadRequestUnavailableUsername, request.Username);
         }
 
         accountResponse = await _grpcAccountService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest
@@ -74,12 +74,12 @@ public class RegisterEndpoint : EndpointBaseAsync
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BAD_REQUEST_UNAVAILABLE_EMAIL, request.Email);
+            return DomainResults.BadRequest(ResultMessageKey.BadRequestUnavailableEmail, request.Email);
         }
 
         try
         {
-            AccountDTO accountDto = request.Adapt<AccountDTO>();
+            AccountDto accountDto = request.Adapt<AccountDto>();
             accountDto.PasswordSalt = _passwordHasherService.GenerateRandomSalt();
             accountDto.Password = _passwordHasherService.HashPassword(request.Password, accountDto.PasswordSalt);
             accountDto.Ip = requesterIp;
@@ -92,8 +92,8 @@ public class RegisterEndpoint : EndpointBaseAsync
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(RegisterEndpoint));
-            return DomainResults.InternalServerError(ResultMessageKey.INTERNAL_SERVER_ERROR_ENTITY_SAVE_ERROR,
-                nameof(AccountDTO));
+            return DomainResults.InternalServerError(ResultMessageKey.InternalServerErrorEntitySaveError,
+                nameof(AccountDto));
         }
 
         return DomainResults.Ok();

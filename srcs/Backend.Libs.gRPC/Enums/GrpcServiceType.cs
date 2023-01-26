@@ -2,8 +2,8 @@
 
 public enum GrpcServiceType : short
 {
-    CORE_API_HOST = 6661,
-    AUTH_API_HOST = 7771,
-    DATABASE_SERVER_HOST = 6662
+    CoreApiPort = 6661,
+    AuthApiPort = 7771,
+    DatabaseServerPort = 6662
     
 }

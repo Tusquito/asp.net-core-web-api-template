@@ -1,0 +1,1 @@
+docker run --restart always -p 5672:5672 -e RABBITMQ_PASSWORD=bitnami -e RABBITMQ_USERNAME=user --name rabbitmq -d bitnami/rabbitmq:latest

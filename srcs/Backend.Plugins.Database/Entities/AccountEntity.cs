@@ -6,7 +6,7 @@ using Backend.Plugins.Database.Context;
 
 namespace Backend.Plugins.Database.Entities;
 
-[Table("account", Schema = DatabaseSchemas.ACCOUNTS)]
+[Table("account", Schema = DatabaseSchemas.Accounts)]
 public class AccountEntity : IUuidEntity
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
