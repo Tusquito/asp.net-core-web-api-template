@@ -28,9 +28,9 @@ public enum ResultMessageKey
      * Bad request
      */
     [ResultMessageType(ResultType.BadRequest)]
-    BadRequestNullLogin = 400002,
+    BadRequestLoginInputMissingOnLogin = 400002,
     [ResultMessageType(ResultType.BadRequest)]
-    BadRequestNullPassword = 400003,
+    BadRequestPasswordInputMissingOnLogin = 400003,
     [ResultMessageType(ResultType.BadRequest)]
     BadRequestInvalidLogin = 400004,
     [ResultMessageType(ResultType.BadRequest)]

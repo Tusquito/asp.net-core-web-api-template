@@ -23,7 +23,7 @@ using Microsoft.Extensions.Logging;
 namespace Backend.Api.Authentication.Endpoints;
 
 public class RegisterEndpoint : EndpointBaseAsync
-    .WithRequest<RegisterRequest>
+    .WithRequest<RegisterRequestForm>
     .WithActionResult
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
@@ -42,16 +42,16 @@ public class RegisterEndpoint : EndpointBaseAsync
 
     [AllowAnonymous]
     [HttpPost("/register")]
-    public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequest request,
+    public override async Task<ActionResult> HandleAsync([FromBody] RegisterRequestForm requestForm,
         CancellationToken cancellationToken = new())
     {
         string requesterIp = _httpContextAccessor.GetRequestIpOrThrow();
-        if (request.Password != request.PasswordConfirmation)
+        if (requestForm.Password != requestForm.PasswordConfirmation)
         {
             return DomainResults.BadRequest(ResultMessageKey.BadRequestDifferentPasswordConfirmation);
         }
 
-        if (!EmailValidator.Validate(request.Email))
+        if (!EmailValidator.Validate(requestForm.Email))
         {
             return DomainResults.BadRequest(ResultMessageKey.BadRequestInvalidEmailFormat);
         }
@@ -59,29 +59,29 @@ public class RegisterEndpoint : EndpointBaseAsync
         GrpcAccountResponse accountResponse = await _grpcAccountService.GetAccountByUsernameAsync(
             new GrpcGetAccountByStringRequest
             {
-                Search = request.Username
+                Search = requestForm.Username
             }, cancellationToken);
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BadRequestUnavailableUsername, request.Username);
+            return DomainResults.BadRequest(ResultMessageKey.BadRequestUnavailableUsername, requestForm.Username);
         }
 
         accountResponse = await _grpcAccountService.GetAccountByEmailAsync(new GrpcGetAccountByStringRequest
         {
-            Search = request.Email
+            Search = requestForm.Email
         }, cancellationToken: cancellationToken);
 
         if (accountResponse.Type == GrpcResponseType.Success)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BadRequestUnavailableEmail, request.Email);
+            return DomainResults.BadRequest(ResultMessageKey.BadRequestUnavailableEmail, requestForm.Email);
         }
 
         try
         {
-            AccountDto accountDto = request.Adapt<AccountDto>();
+            AccountDto accountDto = requestForm.Adapt<AccountDto>();
             accountDto.PasswordSalt = _passwordHasherService.GenerateRandomSalt();
-            accountDto.Password = _passwordHasherService.HashPassword(request.Password, accountDto.PasswordSalt);
+            accountDto.Password = _passwordHasherService.HashPassword(requestForm.Password, accountDto.PasswordSalt);
             accountDto.Ip = requesterIp;
             accountDto.Roles = new List<RoleType> { RoleType.User };
             await _grpcAccountService.UpdateAccountAsync(new GrpcSaveAccountRequest

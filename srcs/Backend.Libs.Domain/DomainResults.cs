@@ -25,9 +25,7 @@ public static class DomainResults
     {
         return new NoContentResult();
     }
-    
-    
-    
+
     public static BadRequestObjectResult BadRequest(ResultMessageKey messageKey = ResultMessageKey.BadRequest, params object[] args)
     {
         return new BadRequestObjectResult(new GenericResult(StatusCodes.Status400BadRequest, null, new GenericResultMessage(messageKey, (int)messageKey, args)));

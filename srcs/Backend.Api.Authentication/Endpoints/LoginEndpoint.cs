@@ -5,7 +5,10 @@ using Backend.Libs.Domain;
 using Backend.Libs.Domain.Commands.Authentication;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Domain.Validators.Authentication;
 using Backend.Libs.Models.Authentication;
+using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,33 +16,30 @@ using Microsoft.AspNetCore.Mvc;
 namespace Backend.Api.Authentication.Endpoints;
 
 public class LoginEndpoint : EndpointBaseAsync
-    .WithRequest<LoginRequest>
+    .WithRequest<LoginRequestForm>
     .WithoutResult
 {
 
     private readonly ISender _sender;
-    public LoginEndpoint(ISender sender)
+    private readonly IValidator<LoginRequestForm> _validator;
+    public LoginEndpoint(ISender sender, IValidator<LoginRequestForm> validator)
     {
         _sender = sender;
+        _validator = validator;
     }
 
     [AllowAnonymous]
     [HttpPost("/login")]
-    public override async Task<IActionResult> HandleAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = new())
+    public override async Task<IActionResult> HandleAsync([FromBody] LoginRequestForm form, CancellationToken cancellationToken = new())
     {
-        if (string.IsNullOrWhiteSpace(request.Login))
+        ValidationResult validationResult = await _validator.ValidateAsync(form, cancellationToken);
+        
+        if (!validationResult.IsValid)
         {
-            return DomainResults.BadRequest(ResultMessageKey.BadRequestNullLogin);
+            return validationResult.ToActionResult();
         }
 
-        if (string.IsNullOrWhiteSpace(request.Password))
-        {
-            return DomainResults.BadRequest(ResultMessageKey.BadRequestNullPassword);
-        }
-
-        AuthenticateAccountCommand command = new AuthenticateAccountCommand(request.Login, request.Password);
-
-        Result<TokenModel> result = await _sender.Send(command, cancellationToken);
+        Result<TokenModel> result = await _sender.Send(new AuthenticateAccountCommand(form.Login, form.Password), cancellationToken);
 
         return result.ToActionResult();
     }
