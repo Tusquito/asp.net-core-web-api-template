@@ -21,4 +21,10 @@
       <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="MediatR.Extensions.Microsoft.DependencyInjection">
+        <HintPath>..\..\..\..\..\.nuget\packages\mediatr.extensions.microsoft.dependencyinjection\11.0.0\lib\netstandard2.1\MediatR.Extensions.Microsoft.DependencyInjection.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>

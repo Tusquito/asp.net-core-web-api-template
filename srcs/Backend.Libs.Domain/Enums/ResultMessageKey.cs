@@ -32,9 +32,9 @@ public enum ResultMessageKey
     [ResultMessageType(ResultType.BadRequest)]
     BadRequestPasswordInputMissingOnLogin = 400003,
     [ResultMessageType(ResultType.BadRequest)]
-    BadRequestInvalidLogin = 400004,
+    BadRequestInvalidUsernameFormat = 400004,
     [ResultMessageType(ResultType.BadRequest)]
-    BadRequestInvalidPassword = 400005,
+    BadRequestInvalidPasswordFormat = 400005,
     [ResultMessageType(ResultType.BadRequest)]
     BadRequestDifferentPasswordConfirmation = 400006,
     [ResultMessageType(ResultType.BadRequest)]
@@ -45,6 +45,10 @@ public enum ResultMessageKey
     BadRequestUnavailableEmail = 400009,
     [ResultMessageType(ResultType.BadRequest)]
     BadRequestWrongPassword = 400010,
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestInvalidPasswordLength = 400011, // Min,Max
+    [ResultMessageType(ResultType.BadRequest)]
+    BadRequestInvalidUsernameLength= 400012, // Min,Max
 
     /**
      * Not Found

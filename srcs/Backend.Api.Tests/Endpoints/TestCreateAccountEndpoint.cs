@@ -21,8 +21,8 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
 
     [HttpPost("api/tests/account")]
     [ProducesResponseType(typeof(GenericResult), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(GenericResult), StatusCodes.Status500InternalServerError)]
-    [ProducesResponseType(typeof(GenericResult), StatusCodes.Status503ServiceUnavailable)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     [Produces("application/json")]
     public override async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {

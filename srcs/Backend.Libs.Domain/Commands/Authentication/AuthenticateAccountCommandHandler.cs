@@ -10,12 +10,12 @@ using Backend.Libs.Security.Extensions;
 
 namespace Backend.Libs.Domain.Commands.Authentication;
 
-public class AuthenticateAccountHandler : ICommandHandler<AuthenticateAccountCommand, TokenModel>
+public class AuthenticateAccountCommandHandler : ICommandHandler<AuthenticateAccountCommand, TokenModel>
 {
     private readonly IAccountService _accountService;
     private readonly IPasswordHasherService _passwordHasherService;
 
-    public AuthenticateAccountHandler(IAccountService accountService, IPasswordHasherService passwordHasherService)
+    public AuthenticateAccountCommandHandler(IAccountService accountService, IPasswordHasherService passwordHasherService)
     {
         _accountService = accountService;
         _passwordHasherService = passwordHasherService;

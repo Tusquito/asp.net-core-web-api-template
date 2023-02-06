@@ -10,7 +10,7 @@ public static class ResultExtensions
 {
     public static IActionResult ToActionResult(this ValidationResult result)
     {
-        ResultMessageKey messageKey = Enum.Parse<ResultMessageKey>(result.Errors.First().ErrorMessage);
+        ResultMessageKey messageKey = Enum.Parse<ResultMessageKey>(result.Errors.First().ErrorCode);
         return result.IsValid switch
         {
             true => DomainResults.Ok(),

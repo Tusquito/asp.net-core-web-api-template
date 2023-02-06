@@ -10,11 +10,9 @@ public class LoginRequestValidator : AbstractValidator<LoginRequestForm>
     {
         RuleFor(x => x.Login)
             .NotEmpty()
-            .NotNull()
-            .WithMessage(ResultMessageKey.BadRequestLoginInputMissingOnLogin.ToString());
+            .WithErrorCode(ResultMessageKey.BadRequestLoginInputMissingOnLogin.ToString());
         RuleFor(x => x.Password)
             .NotEmpty()
-            .NotNull()
-            .WithMessage(ResultMessageKey.BadRequestPasswordInputMissingOnLogin.ToString());
+            .WithErrorCode(ResultMessageKey.BadRequestPasswordInputMissingOnLogin.ToString());
     }
 }

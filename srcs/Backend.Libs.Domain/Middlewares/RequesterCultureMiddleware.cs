@@ -11,7 +11,7 @@ public class RequesterCultureMiddleware
 
     public RequesterCultureMiddleware(RequestDelegate next)
     {
-        _next = next;
+        _next = next; 
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -20,7 +20,7 @@ public class RequesterCultureMiddleware
 
         if (context.Request.Headers.ContainsKey("Accept-Language") && context.Request.Headers["Accept-Language"].Any())
         {
-            currentCultureIso = context.Request.Headers["Accept-Language"].First()!;
+            currentCultureIso = context.Request.Headers["Accept-Language"].First()!.Split(',').First();
         }
         
         CultureInfo culture = new CultureInfo(currentCultureIso);

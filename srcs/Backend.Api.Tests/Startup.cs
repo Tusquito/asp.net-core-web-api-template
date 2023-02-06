@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using System.Windows.Input;
 using Backend.Libs.Cryptography.Extensions;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Enums;
@@ -9,7 +8,6 @@ using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
 using Backend.Plugins.RabbitMQ.Extensions;
 using Backend.Plugins.RabbitMQ.Messages;
-using MediatR;
 
 namespace Backend.Api.Tests;
 
@@ -36,10 +34,10 @@ public class Startup
                     new JsonStringEnumConverter());
             });
 
-        services.AddAuthSwagger("Backend.Api");
+        services.AddAuthSwagger(typeof(Startup).Namespace!);
         services.AddGrpcDatabaseServices();
         services.AddCryptographyLibs();
-        services.AddMediatR(typeof(ICommand).Assembly);
+        services.AddDomainLibs();
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
