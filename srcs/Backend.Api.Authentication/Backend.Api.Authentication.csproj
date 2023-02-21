@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
     </PropertyGroup>
@@ -18,11 +18,4 @@
       <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
       <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="MediatR.Extensions.Microsoft.DependencyInjection">
-        <HintPath>..\..\..\..\..\.nuget\packages\mediatr.extensions.microsoft.dependencyinjection\11.0.0\lib\netstandard2.1\MediatR.Extensions.Microsoft.DependencyInjection.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>

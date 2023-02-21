@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  auth-api:
+    image:  ${DOCKER_REGISTRY-}auth-api
+    ports:
+      - "6663:6663"
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+    build:
+      context: .
+      dockerfile: srcs/Backend.Api.Authentication/Dockerfile
+  db-server:
+    image:  ${DOCKER_REGISTRY-}db-server
+    ports:
+      - "7771:7771"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    build:
+      context: .
+      dockerfile: srcs/Backend.Server.Database/Dockerfile
+  postgresql:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+      
+    
+    
