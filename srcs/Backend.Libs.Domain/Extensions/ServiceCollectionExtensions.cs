@@ -1,3 +1,4 @@
+using Backend.Libs.Domain.Abstractions;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,11 @@ public static class ServiceCollectionExtensions
         services.AddValidatorsFromAssemblyContaining(typeof(ServiceCollectionExtensions));
         
         // MediatR
-        services.AddMediatR(typeof(ServiceCollectionExtensions));
+        services.AddMediatR(x =>
+        {
+            x.Lifetime = ServiceLifetime.Scoped;
+            x.RegisterServicesFromAssemblyContaining<ICommand>();
+        });
         
         return services;
     }
