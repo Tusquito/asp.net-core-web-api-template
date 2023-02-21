@@ -20,6 +20,7 @@ public class LoginEndpoint : EndpointBaseAsync
 
     private readonly ISender _sender;
     private readonly IValidator<LoginRequestForm> _validator;
+    
     public LoginEndpoint(ISender sender, IValidator<LoginRequestForm> validator)
     {
         _sender = sender;

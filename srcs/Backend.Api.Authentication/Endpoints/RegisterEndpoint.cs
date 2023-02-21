@@ -16,6 +16,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Authentication.Endpoints;
@@ -26,11 +27,13 @@ public class RegisterEndpoint : EndpointBaseAsync
 {
     private readonly IValidator<RegisterRequestForm> _validator;
     private readonly ISender _sender;
+    private readonly IHttpContextAccessor _contextAccessor;
 
-    public RegisterEndpoint(IValidator<RegisterRequestForm> validator, ISender sender)
+    public RegisterEndpoint(IValidator<RegisterRequestForm> validator, ISender sender, IHttpContextAccessor contextAccessor)
     {
         _validator = validator;
         _sender = sender;
+        _contextAccessor = contextAccessor;
     }
 
     [AllowAnonymous]
@@ -46,7 +49,7 @@ public class RegisterEndpoint : EndpointBaseAsync
         }
 
         RegisterAccountCommand command =
-            new RegisterAccountCommand(form.Username, form.Password, form.PasswordConfirmation, form.Email);
+            new RegisterAccountCommand(form.Username, form.Password, form.Email, _contextAccessor.GetRequestIpOrThrow());
 
         Result result = await _sender.Send(command, cancellationToken);
 

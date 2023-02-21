@@ -40,6 +40,7 @@ public class Result
 {
     public ResultType Type { get; init; } = ResultType.Ok;
     public ResultMessageKey Message { get; init; } = ResultMessageKey.Ok;
+    public bool Successful => (ResultType.Success & Type) == Type;
     
     protected Result(){}
 
