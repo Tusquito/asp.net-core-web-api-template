@@ -13,4 +13,10 @@
       <ProjectReference Include="..\Backend.Plugins.Database\Backend.Plugins.Database.csproj" />
       <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
+    </ItemGroup>
 </Project>

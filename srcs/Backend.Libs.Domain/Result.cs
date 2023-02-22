@@ -8,7 +8,7 @@ namespace Backend.Libs.Domain;
 
 public class Result<T> : Result
 {
-    public T? Value { get; init; }
+    public T? Value { get; }
 
     private Result(T value)
     {
@@ -25,8 +25,8 @@ public class Result<T> : Result
         new(value, ResultType.Ok, message);
     public static Result<T> Created(T value, ResultMessageKey message = ResultMessageKey.Created) =>
         new(value, ResultType.Created, message);
-    public new static Result<T> Failed(ResultMessageKey message = ResultMessageKey.InternalServerError) => new(ResultType.Failure, message);
-    public new static Result<T> Failed(ResultType type, ResultMessageKey message) => new(type, message);
+    public static Result<T> Failed(ResultMessageKey message = ResultMessageKey.InternalServerError) => new(ResultType.Failure, message);
+    public static Result<T> Failed(ResultType type, ResultMessageKey message) => new(type, message);
     public new static Result<T> NotFound(ResultMessageKey message = ResultMessageKey.NotFound) =>
         new(ResultType.NotFound, message);
     public new static Result<T> BadRequest(ResultMessageKey message = ResultMessageKey.BadRequest) =>

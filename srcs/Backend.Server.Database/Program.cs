@@ -38,7 +38,7 @@ public class Program
         catch (Exception ex)
         {
             logger.LogError(ex, "Migration failed");
-            throw;
+            return;
         }
 
         logger.LogWarning("Starting...");

@@ -10,7 +10,7 @@
       <PackageReference Include="Ardalis.ApiEndpoints" Version="4.0.1" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
       <PackageReference Include="MediatR" Version="12.0.0" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
@@ -20,11 +20,4 @@
       <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
       <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="MediatR.Extensions.Microsoft.DependencyInjection">
-        <HintPath>..\..\..\..\..\.nuget\packages\mediatr.extensions.microsoft.dependencyinjection\11.0.0\lib\netstandard2.1\MediatR.Extensions.Microsoft.DependencyInjection.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>

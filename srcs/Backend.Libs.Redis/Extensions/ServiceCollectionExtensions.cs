@@ -11,7 +11,7 @@ public static class ServiceCollectionExtensions
         private static IConnectionMultiplexer GetConnectionMultiplexer(this RedisConfiguration configuration) =>
             ConnectionMultiplexer.Connect(new ConfigurationOptions
             {
-                Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD"),
+                Password = configuration.Password,
                 EndPoints = { configuration.ToString() }
             });
 

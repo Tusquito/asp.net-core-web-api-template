@@ -43,7 +43,6 @@ public class Startup
         services.AddAuthSwagger("Backend.Api");
         services.AddGrpcDatabaseServices();
         services.AddCryptographyLibs();
-        services.AddMediatR(typeof(ICommand).Assembly);
     }
     
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
