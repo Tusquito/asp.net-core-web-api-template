@@ -5,15 +5,15 @@ using Backend.Libs.RabbitMQ.Attributes;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
-namespace Backend.Libs.RabbitMQ.Producers;
+namespace Backend.Libs.RabbitMQ.Publishers;
 
-public class GenericRabbitMqProducer<T> : IRabbitMqProducer<T>
+public class GenericRabbitMqPublisher<T> : IRabbitMqPublisher<T>
     where T : IRabbitMqMessage<T>
 {
     private readonly ConnectionFactory _connection;
-    private readonly ILogger<GenericRabbitMqProducer<T>> _logger;
+    private readonly ILogger<GenericRabbitMqPublisher<T>> _logger;
 
-    public GenericRabbitMqProducer(ConnectionFactory connection, ILogger<GenericRabbitMqProducer<T>> logger)
+    public GenericRabbitMqPublisher(ConnectionFactory connection, ILogger<GenericRabbitMqPublisher<T>> logger)
     {
         _connection = connection;
         _logger = logger;
@@ -28,7 +28,7 @@ public class GenericRabbitMqProducer<T> : IRabbitMqProducer<T>
 
             if (string.IsNullOrEmpty(queueName))
             {
-                _logger.LogError("[{Scope}] No queue name found for {Message}", nameof(GenericRabbitMqProducer<T>),
+                _logger.LogError("[{Scope}] No queue name found for {Message}", nameof(GenericRabbitMqPublisher<T>),
                     nameof(T));
                 return Task.CompletedTask;
             }
@@ -39,11 +39,11 @@ public class GenericRabbitMqProducer<T> : IRabbitMqProducer<T>
             var bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
             var props = channel.CreateBasicProperties();
             channel.BasicPublish(string.Empty, queueName, props, bytes);
-            _logger.LogInformation("[{Scope}] New message sent into queue {QueueName}", nameof(GenericRabbitMqProducer<T>), queueName);
+            _logger.LogInformation("[{Scope}] New message sent into queue {QueueName}", nameof(GenericRabbitMqPublisher<T>), queueName);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "[{Scope}]", nameof(GenericRabbitMqProducer<T>));
+            _logger.LogError(e, "[{Scope}]", nameof(GenericRabbitMqPublisher<T>));
         }
         
         return Task.CompletedTask;

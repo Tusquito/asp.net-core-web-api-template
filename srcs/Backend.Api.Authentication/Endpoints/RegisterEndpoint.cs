@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Commands.Authentication;
-using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.gRPC.Account.Request;
-using Backend.Libs.gRPC.Account.Responses;
-using Backend.Libs.gRPC.Enums;
 using Backend.Libs.Models.Account;
 using FluentValidation;
 using FluentValidation.Results;
