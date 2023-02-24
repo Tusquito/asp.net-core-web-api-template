@@ -7,7 +7,7 @@ namespace Backend.Libs.Domain.Validators.Authentication;
 public class RegisterRequestValidator : AbstractValidator<RegisterRequestForm>
 {
 
-    public const int PasswordMinLength = 8;
+    public const int PasswordMinLength = 4;
     public const int PasswordMaxLength = 16;
     
     public const int UsernameMinLength = 4;
@@ -16,11 +16,15 @@ public class RegisterRequestValidator : AbstractValidator<RegisterRequestForm>
     public RegisterRequestValidator()
     {
         RuleFor(x => x.Username)
-            .NotEmpty().WithMessage(ResultMessageKey.BadRequestInvalidUsernameFormat.ToString())
-            .Length(UsernameMinLength, UsernameMaxLength).WithMessage(ResultMessageKey.BadRequestInvalidUsernameLength.ToString());
+            .NotEmpty()
+            .WithMessage(ResultMessageKey.BadRequestInvalidUsernameFormat.ToString())
+            .Length(UsernameMinLength, UsernameMaxLength)
+            .WithMessage(ResultMessageKey.BadRequestInvalidUsernameLength.ToString());
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage(ResultMessageKey.BadRequestInvalidPasswordFormat.ToString())
-            .Length(PasswordMinLength, PasswordMaxLength).WithMessage(ResultMessageKey.BadRequestInvalidPasswordLength.ToString());
+            .NotEmpty()
+            .WithMessage(ResultMessageKey.BadRequestInvalidPasswordFormat.ToString())
+            .Length(PasswordMinLength, PasswordMaxLength)
+            .WithMessage(ResultMessageKey.BadRequestInvalidPasswordLength.ToString());
         RuleFor(x => x.Email)
             .EmailAddress()
             .WithMessage(ResultMessageKey.BadRequestInvalidEmailFormat.ToString());
