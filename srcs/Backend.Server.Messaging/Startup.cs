@@ -21,7 +21,7 @@ namespace Backend.Server.Messaging
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMediatorLibs();
-            services.TryAddRabbitMqClientFactory();
+            services.TryAddRabbitMqClientFactory(Configuration);
 
             services.AddControllers();
             

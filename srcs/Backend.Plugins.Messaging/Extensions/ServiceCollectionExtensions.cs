@@ -1,8 +1,10 @@
 ﻿using Backend.Libs.Mediator.Messaging.Abstractions;
 using Backend.Libs.Messaging.Abstractions;
 using Backend.Libs.Messaging.Consumers;
+using Backend.Libs.Messaging.Options;
 using Backend.Libs.Messaging.Producers;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RabbitMQ.Client;
@@ -26,15 +28,22 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection TryAddRabbitMqClientFactory(this IServiceCollection services)
+    public static IServiceCollection TryAddRabbitMqClientFactory(this IServiceCollection services, IConfiguration configuration)
     {
-        services.TryAddSingleton(_ => new ConnectionFactory
+        services.Configure<RabbitMqOptions>(configuration.GetSection(RabbitMqOptions.Name));
+        
+        services.TryAddSingleton(provider =>
         {
-            Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? "bitnami",
-            UserName = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? "user",
-            HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOSTNAME") ?? "localhost",
-            Port = short.Parse(Environment.GetEnvironmentVariable("RABBITMQ_PORT") ?? "5672"),
-            DispatchConsumersAsync = true
+            RabbitMqOptions options = provider.GetRequiredService<RabbitMqOptions>();
+            
+            return new ConnectionFactory
+            {
+                Password = options.Password,
+                UserName = options.Username,
+                HostName = options.Hostname,
+                Port = options.Port,
+                DispatchConsumersAsync = true
+            };
         });
 
         return services;

@@ -13,6 +13,13 @@ namespace Backend.Api.Tests;
 
 public class Startup
 {
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    private IConfiguration Configuration { get; }
+    
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddCors();
@@ -22,7 +29,7 @@ public class Startup
         services.AddPermissionBasedAuthorization<PermissionType, RoleType>();
 
         services.AddEndpointsApiExplorer();
-        services.TryAddRabbitMqClientFactory();
+        services.TryAddRabbitMqClientFactory(Configuration);
         services.TryAddRedisKeyValueStorage();
 
         services.TryAddRabbitMqProducer<TestMessage>();
