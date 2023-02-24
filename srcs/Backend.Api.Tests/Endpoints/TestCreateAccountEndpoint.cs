@@ -1,8 +1,8 @@
 ﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
-using Backend.Libs.Domain.Commands.Account;
 using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Mediator.Commands.Account;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

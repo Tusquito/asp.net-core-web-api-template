@@ -8,11 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="MediatR" Version="12.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Mediator\Backend.Libs.Mediator.csproj" />
       <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
       <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
       <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />

@@ -1,7 +1,8 @@
 using System.Text.Json.Serialization;
+using Backend.Libs.Caching.Extensions;
 using Backend.Libs.Cryptography.Extensions;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.Redis.Extensions;
+using Backend.Libs.Mediator.Extensions;
 using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,7 @@ namespace Backend.Api.Authentication
 
             services.AddCryptographyLibs();
             services.AddDomainLibs();
+            services.AddMediatorLibs();
             
             services.TryAddRedisKeyValueStorage();
         }

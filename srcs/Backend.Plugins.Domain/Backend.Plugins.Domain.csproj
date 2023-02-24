@@ -10,7 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
       <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Redis\Backend.Libs.Redis.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Caching\Backend.Libs.Caching.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -6,7 +6,7 @@ using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.gRPC.Account.Responses;
 using Backend.Libs.gRPC.Enums;
-using Backend.Libs.Redis;
+using Backend.Libs.Caching;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Plugins.Domain.Services.Account;

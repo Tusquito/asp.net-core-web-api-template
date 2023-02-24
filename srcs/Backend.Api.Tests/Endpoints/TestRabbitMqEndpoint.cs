@@ -1,7 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
-using Backend.Libs.RabbitMQ.Producers;
-using Backend.Plugins.RabbitMQ.Messages;
+using Backend.Libs.Messaging.Producers;
+using Backend.Plugins.Messaging.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Tests.Endpoints;
@@ -23,7 +23,7 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
     {
         try
         {
-            await _producer.PublishAsync(new TestMessage(), cancellationToken);
+            await _producer.ProduceAsync(new TestMessage(), cancellationToken);
         }
         catch (Exception e)
         {

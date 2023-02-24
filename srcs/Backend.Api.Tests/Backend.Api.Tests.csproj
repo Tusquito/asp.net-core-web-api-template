@@ -22,6 +22,6 @@
       <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
       <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
       <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.RabbitMQ\Backend.Plugins.RabbitMQ.csproj" />
+      <ProjectReference Include="..\Backend.Plugins.Messaging\Backend.Plugins.Messaging.csproj" />
     </ItemGroup>
 </Project>

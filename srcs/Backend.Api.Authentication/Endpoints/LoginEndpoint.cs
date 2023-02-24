@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
-using Backend.Libs.Domain.Commands.Authentication;
 using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Mediator.Commands.Authentication;
 using Backend.Libs.Models.Authentication;
 using FluentValidation;
 using FluentValidation.Results;
