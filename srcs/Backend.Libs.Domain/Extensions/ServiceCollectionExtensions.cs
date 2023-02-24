@@ -1,5 +1,6 @@
 using Backend.Libs.Domain.Abstractions;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backend.Libs.Domain.Extensions;

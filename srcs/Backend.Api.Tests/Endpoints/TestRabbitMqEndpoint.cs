@@ -1,6 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
-using Backend.Libs.RabbitMQ.Publishers;
+using Backend.Libs.RabbitMQ.Producers;
 using Backend.Plugins.RabbitMQ.Messages;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,19 +11,19 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
     .WithActionResult
 {
     private readonly ILogger<TestRabbitMqEndpoint> _logger;
-    private readonly IRabbitMqPublisher<TestMessage> _publisher;
+    private readonly IRabbitMqProducer<TestMessage> _producer;
 
-    public TestRabbitMqEndpoint(ILogger<TestRabbitMqEndpoint> logger, IRabbitMqPublisher<TestMessage> publisher)
+    public TestRabbitMqEndpoint(ILogger<TestRabbitMqEndpoint> logger, IRabbitMqProducer<TestMessage> producer)
     {
         _logger = logger;
-        _publisher = publisher;
+        _producer = producer;
     }
     [HttpGet("api/test/rabbitmq")]
     public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
         try
         {
-            await _publisher.PublishAsync(new TestMessage(), cancellationToken);
+            await _producer.PublishAsync(new TestMessage(), cancellationToken);
         }
         catch (Exception e)
         {

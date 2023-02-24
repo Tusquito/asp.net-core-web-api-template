@@ -1,6 +1,6 @@
 using Backend.Plugins.RabbitMQ.Extensions;
 using Backend.Plugins.RabbitMQ.Messages;
-using Backend.Server.RabbitMQ.Handlers;
+using Backend.Server.RabbitMQ.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +24,7 @@ namespace Backend.Server.RabbitMQ
 
             services.AddControllers();
             
-            services.AddRabbitMqConsumer<TestMessage, TestMessageConsumerMessageHandler>();
+            services.AddRabbitMqConsumer<TestMessage, TestMessageConsumerEventHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

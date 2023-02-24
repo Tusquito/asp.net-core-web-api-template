@@ -25,7 +25,7 @@ public class Startup
         services.AddRabbitMqClientFactoryFromEnv();
         services.TryAddRedisKeyValueStorage();
 
-        services.AddRabbitMqPublisher<TestMessage>();
+        services.AddRabbitMqProducer<TestMessage>();
 
         services.AddControllers()
             .AddJsonOptions(x =>

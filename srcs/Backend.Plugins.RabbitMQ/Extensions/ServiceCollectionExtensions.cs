@@ -1,7 +1,7 @@
 ﻿using Backend.Libs.RabbitMQ;
 using Backend.Libs.RabbitMQ.Consumers;
-using Backend.Libs.RabbitMQ.Handlers;
-using Backend.Libs.RabbitMQ.Publishers;
+using Backend.Libs.RabbitMQ.Events;
+using Backend.Libs.RabbitMQ.Producers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RabbitMQ.Client;
@@ -12,18 +12,18 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddRabbitMqConsumer<TMessage, TEvent>(this IServiceCollection services)
         where TMessage : IRabbitMqMessage<TMessage>
-        where TEvent : class, IAsyncRabbitMqConsumerMessageHandler<TMessage>
+        where TEvent : class, IAsyncRabbitMqConsumerEventHandler<TMessage>
     {
-        services.TryAddSingleton<IAsyncRabbitMqConsumerMessageHandler<TMessage>, TEvent>();
+        services.TryAddSingleton<IAsyncRabbitMqConsumerEventHandler<TMessage>, TEvent>();
         services.TryAddTransient<IRabbitMqConsumer<TMessage>, GenericRabbitMqConsumer<TMessage>>();
         services.AddHostedService<GenericRabbitMqConsumer<TMessage>>();
         return services;
     }
     
-    public static IServiceCollection AddRabbitMqPublisher<TMessage>(this IServiceCollection services)
+    public static IServiceCollection AddRabbitMqProducer<TMessage>(this IServiceCollection services)
         where TMessage : IRabbitMqMessage<TMessage>
     {
-        services.TryAddTransient<IRabbitMqPublisher<TMessage>, GenericRabbitMqPublisher<TMessage>>();
+        services.TryAddTransient<IRabbitMqProducer<TMessage>, GenericRabbitMqProducer<TMessage>>();
         return services;
     }
 

@@ -6,4 +6,5 @@ public enum GrpcServiceType : short
     TestApiPort = 6662,
     AuthApiPort = 6663,
     DatabaseServerPort = 7771
+    
 }

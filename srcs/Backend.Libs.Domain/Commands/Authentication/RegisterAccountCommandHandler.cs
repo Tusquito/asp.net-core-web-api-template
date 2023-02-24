@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -5,7 +6,10 @@ using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Abstractions;
 using Backend.Libs.Domain.Enums;
+using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Domain.Services.Account;
+using Backend.Libs.gRPC.Account.Request;
+using Backend.Libs.gRPC.Enums;
 
 namespace Backend.Libs.Domain.Commands.Authentication;
 

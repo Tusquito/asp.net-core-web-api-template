@@ -1,9 +1,6 @@
-﻿using System.Collections.Concurrent;
-using System.Reflection;
-using System.Text;
-using System.Text.Json;
+﻿using System.Reflection;
 using Backend.Libs.RabbitMQ.Attributes;
-using Backend.Libs.RabbitMQ.Handlers;
+using Backend.Libs.RabbitMQ.Events;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -11,53 +8,25 @@ using RabbitMQ.Client.Events;
 
 namespace Backend.Libs.RabbitMQ.Consumers;
 
-public class GenericRabbitMqConsumer<T> : BackgroundService, IRabbitMqConsumer<T> where T : IRabbitMqMessage<T>
+public class GenericRabbitMqConsumer<T> : IRabbitMqConsumer<T>,
+    IHostedService,
+    IDisposable
+    where T : IRabbitMqMessage<T>
 {
     private readonly ILogger _logger;
-    private readonly IAsyncRabbitMqConsumerMessageHandler<T> _asyncConsumerMessageHandler;
-    private readonly ConcurrentQueue<(T, BasicDeliverEventArgs)> _queue;
+    private readonly IAsyncRabbitMqConsumerEventHandler<T> _asyncConsumerEventHandler;
     private readonly IModel _channel;
     private readonly IConnection _connection;
 
-    public GenericRabbitMqConsumer(ILoggerFactory logger, ConnectionFactory connectionFactory, IAsyncRabbitMqConsumerMessageHandler<T> asyncConsumerMessageHandler, ConcurrentQueue<(T, BasicDeliverEventArgs)> queue)
+    public GenericRabbitMqConsumer(ILoggerFactory logger, ConnectionFactory connectionFactory, IAsyncRabbitMqConsumerEventHandler<T> asyncConsumerEventHandler)
     {
         _logger = logger.CreateLogger(typeof(GenericRabbitMqConsumer<T>));
-        _asyncConsumerMessageHandler = asyncConsumerMessageHandler;
-        _queue = queue;
+        _asyncConsumerEventHandler = asyncConsumerEventHandler;
         _connection = connectionFactory.CreateConnection();
         _channel = _connection.CreateModel();
     }
 
-    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
-    {
-        PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromSeconds(10));
-        while (await timer.WaitForNextTickAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
-        {
-            int count = 0;
-            while (_queue.TryDequeue(out var queuedMsg))
-            {
-                try
-                {
-                    await _asyncConsumerMessageHandler.HandleAsync(queuedMsg.Item1, cancellationToken);
-                    _logger.LogDebug("[{Scope}] New message of type {Type} consumed successfully",
-                        nameof(GenericRabbitMqConsumer<T>), typeof(T));
-                    count++;
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "[{Scope}]", nameof(GenericRabbitMqConsumer<T>));
-                }
-                finally
-                {
-                    _channel.BasicAck(queuedMsg.Item2.DeliveryTag, false);
-                }
-            }
-            _logger.LogInformation("[{Scope}] {Count} messages consumed successfully",
-                nameof(GenericRabbitMqConsumer<T>), count);
-        }
-    }
-
-    public override Task StartAsync(CancellationToken cancellationToken)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
         if (cancellationToken.IsCancellationRequested)
         {
@@ -91,23 +60,25 @@ public class GenericRabbitMqConsumer<T> : BackgroundService, IRabbitMqConsumer<T
         return Task.CompletedTask;
     }
 
-    private Task ConsumerOnReceived(object sender, BasicDeliverEventArgs @event)
+    private async Task ConsumerOnReceived(object sender, BasicDeliverEventArgs @event)
     {
         try
         {
-            _queue.Enqueue((JsonSerializer.Deserialize<T>(Encoding.UTF8.GetString(@event.Body.ToArray()))!, @event));
+            await _asyncConsumerEventHandler.HandleAsync(sender, @event);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GenericRabbitMqConsumer<T>));
         }
-
-        return Task.CompletedTask;
+        finally
+        {
+            _channel.BasicAck(@event.DeliveryTag, false);
+        }
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
-    public override void Dispose()
+    public void Dispose()
     {
         if (_channel is { IsOpen: true })
         {

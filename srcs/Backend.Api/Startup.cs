@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Backend.Libs.Cryptography.Extensions;
 using Backend.Libs.Database.Account;
+using Backend.Libs.Domain.Abstractions;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Redis.Extensions;
@@ -8,6 +9,7 @@ using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
 using Backend.Plugins.RabbitMQ.Extensions;
 using Backend.Plugins.RabbitMQ.Messages;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +31,7 @@ public class Startup
         services.AddRabbitMqClientFactoryFromEnv();
         services.TryAddRedisKeyValueStorage();
 
-        services.AddRabbitMqPublisher<TestMessage>();
+        services.AddRabbitMqProducer<TestMessage>();
 
         services.AddControllers()
             .AddJsonOptions(x =>
