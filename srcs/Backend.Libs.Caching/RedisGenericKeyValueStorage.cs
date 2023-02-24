@@ -2,18 +2,18 @@
 
 namespace Backend.Libs.Caching;
 
-public sealed class RedisGenericKeyValueAsyncStorage<TObject, TKey> : IKeyValueAsyncStorage<TObject, TKey>
+public sealed class RedisGenericKeyValueStorageAsync<TKey, TObject> : IKeyValueStorageAsync<TKey, TObject>
     where TKey : notnull
     {
         private readonly ICacheClient _cacheClient;
         private readonly string _dataPrefix;
         private readonly string _keySetKey;
 
-        public RedisGenericKeyValueAsyncStorage(ICacheClient multiplexer) : this(typeof(TObject).Name.ToLower(), multiplexer)
+        public RedisGenericKeyValueStorageAsync(ICacheClient multiplexer) : this(typeof(TObject).Name.ToLower(), multiplexer)
         {
         }
 
-        private RedisGenericKeyValueAsyncStorage(string basePrefix, ICacheClient multiplexer)
+        private RedisGenericKeyValueStorageAsync(string basePrefix, ICacheClient multiplexer)
         {
             _dataPrefix = "data:" + basePrefix + ':';
             _keySetKey = "keys:" + basePrefix;

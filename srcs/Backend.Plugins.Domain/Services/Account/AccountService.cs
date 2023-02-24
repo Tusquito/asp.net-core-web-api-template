@@ -13,18 +13,19 @@ namespace Backend.Plugins.Domain.Services.Account;
 
 public class AccountService : IAccountService
 {
-    private readonly IKeyValueAsyncStorage<AccountDto, Guid> _accountByIdStorage;
-    private readonly IKeyValueAsyncStorage<AccountDto, string> _accountByLoginStorage;
+    private readonly IKeyValueStorageAsync<Guid, AccountDto> _accountByIdCache;
+    private readonly IKeyValueStorageAsync<string, AccountDto> _accountByLoginCache;
     private readonly ILogger<AccountService> _logger;
     private readonly IGrpcAccountService _grpcService;
     private readonly TimeSpan _cacheTtl = TimeSpan.FromHours(2);
 
-    public AccountService(IKeyValueAsyncStorage<AccountDto, Guid> accountByIdStorage, ILogger<AccountService> logger, IGrpcAccountService grpcService, IKeyValueAsyncStorage<AccountDto, string> accountByLoginStorage)
+    public AccountService(IKeyValueStorageAsync<Guid, AccountDto> accountByIdCache, ILogger<AccountService> logger,
+        IGrpcAccountService grpcService, IKeyValueStorageAsync<string, AccountDto> accountByLoginCache)
     {
-        _accountByIdStorage = accountByIdStorage;
+        _accountByIdCache = accountByIdCache;
         _logger = logger;
         _grpcService = grpcService;
-        _accountByLoginStorage = accountByLoginStorage;
+        _accountByLoginCache = accountByLoginCache;
     }
 
     public async Task<Result<AccountDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool forceRefresh = false)
@@ -33,7 +34,7 @@ public class AccountService : IAccountService
         {
             if (!forceRefresh)
             {
-                AccountDto? accountDto = await _accountByIdStorage.GetByIdAsync(id);
+                AccountDto? accountDto = await _accountByIdCache.GetByIdAsync(id);
                 if (accountDto != default)
                 {
                     return Result<AccountDto?>.Ok(accountDto);
@@ -52,7 +53,7 @@ public class AccountService : IAccountService
                 return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountById);
             }
 
-            await _accountByIdStorage.RegisterAsync(id, response.AccountDto, _cacheTtl);
+            await _accountByIdCache.RegisterAsync(id, response.AccountDto, _cacheTtl);
 
             return Result<AccountDto?>.Ok(response.AccountDto);
         }
@@ -79,9 +80,9 @@ public class AccountService : IAccountService
                 return Result.NotFound();
             }
 
-            await _accountByIdStorage.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
-            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
-            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
+            await _accountByIdCache.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
+            await _accountByLoginCache.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
+            await _accountByLoginCache.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
 
             return Result.NoContent();
         }
@@ -108,9 +109,9 @@ public class AccountService : IAccountService
                 return Result<AccountDto?>.Failed();
             }
 
-            await _accountByIdStorage.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
-            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
-            await _accountByLoginStorage.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
+            await _accountByIdCache.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
+            await _accountByLoginCache.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
+            await _accountByLoginCache.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
 
             return Result<AccountDto?>.Created(response.AccountDto);
         }
@@ -132,7 +133,7 @@ public class AccountService : IAccountService
         {
             if (!forceRefresh)
             {
-                AccountDto? accountDto = await _accountByLoginStorage.GetByIdAsync(email);
+                AccountDto? accountDto = await _accountByLoginCache.GetByIdAsync(email);
                 if (accountDto != default)
                 {
                     return Result<AccountDto?>.Ok(accountDto);
@@ -151,7 +152,7 @@ public class AccountService : IAccountService
                 return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountById);
             }
 
-            await _accountByLoginStorage.RegisterAsync(email, response.AccountDto, _cacheTtl);
+            await _accountByLoginCache.RegisterAsync(email, response.AccountDto, _cacheTtl);
 
             return Result<AccountDto?>.Ok(response.AccountDto);
         }
@@ -168,7 +169,7 @@ public class AccountService : IAccountService
         {
             if (!forceRefresh)
             {
-                AccountDto? accountDto = await _accountByLoginStorage.GetByIdAsync(username);
+                AccountDto? accountDto = await _accountByLoginCache.GetByIdAsync(username);
                 if (accountDto != default)
                 {
                     return Result<AccountDto?>.Ok(accountDto);
@@ -187,7 +188,7 @@ public class AccountService : IAccountService
                 return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountByLogin);
             }
 
-            await _accountByLoginStorage.RegisterAsync(username, response.AccountDto, _cacheTtl);
+            await _accountByLoginCache.RegisterAsync(username, response.AccountDto, _cacheTtl);
 
             return Result<AccountDto?>.Ok(response.AccountDto);
         }

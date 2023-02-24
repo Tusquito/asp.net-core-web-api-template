@@ -40,6 +40,6 @@ public static class ServiceCollectionExtensions
         {
             services.TryAddConnectionMultiplexerFromEnv();
             services.TryAddRedisCacheClient();
-            services.TryAddSingleton(typeof(IKeyValueAsyncStorage<,>), typeof(RedisGenericKeyValueAsyncStorage<,>));
+            services.TryAddSingleton(typeof(IKeyValueStorageAsync<,>), typeof(RedisGenericKeyValueStorageAsync<,>));
         }
 }

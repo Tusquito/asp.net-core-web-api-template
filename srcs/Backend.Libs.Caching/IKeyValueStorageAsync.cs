@@ -1,6 +1,6 @@
 ﻿namespace Backend.Libs.Caching;
 
-    public interface IKeyValueAsyncStorage<TObject, TKey>
+    public interface IKeyValueStorageAsync<TKey, TObject>
     where TKey : notnull
     {
         Task<IEnumerable<TObject>> GetAllAsync();
