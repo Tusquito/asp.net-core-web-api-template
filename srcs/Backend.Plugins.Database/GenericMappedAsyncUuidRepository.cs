@@ -140,7 +140,7 @@ public class GenericMappedAsyncUuidRepository<TEntity, TDto> : IGenericAsyncUuid
             {
                 return new List<TDto>();
             }
-            context.Set<TEntity>().UpdateRange();
+            context.Set<TEntity>().UpdateRange(tmp);
             await context.SaveChangesAsync(cancellationToken);
             return uuidDtos.ToList();
         }

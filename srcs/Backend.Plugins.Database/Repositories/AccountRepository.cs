@@ -65,13 +65,16 @@ public class AccountRepository : IAccountRepository
         }
     }
 
-    public async Task<List<AccountDto?>?> GetAllAsync(CancellationToken cancellationToken) => await _repository.GetAllAsync(cancellationToken);
-    public async Task<AccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken) => await _repository.GetByIdAsync(id, cancellationToken);
+    public async Task<List<AccountDto?>?> GetAllAsync(CancellationToken cancellationToken) =>
+        await _repository.GetAllAsync(cancellationToken);
+    public async Task<AccountDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
+        await _repository.GetByIdAsync(id, cancellationToken);
 
     public async Task<List<AccountDto?>?> GetByIdsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken) =>
         await _repository.GetByIdsAsync(ids, cancellationToken);
 
-    public async Task<AccountDto?> AddAsync(AccountDto obj, CancellationToken cancellationToken) => await _repository.AddAsync(obj, cancellationToken);
+    public async Task<AccountDto?> AddAsync(AccountDto obj, CancellationToken cancellationToken) =>
+        await _repository.AddAsync(obj, cancellationToken);
 
     public async Task<List<AccountDto>?> AddRangeAsync(IEnumerable<AccountDto> objs, CancellationToken cancellationToken) =>
         await _repository.AddRangeAsync(objs, cancellationToken);
