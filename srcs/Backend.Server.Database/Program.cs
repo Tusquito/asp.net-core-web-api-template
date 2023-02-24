@@ -21,9 +21,9 @@ public class Program
         MapsterMapperRules.InitMappingRules();
         IHost web = CreateHostBuilder(args).Build();
 
-        var logger = web.Services.GetRequiredService<ILogger<Program>>();
+        ILogger<Program> logger = web.Services.GetRequiredService<ILogger<Program>>();
         
-        var tmp = web.Services.GetRequiredService<IDbContextFactory<BackendDbContext>>();
+        IDbContextFactory<BackendDbContext> tmp = web.Services.GetRequiredService<IDbContextFactory<BackendDbContext>>();
         await using BackendDbContext context = await tmp.CreateDbContextAsync();
         try
         {

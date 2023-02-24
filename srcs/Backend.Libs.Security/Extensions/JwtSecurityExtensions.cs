@@ -15,7 +15,7 @@ public static class JwtSecurityExtensions
     
     public static string GenerateJwtToken(this AccountDto account)
     {
-        var tokenDescriptor = new SecurityTokenDescriptor
+        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
         {
             Issuer = "backend",
             Audience = "backend",

@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using Backend.Libs.Mediator.Messaging.Abstractions;
+using Backend.Libs.Messaging.Abstractions;
 using Backend.Libs.Messaging.Attributes;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -11,10 +12,10 @@ using RabbitMQ.Client.Events;
 
 namespace Backend.Libs.Messaging.Consumers;
 
-public class GenericRabbitMqConsumer<T> : IRabbitMqConsumer<T>,
+public class GenericRabbitMqConsumer<T> : IMessageConsumer<T>,
     IHostedService,
     IDisposable
-    where T : IRabbitMqMessage<T>
+    where T : IMessage<T>
 {
     private readonly ILogger _logger;
     private readonly IModel _channel;
@@ -49,7 +50,7 @@ public class GenericRabbitMqConsumer<T> : IRabbitMqConsumer<T>,
 
             _channel.QueueDeclare(queueName, false, false, false, null);
 
-            var consumer = new AsyncEventingBasicConsumer(_channel);
+            AsyncEventingBasicConsumer consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += ConsumerOnReceived;
 
             _channel.BasicConsume(queueName, false, consumer);

@@ -2,6 +2,6 @@
 
 namespace Backend.Libs.Mediator.Messaging.Abstractions;
 
-public interface IRabbitMqMessage<T> : IRequest
+public interface IMessage<T> : IRequest
 {
 }

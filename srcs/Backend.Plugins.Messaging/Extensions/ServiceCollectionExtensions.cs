@@ -1,4 +1,5 @@
 ﻿using Backend.Libs.Mediator.Messaging.Abstractions;
+using Backend.Libs.Messaging.Abstractions;
 using Backend.Libs.Messaging.Consumers;
 using Backend.Libs.Messaging.Producers;
 using MediatR;
@@ -11,17 +12,17 @@ namespace Backend.Plugins.Messaging.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection TryAddRabbitMqConsumer<TMessage>(this IServiceCollection services)
-        where TMessage : IRabbitMqMessage<TMessage>, IRequest
+        where TMessage : IMessage<TMessage>, IRequest
     {
-        services.TryAddTransient<IRabbitMqConsumer<TMessage>, GenericRabbitMqConsumer<TMessage>>();
+        services.TryAddTransient<IMessageConsumer<TMessage>, GenericRabbitMqConsumer<TMessage>>();
         services.AddHostedService<GenericRabbitMqConsumer<TMessage>>();
         return services;
     }
     
     public static IServiceCollection TryAddRabbitMqProducer<TMessage>(this IServiceCollection services)
-        where TMessage : IRabbitMqMessage<TMessage>
+        where TMessage : IMessage<TMessage>
     {
-        services.TryAddTransient<IRabbitMqProducer<TMessage>, GenericRabbitMqProducer<TMessage>>();
+        services.TryAddTransient<IMessageProducer<TMessage>, GenericRabbitMqProducer<TMessage>>();
         return services;
     }
 

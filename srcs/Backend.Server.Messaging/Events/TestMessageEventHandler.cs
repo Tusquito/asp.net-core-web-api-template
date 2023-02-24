@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backend.Server.Messaging.Events;
 
-public class TestMessageEventHandler : IAsyncRabbitMqEventHandler<TestMessage>
+public class TestMessageEventHandler : IAsyncEventHandler<TestMessage>
 {
     private readonly ILogger<TestMessageEventHandler> _logger;
 

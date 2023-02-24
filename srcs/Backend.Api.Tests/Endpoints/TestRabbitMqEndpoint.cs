@@ -1,5 +1,6 @@
 ﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
+using Backend.Libs.Messaging.Abstractions;
 using Backend.Libs.Messaging.Producers;
 using Backend.Plugins.Messaging.Messages;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,9 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
     .WithActionResult
 {
     private readonly ILogger<TestRabbitMqEndpoint> _logger;
-    private readonly IRabbitMqProducer<TestMessage> _producer;
+    private readonly IMessageProducer<TestMessage> _producer;
 
-    public TestRabbitMqEndpoint(ILogger<TestRabbitMqEndpoint> logger, IRabbitMqProducer<TestMessage> producer)
+    public TestRabbitMqEndpoint(ILogger<TestRabbitMqEndpoint> logger, IMessageProducer<TestMessage> producer)
     {
         _logger = logger;
         _producer = producer;

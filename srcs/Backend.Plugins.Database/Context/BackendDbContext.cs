@@ -2,6 +2,7 @@
 using Backend.Libs.Database.Generic;
 using Backend.Plugins.Database.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.DataEncryption;
 using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
 
@@ -34,10 +35,10 @@ public class BackendDbContext : DbContext
 
     private void OnBeforeSaving()
     {
-        var entries = ChangeTracker.Entries();
-        var utcNow = DateTime.UtcNow;
+        IEnumerable<EntityEntry> entries = ChangeTracker.Entries();
+        DateTime utcNow = DateTime.UtcNow;
 
-        foreach (var entry in entries)
+        foreach (EntityEntry entry in entries)
         {
             if (entry.Entity is IEntity trackable)
             {

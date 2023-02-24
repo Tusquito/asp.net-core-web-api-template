@@ -8,7 +8,7 @@ public class DesignTimeContextFactory : IDesignTimeDbContextFactory<BackendDbCon
 {
     public BackendDbContext CreateDbContext(string[] args)
     {
-        var optionsBuilder = new DbContextOptionsBuilder<BackendDbContext>();
+        DbContextOptionsBuilder<BackendDbContext> optionsBuilder = new DbContextOptionsBuilder<BackendDbContext>();
         optionsBuilder.UseNpgsql(PgsqlDatabaseConfiguration.FromEnv().ToString());
         return new BackendDbContext(optionsBuilder.Options);
     }

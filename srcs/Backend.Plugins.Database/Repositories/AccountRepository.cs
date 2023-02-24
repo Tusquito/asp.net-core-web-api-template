@@ -85,7 +85,7 @@ public class AccountRepository : IAccountRepository
 
     public async Task<List<AccountDto>?> UpdateRangeAsync(IEnumerable<AccountDto> objs, CancellationToken cancellationToken)
     {
-        foreach (var accountDto in objs)
+        foreach (AccountDto accountDto in objs)
         {
             accountDto.Username = accountDto.Username.ToLowerInvariant();
             accountDto.Email = accountDto.Email.ToLowerInvariant();
