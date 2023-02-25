@@ -38,6 +38,11 @@ public class AuthenticateAccountCommandHandler : ICommandHandler<AuthenticateAcc
         
         return result.Value.Password != _passwordHasherService.HashPassword(request.Password, result.Value.PasswordSalt)
             ? Result<TokenModel>.BadRequest(ResultMessageKey.BadRequestWrongPassword)
-            : Result<TokenModel>.Ok(new TokenModel { AccessToken = result.Value.GenerateJwtToken() });
+            : Result<TokenModel>.Ok(new TokenModel
+            {
+                AccessToken = result.Value.GenerateJwtToken(),
+                RefreshToken = string.Empty,
+                TokenType = "Bearer"
+            });
     }
 }

@@ -25,7 +25,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Server.Database\Backend.Server.Database.csproj" />
-      <ProjectReference Include="..\Backend.Api\Backend.Api.csproj" />
     </ItemGroup>
 
 </Project>
