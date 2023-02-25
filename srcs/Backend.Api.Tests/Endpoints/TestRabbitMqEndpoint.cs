@@ -23,7 +23,12 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
     {
         try
         {
-            await _producer.ProduceAsync(new TestMessage(), cancellationToken);
+            await _producer.ProduceAsync(new TestMessage
+            {
+                Id = Guid.NewGuid(),
+                Text = "",
+                CreatedAt = DateTime.UtcNow
+            }, cancellationToken);
         }
         catch (Exception e)
         {

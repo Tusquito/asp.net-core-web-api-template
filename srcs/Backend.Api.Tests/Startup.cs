@@ -42,7 +42,7 @@ public class Startup
                     new JsonStringEnumConverter());
             });
 
-        services.AddAuthSwagger(typeof(Startup).Namespace!);
+        services.AddAuthedSwagger(typeof(Startup).Namespace!);
         services.AddGrpcDatabaseServices();
         services.AddCryptographyLibs();
         services.AddDomainLibs();

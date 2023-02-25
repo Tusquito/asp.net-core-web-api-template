@@ -6,7 +6,7 @@ namespace Backend.Libs.Messaging.Messages;
 [QueueName("test.message")]
 public class TestMessage : IMessage
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public string Text { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public required Guid Id { get; init; }
+    public required string Text { get; init; }
+    public required DateTime CreatedAt { get; init; }
 }

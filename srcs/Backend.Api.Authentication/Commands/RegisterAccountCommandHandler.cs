@@ -37,18 +37,17 @@ public class RegisterAccountCommandHandler : ICommandHandler<RegisterAccountComm
             return Result.BadRequest(ResultMessageKey.BadRequestUnavailableEmail);
         }
 
+        string passwordSalt = _hasherService.GenerateRandomSalt();
+        
         AccountDto accountDto = new AccountDto
         {
             Email = request.Email,
-            Password = request.Password,
+            Password = _hasherService.HashPassword(request.Password, passwordSalt),
             Username = request.Username,
-            PasswordSalt = _hasherService.GenerateRandomSalt(),
+            PasswordSalt = passwordSalt,
             Roles = new List<RoleType> { RoleType.User },
-            Ip = request.Ip,
-
+            Ip = request.Ip
         };
-
-        accountDto.Password = _hasherService.HashPassword(request.Password, accountDto.PasswordSalt);
 
         return await _accountService.AddAsync(accountDto, cancellationToken);
     }

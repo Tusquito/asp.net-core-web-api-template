@@ -13,15 +13,15 @@ public class AccountEntity : IUuidEntity
     public Guid Id { get; set; }
 
     [Encrypted] 
-    public string Username { get; set; } = string.Empty;
+    public required string Username { get; set; }
     [Encrypted]
-    public string Email { get; set; } = string.Empty;
+    public required string Email { get; set; }
+
+    [Encrypted] 
+    public required string Password { get; set; }
 
     [Encrypted]
-    public string Password { get; set; } = string.Empty;
-
-    [Encrypted]
-    public string PasswordSalt { get; set; } = string.Empty;
+    public required string PasswordSalt { get; set; } = string.Empty;
 
     [Encrypted] 
     public string Ip { get; set; } = string.Empty;

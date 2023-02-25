@@ -9,18 +9,18 @@ public class AccountDto : IUuidDto
     [ProtoMember(1)]
     public Guid Id { get; set; }
     [ProtoMember(2)]
-    public string Username { get; set; } = string.Empty;
+    public required string Username { get; set; }
     [ProtoMember(3)]
-    public string Email { get; set; } = string.Empty;
+    public required string Email { get; set; }
     [ProtoMember(4)]
     [JsonIgnore]
-    public string Password { get; set; } = string.Empty;
+    public required string Password { get; set; }
     [ProtoMember(5)]
     [JsonIgnore]
-    public string Ip { get; set; } = string.Empty;
+    public required string Ip { get; set; }
     [ProtoMember(6)] 
-    public List<RoleType> Roles { get; set; } = new();
+    public required List<RoleType> Roles { get; set; }
     [JsonIgnore]
     [ProtoMember(7)]
-    public string PasswordSalt { get; set; } = string.Empty;
+    public required string PasswordSalt { get; set; }
 }

@@ -6,5 +6,5 @@ namespace Backend.Libs.gRPC.Account.Request;
 public class GrpcGetAccountByStringRequest
 {
     [ProtoMember(1)]
-    public string Search { get; init; } = string.Empty;
+    public required string Search { get; init; }
 }

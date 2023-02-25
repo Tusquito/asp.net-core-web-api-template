@@ -46,7 +46,7 @@ public class Startup
                     new JsonStringEnumConverter());
             });
 
-        services.AddAuthSwagger("Backend.Api");
+        services.AddAuthedSwagger("Backend.Api");
         services.AddGrpcDatabaseServices();
         services.AddCryptographyLibs();
     }

@@ -13,8 +13,4 @@
       <ProjectReference Include="..\Backend.Libs.Caching\Backend.Libs.Caching.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Services\Authentication" />
-    </ItemGroup>
-
 </Project>

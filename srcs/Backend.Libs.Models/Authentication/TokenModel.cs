@@ -2,7 +2,7 @@
 
 public class TokenModel
 {
-    public string AccessToken { get; init; } = string.Empty;
-    public string RefreshToken { get; init; } = string.Empty;
-    public string TokenType { get; init; } = "Bearer";
+    public required string AccessToken { get; init; }
+    public required string RefreshToken { get; init; }
+    public required string TokenType { get; init; } = "Bearer";
 }

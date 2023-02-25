@@ -9,7 +9,7 @@ namespace Backend.Plugins.Domain.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddAuthSwagger(this IServiceCollection services, string apiName, string version = "v1")
+    public static IServiceCollection AddAuthedSwagger(this IServiceCollection services, string apiName, string version = "v1")
     {
         services.AddSwaggerGen(c =>
         {

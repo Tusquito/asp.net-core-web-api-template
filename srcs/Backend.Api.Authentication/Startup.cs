@@ -29,7 +29,7 @@ namespace Backend.Api.Authentication
                         new JsonStringEnumConverter());
                 });
 
-            services.AddAuthSwagger(typeof(Startup).Namespace!);
+            services.AddAuthedSwagger(typeof(Startup).Namespace!);
             
             services.AddGrpcDatabaseServices();
 

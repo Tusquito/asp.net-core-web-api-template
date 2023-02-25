@@ -2,6 +2,6 @@
 
 public class LoginRequestForm
 {
-    public string Login { get; init; } = string.Empty;
-    public string Password { get; init; } = string.Empty;
+    public required string Login { get; init; }
+    public required string Password { get; init; }
 }
