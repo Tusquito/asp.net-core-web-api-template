@@ -4,9 +4,8 @@ using Backend.Libs.Domain;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Domain.Services.Account;
 using Backend.Libs.Mediator.Commands.Abstractions;
-using Microsoft.AspNetCore.Http;
 
-namespace Backend.Libs.Mediator.Commands.Account;
+namespace Backend.Api.Tests.Commands;
 
 public class CreateAccountHandler : ICommandHandler<CreateAccountCommand>
 {

@@ -7,14 +7,15 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace Backend.Plugins.Messaging.Extensions;
+namespace Backend.Libs.Messaging.Extensions;
 
 public static class ServiceCollectionExtensions
 {
     public static IServiceCollection TryAddRabbitMqConsumer<TMessage>(this IServiceCollection services)
-        where TMessage : IMessage<TMessage>, IRequest
+        where TMessage : IMessage, IRequest
     {
         services.TryAddTransient<IMessageConsumer<TMessage>, GenericRabbitMqConsumer<TMessage>>();
         services.AddHostedService<GenericRabbitMqConsumer<TMessage>>();
@@ -22,7 +23,7 @@ public static class ServiceCollectionExtensions
     }
     
     public static IServiceCollection TryAddRabbitMqProducer<TMessage>(this IServiceCollection services)
-        where TMessage : IMessage<TMessage>
+        where TMessage : IMessage
     {
         services.TryAddTransient<IMessageProducer<TMessage>, GenericRabbitMqProducer<TMessage>>();
         return services;
@@ -31,6 +32,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection TryAddRabbitMqClientFactory(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<RabbitMqOptions>(configuration.GetSection(RabbitMqOptions.Name));
+        services.AddSingleton<RabbitMqOptions>(x => x.GetRequiredService<IOptions<RabbitMqOptions>>().Value);
         
         services.TryAddSingleton(provider =>
         {

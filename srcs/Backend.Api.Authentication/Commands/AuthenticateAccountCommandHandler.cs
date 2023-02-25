@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
@@ -7,7 +9,7 @@ using Backend.Libs.Mediator.Commands.Abstractions;
 using Backend.Libs.Models.Authentication;
 using Backend.Libs.Security.Extensions;
 
-namespace Backend.Libs.Mediator.Commands.Authentication;
+namespace Backend.Api.Authentication.Commands;
 
 public class AuthenticateAccountCommandHandler : ICommandHandler<AuthenticateAccountCommand, TokenModel>
 {

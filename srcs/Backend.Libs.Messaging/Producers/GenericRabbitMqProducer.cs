@@ -10,7 +10,7 @@ using RabbitMQ.Client;
 namespace Backend.Libs.Messaging.Producers;
 
 public class GenericRabbitMqProducer<T> : IMessageProducer<T>
-    where T : IMessage<T>
+    where T : IMessage
 {
     private readonly ConnectionFactory _connection;
     private readonly ILogger<GenericRabbitMqProducer<T>> _logger;

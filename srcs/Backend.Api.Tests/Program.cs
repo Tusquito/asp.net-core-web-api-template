@@ -48,7 +48,7 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls($"http://*:{(short)GrpcServiceType.TestApiPort}");
+                webBuilder.UseUrls($"http://*:{(short)ServicePort.TestApiPort}");
             });
         return host;
     }

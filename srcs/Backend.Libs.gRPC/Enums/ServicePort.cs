@@ -1,6 +1,6 @@
 ﻿namespace Backend.Libs.gRPC.Enums;
 
-public enum GrpcServiceType : short
+public enum ServicePort : short
 {
     CoreApiPort = 6661,
     TestApiPort = 6662,

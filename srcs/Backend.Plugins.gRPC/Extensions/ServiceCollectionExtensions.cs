@@ -12,12 +12,12 @@ namespace Backend.Plugins.gRPC.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    private static void AddGrpcClientService<T>(this IServiceCollection services, GrpcServiceType serviceType) where T : class
+    private static void AddGrpcClientService<T>(this IServiceCollection services, ServicePort servicePort) where T : class
     {
         services.AddScoped<T>(s =>
         {
-            string ip = Environment.GetEnvironmentVariable(serviceType.ToString()) ?? "localhost";
-            int port = Convert.ToInt32(serviceType);
+            string ip = Environment.GetEnvironmentVariable(servicePort.ToString()) ?? "localhost";
+            int port = Convert.ToInt32(servicePort);
             CallCredentials credentials = CallCredentials.FromInterceptor((context, metadata) =>
             {
                 // TODO AUTHENTICATE SERVICES BETWEEN THEMSELVES
@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddGrpcDatabaseServices(this IServiceCollection services)
     {
         services.AddTransient<IAccountService, AccountService>();
-        services.AddGrpcClientService<IGrpcAccountService>(GrpcServiceType.DatabaseServerPort);
+        services.AddGrpcClientService<IGrpcAccountService>(ServicePort.DatabaseServerPort);
         return services;
     }
 }

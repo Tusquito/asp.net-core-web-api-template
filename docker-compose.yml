@@ -2,38 +2,41 @@ version: "3.9"
 
 volumes:
   pgsql_volume:
-    
+  
 services:
-  auth-api:
-    image:  ${DOCKER_REGISTRY-}auth-api
-    depends_on:
-      - redis
-    links:
-      - redis
-      - db-server
-    ports:
-      - "6663:6663"
-    environment:
-        - REDIS_IP=redis
-        - ASPNETCORE_ENVIRONMENT=Development
-    build:
-      context: .
-      dockerfile: srcs/Backend.Api.Authentication/Dockerfile
-  db-server:
-    image:  ${DOCKER_REGISTRY-}db-server
-    ports:
-      - "7771:7771"
-    depends_on:
-      - postgresql
-    links:
-      - postgresql
-    environment:
-      - PGSQL_DATABASE_IP=postgresql
-      - ASPNETCORE_ENVIRONMENT=Development
-    build:
-      context: .
-      dockerfile: srcs/Backend.Server.Database/Dockerfile
+  # auth-api:
+  #  container_name: authentication-api
+  # image:  ${DOCKER_REGISTRY-}auth-api
+  # depends_on:
+  #   - redis
+  # links:
+  #  - redis
+  #   - db-server
+  # ports:
+  #   - "6663:6663"
+  # environment:
+  #     - REDIS_IP=redis
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  # build:
+  #   context: .
+  #   dockerfile: srcs/Backend.Api.Authentication/Dockerfile
+  #db-server:
+  # container_name: database-server
+  # image:  ${DOCKER_REGISTRY-}db-server
+  # ports:
+  #   - "7771:7771"
+  # depends_on:
+  #   - postgresql
+  # links:
+  #   - postgresql
+  # environment:
+  #   - PGSQL_DATABASE_IP=postgresql
+  #   - ASPNETCORE_ENVIRONMENT=Development
+  # build:
+  #   context: .
+  #   dockerfile: srcs/Backend.Server.Database/Dockerfile
   postgresql:
+    container_name: pgsql
     image: postgres:latest
     restart: always
     ports:
@@ -45,10 +48,21 @@ services:
     volumes:
       - pgsql_volume:/var/lib/postgresql/data
   redis:
+    container_name: redis
     image: redis:latest
     restart: always
     ports:
       - "6379:6379"
+  rabbitmq:
+    container_name: rabbitmq
+    image: bitnami/rabbitmq:latest
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_PASSWORD=root 
+      - RABBITMQ_USERNAME=root
   pgadmin:
     image: dpage/pgadmin4
     restart: always
@@ -57,8 +71,8 @@ services:
     links:
       - postgresql
     environment:
-      PGADMIN_DEFAULT_EMAIL: root@root.com
-      PGADMIN_DEFAULT_PASSWORD: root
+      - PGADMIN_DEFAULT_EMAIL=postgres@root.com
+      - PGADMIN_DEFAULT_PASSWORD=root
     ports:
       - "5050:80"
       

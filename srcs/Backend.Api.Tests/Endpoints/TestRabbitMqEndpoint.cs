@@ -1,8 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
 using Backend.Libs.Messaging.Abstractions;
-using Backend.Libs.Messaging.Producers;
-using Backend.Plugins.Messaging.Messages;
+using Backend.Libs.Messaging.Messages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Tests.Endpoints;

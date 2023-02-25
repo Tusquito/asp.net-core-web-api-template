@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Backend.Libs.Cryptography.Services;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
@@ -5,7 +8,7 @@ using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Services.Account;
 using Backend.Libs.Mediator.Commands.Abstractions;
 
-namespace Backend.Libs.Mediator.Commands.Authentication;
+namespace Backend.Api.Authentication.Commands;
 
 public class RegisterAccountCommandHandler : ICommandHandler<RegisterAccountCommand>
 {

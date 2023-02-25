@@ -4,15 +4,15 @@ namespace Backend.Libs.Mediator.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddMediatorLibs(this IServiceCollection services)
+    public static IServiceCollection AddMediatorLibs<TStartup>(this IServiceCollection services) where TStartup : class
     {
         // MediatR
         services.AddMediatR(x =>
         {
-            x.Lifetime = ServiceLifetime.Scoped;
-            x.RegisterServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+            x.Lifetime = ServiceLifetime.Transient;
+            x.RegisterServicesFromAssemblyContaining(typeof(TStartup));
         });
-
+        
         return services;
     }
 }

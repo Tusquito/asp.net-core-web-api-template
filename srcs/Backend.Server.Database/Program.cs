@@ -61,7 +61,7 @@ public class Program
                     });
                 });
                 webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls($"http://*:{(short)GrpcServiceType.DatabaseServerPort}");
+                webBuilder.UseUrls($"http://*:{(short)ServicePort.DatabaseServerPort}");
             });
         return host;
     }

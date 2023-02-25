@@ -4,10 +4,10 @@ using Backend.Libs.Cryptography.Extensions;
 using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Messaging.Extensions;
+using Backend.Libs.Messaging.Messages;
 using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
-using Backend.Plugins.Messaging.Extensions;
-using Backend.Plugins.Messaging.Messages;
 
 namespace Backend.Api.Tests;
 
@@ -29,6 +29,7 @@ public class Startup
         services.AddPermissionBasedAuthorization<PermissionType, RoleType>();
 
         services.AddEndpointsApiExplorer();
+
         services.TryAddRabbitMqClientFactory(Configuration);
         services.TryAddRedisKeyValueStorage();
 

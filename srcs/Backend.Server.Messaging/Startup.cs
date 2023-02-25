@@ -1,6 +1,6 @@
 using Backend.Libs.Mediator.Extensions;
-using Backend.Plugins.Messaging.Extensions;
-using Backend.Plugins.Messaging.Messages;
+using Backend.Libs.Messaging.Extensions;
+using Backend.Libs.Messaging.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +20,7 @@ namespace Backend.Server.Messaging
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatorLibs();
+            services.AddMediatorLibs<Startup>();
             services.TryAddRabbitMqClientFactory(Configuration);
 
             services.AddControllers();

@@ -15,7 +15,7 @@ namespace Backend.Libs.Messaging.Consumers;
 public class GenericRabbitMqConsumer<T> : IMessageConsumer<T>,
     IHostedService,
     IDisposable
-    where T : IMessage<T>
+    where T : IMessage
 {
     private readonly ILogger _logger;
     private readonly IModel _channel;

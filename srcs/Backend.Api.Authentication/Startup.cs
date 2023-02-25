@@ -35,7 +35,7 @@ namespace Backend.Api.Authentication
 
             services.AddCryptographyLibs();
             services.AddDomainLibs();
-            services.AddMediatorLibs();
+            services.AddMediatorLibs<Startup>();
             
             services.TryAddRedisKeyValueStorage();
         }

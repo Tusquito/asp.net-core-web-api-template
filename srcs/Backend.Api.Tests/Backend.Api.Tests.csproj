@@ -20,8 +20,9 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Mediator\Backend.Libs.Mediator.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Messaging\Backend.Libs.Messaging.csproj" />
       <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
       <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.Messaging\Backend.Plugins.Messaging.csproj" />
     </ItemGroup>
 </Project>

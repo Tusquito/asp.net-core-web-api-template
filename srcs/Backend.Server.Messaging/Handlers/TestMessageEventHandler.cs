@@ -2,10 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Backend.Libs.Mediator.Messaging.Abstractions;
-using Backend.Plugins.Messaging.Messages;
+using Backend.Libs.Messaging.Messages;
 using Microsoft.Extensions.Logging;
 
-namespace Backend.Server.Messaging.Events;
+namespace Backend.Server.Messaging.Handlers;
 
 public class TestMessageEventHandler : IAsyncEventHandler<TestMessage>
 {

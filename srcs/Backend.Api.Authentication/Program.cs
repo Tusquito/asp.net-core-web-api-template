@@ -55,7 +55,7 @@ namespace Backend.Api.Authentication
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls($"http://*:{(short)GrpcServiceType.AuthApiPort}");
+                    webBuilder.UseUrls($"http://*:{(short)ServicePort.AuthApiPort}");
                 });
             return host;
         }

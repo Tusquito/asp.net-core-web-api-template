@@ -13,7 +13,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Messaging\Backend.Libs.Messaging.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.Messaging\Backend.Plugins.Messaging.csproj" />
     </ItemGroup>
 
 </Project>
