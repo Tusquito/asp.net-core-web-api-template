@@ -9,19 +9,18 @@ using RabbitMQ.Client;
 
 namespace Backend.Libs.Messaging.Producers;
 
-public class GenericRabbitMqProducer<T> : IMessageProducer<T>
-    where T : IMessage
+public class RabbitMqProducer : IMessageProducer
 {
     private readonly ConnectionFactory _connection;
-    private readonly ILogger<GenericRabbitMqProducer<T>> _logger;
+    private readonly ILogger<RabbitMqProducer> _logger;
 
-    public GenericRabbitMqProducer(ConnectionFactory connection, ILogger<GenericRabbitMqProducer<T>> logger)
+    public RabbitMqProducer(ConnectionFactory connection, ILogger<RabbitMqProducer> logger)
     {
         _connection = connection;
         _logger = logger;
     }
 
-    public Task ProduceAsync(T message, CancellationToken cancellationToken = default)
+    public Task ProduceAsync<T>(T message, CancellationToken cancellationToken = default) where T : IMessage
     {
         try
         {
@@ -30,7 +29,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (connection == null)
             {
                 _logger.LogError("[{Scope}] An error occured while opening a connection",
-                    nameof(GenericRabbitMqProducer<T>));
+                    nameof(RabbitMqProducer));
                 return Task.CompletedTask;
             }
             
@@ -39,7 +38,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (string.IsNullOrEmpty(queueName))
             {
                 _logger.LogError("[{Scope}] No queue name found for {Message}",
-                    nameof(GenericRabbitMqProducer<T>),
+                    nameof(RabbitMqProducer),
                     nameof(T));
                 return Task.CompletedTask;
             }
@@ -49,7 +48,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (channel == null)
             {
                 _logger.LogError("[{Scope}] An error occured while creating a channel",
-                    nameof(GenericRabbitMqProducer<T>));
+                    nameof(RabbitMqProducer));
                 return Task.CompletedTask;
             }
             
@@ -58,7 +57,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (queueDeclare == null)
             {
                 _logger.LogError("[{Scope}] An error occured while creating the queue {Name}",
-                    nameof(GenericRabbitMqProducer<T>),
+                    nameof(RabbitMqProducer),
                     queueName);
                 return Task.CompletedTask;
             }
@@ -66,17 +65,17 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             byte[] bytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
             IBasicProperties? props = channel.CreateBasicProperties();
             channel.BasicPublish(string.Empty, queueName, props, bytes);
-            _logger.LogInformation("[{Scope}] New message sent into queue {QueueName}", nameof(GenericRabbitMqProducer<T>), queueName);
+            _logger.LogInformation("[{Scope}] New message sent into queue {QueueName}", nameof(RabbitMqProducer), queueName);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "[{Scope}]", nameof(GenericRabbitMqProducer<T>));
+            _logger.LogError(e, "[{Scope}]", nameof(RabbitMqProducer));
         }
         
         return Task.CompletedTask;
     }
 
-    public Task ProduceAsync(List<T> messages, CancellationToken cancellationToken = default)
+    public Task ProduceAsync<T>(List<T> messages, CancellationToken cancellationToken = default) where T : IMessage
     {
         try
         {
@@ -85,7 +84,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (connection == null)
             {
                 _logger.LogError("[{Scope}] An error occured while opening a connection",
-                    nameof(GenericRabbitMqProducer<T>));
+                    nameof(RabbitMqProducer));
                 return Task.CompletedTask;
             }
             
@@ -94,7 +93,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (string.IsNullOrEmpty(queueName))
             {
                 _logger.LogError("[{Scope}] No queue name found for {Message}",
-                    nameof(GenericRabbitMqProducer<T>),
+                    nameof(RabbitMqProducer),
                     nameof(T));
                 return Task.CompletedTask;
             }
@@ -104,7 +103,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (channel == null)
             {
                 _logger.LogError("[{Scope}] An error occured while creating a channel",
-                    nameof(GenericRabbitMqProducer<T>));
+                    nameof(RabbitMqProducer));
                 return Task.CompletedTask;
             }
             
@@ -113,7 +112,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (queueDeclare == null)
             {
                 _logger.LogError("[{Scope}] An error occured while creating the queue {Name}",
-                    nameof(GenericRabbitMqProducer<T>),
+                    nameof(RabbitMqProducer),
                     queueName);
                 return Task.CompletedTask;
             }
@@ -123,7 +122,7 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
             if (batch == null)
             {
                 _logger.LogError("[{Scope}] An error occured while creating batch for messages of type {Type}",
-                    nameof(GenericRabbitMqProducer<T>),
+                    nameof(RabbitMqProducer),
                     typeof(T));
                 return Task.CompletedTask;
             }
@@ -138,13 +137,13 @@ public class GenericRabbitMqProducer<T> : IMessageProducer<T>
 
             batch.Publish();
             _logger.LogInformation("[{Scope}] {Count} new messages has been sent into queue {QueueName}",
-                nameof(GenericRabbitMqProducer<T>),
+                nameof(RabbitMqProducer),
                 messages.Count,
                 queueName);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "[{Scope}]", nameof(GenericRabbitMqProducer<T>));
+            _logger.LogError(e, "[{Scope}]", nameof(RabbitMqProducer));
         }
         
         return Task.CompletedTask;

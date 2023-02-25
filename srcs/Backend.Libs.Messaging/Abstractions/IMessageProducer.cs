@@ -2,8 +2,8 @@
 
 namespace Backend.Libs.Messaging.Abstractions;
 
-public interface IMessageProducer<T> where T : IMessage
+public interface IMessageProducer
 {
-    Task ProduceAsync(T message, CancellationToken cancellationToken = default);
-    Task ProduceAsync(List<T> messages, CancellationToken cancellationToken = default);
+    Task ProduceAsync<T>(T message, CancellationToken cancellationToken = default) where T : IMessage;
+    Task ProduceAsync<T>(List<T> messages, CancellationToken cancellationToken = default) where T : IMessage;
 }

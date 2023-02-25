@@ -11,9 +11,9 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
     .WithActionResult
 {
     private readonly ILogger<TestRabbitMqEndpoint> _logger;
-    private readonly IMessageProducer<TestMessage> _producer;
+    private readonly IMessageProducer _producer;
 
-    public TestRabbitMqEndpoint(ILogger<TestRabbitMqEndpoint> logger, IMessageProducer<TestMessage> producer)
+    public TestRabbitMqEndpoint(ILogger<TestRabbitMqEndpoint> logger, IMessageProducer producer)
     {
         _logger = logger;
         _producer = producer;

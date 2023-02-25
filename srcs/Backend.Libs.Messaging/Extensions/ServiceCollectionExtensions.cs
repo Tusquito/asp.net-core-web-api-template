@@ -22,10 +22,9 @@ public static class ServiceCollectionExtensions
         return services;
     }
     
-    public static IServiceCollection TryAddRabbitMqProducer<TMessage>(this IServiceCollection services)
-        where TMessage : IMessage
+    public static IServiceCollection TryAddRabbitMqProducer(this IServiceCollection services)
     {
-        services.TryAddTransient<IMessageProducer<TMessage>, GenericRabbitMqProducer<TMessage>>();
+        services.TryAddTransient<IMessageProducer, RabbitMqProducer>();
         return services;
     }
 

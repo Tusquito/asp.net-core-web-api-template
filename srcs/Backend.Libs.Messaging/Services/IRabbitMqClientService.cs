@@ -1,6 +1,6 @@
 ﻿using RabbitMQ.Client;
 
-namespace Backend.Libs.Messaging;
+namespace Backend.Libs.Messaging.Services;
 
 public interface IRabbitMqClientService
 {

@@ -33,7 +33,7 @@ public class Startup
         services.TryAddRabbitMqClientFactory(Configuration);
         services.TryAddRedisKeyValueStorage();
 
-        services.TryAddRabbitMqProducer<TestMessage>();
+        services.TryAddRabbitMqProducer();
 
         services.AddControllers()
             .AddJsonOptions(x =>

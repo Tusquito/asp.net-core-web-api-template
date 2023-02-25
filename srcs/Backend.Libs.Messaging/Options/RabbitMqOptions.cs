@@ -4,9 +4,9 @@ public class RabbitMqOptions
 {
     public const string Name = nameof(RabbitMqOptions);
 
-    public string Password { get; init; } = "root";
-    public string Username { get; init; } = "root";
-    public string Hostname { get; init; } = "localhost";
-    public short Port { get; init; } = 5672;
+    public required string Password { get; init; } = "root";
+    public required string Username { get; init; } = "root";
+    public required string Hostname { get; init; } = "localhost";
+    public required short Port { get; init; } = 5672;
    
 }
