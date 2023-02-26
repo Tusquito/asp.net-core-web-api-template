@@ -1,4 +1,4 @@
-﻿using Backend.Libs.Database.Generic;
+﻿using Backend.Libs.Database.Abstractions;
 using Mapster;
 
 namespace Backend.Plugins.Database.Mapping;

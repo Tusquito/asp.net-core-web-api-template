@@ -1,4 +1,4 @@
-﻿namespace Backend.Libs.Database.Generic;
+﻿namespace Backend.Libs.Database.Abstractions;
 
 public interface IEntity
 {

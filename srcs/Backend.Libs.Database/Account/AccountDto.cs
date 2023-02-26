@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using Backend.Libs.Database.Generic;
+using Backend.Libs.Database.Abstractions;
 using ProtoBuf;
 
 namespace Backend.Libs.Database.Account;

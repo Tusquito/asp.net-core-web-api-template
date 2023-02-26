@@ -10,6 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
       <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
+      <ProjectReference Include="..\Backend.Plugins.Database\Backend.Plugins.Database.csproj" />
       <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
     </ItemGroup>
 

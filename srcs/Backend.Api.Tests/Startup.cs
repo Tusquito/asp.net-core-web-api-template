@@ -5,7 +5,6 @@ using Backend.Libs.Database.Account;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
 using Backend.Libs.Messaging.Extensions;
-using Backend.Libs.Messaging.Messages;
 using Backend.Plugins.Domain.Extensions;
 using Backend.Plugins.gRPC.Extensions;
 

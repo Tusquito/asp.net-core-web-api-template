@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Libs.Database.Abstractions;
 using Backend.Libs.Database.Account;
-using Backend.Libs.Database.Generic;
 using Backend.Plugins.Database.Context;
 
 namespace Backend.Plugins.Database.Entities;
