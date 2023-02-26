@@ -1,5 +1,5 @@
 ﻿using Backend.Libs.Database;
-using Backend.Libs.Database.Generic;
+using Backend.Libs.Database.Abstractions;
 using Backend.Plugins.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;

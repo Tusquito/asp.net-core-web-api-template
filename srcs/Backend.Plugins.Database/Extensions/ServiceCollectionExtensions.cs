@@ -1,14 +1,12 @@
 ﻿using Backend.Libs.Database;
+using Backend.Libs.Database.Abstractions;
 using Backend.Libs.Database.Account;
-using Backend.Libs.Database.Generic;
 using Backend.Plugins.Database.Context;
 using Backend.Plugins.Database.Entities;
 using Backend.Plugins.Database.Mapping;
-using Backend.Plugins.Database.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Plugins.Database.Extensions;
@@ -20,7 +18,7 @@ public static class ServiceCollectionExtensions
         where TDto : class, IUuidDto
     {
         services.AddTransient<IGenericMapper<TEntity, TDto>, GenericMapsterMapper<TEntity, TDto>>();
-        services.AddTransient<IGenericAsyncUuidRepository<TDto>, GenericMappedAsyncUuidRepository<TEntity, TDto>>();
+        services.AddTransient<IGenericUuidRepositoryAsync<TEntity, TDto>, GenericUuidRepositoryAsync<TEntity, TDto>>();
         return services;
     }
     
@@ -65,7 +63,6 @@ public static class ServiceCollectionExtensions
         services.AddPgsqlDatabaseContext<BackendDbContext>();
 
         services.TryAddMappedAsyncUuidRepository<AccountEntity, AccountDto>();
-        services.TryAddTransient<IAccountRepository, AccountRepository>();
 
         return services;
     }

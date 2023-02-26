@@ -1,18 +1,20 @@
-﻿using Backend.Libs.Database.Account;
+﻿using Backend.Libs.Database.Abstractions;
+using Backend.Libs.Database.Account;
 using Backend.Libs.gRPC.Account;
 using Backend.Libs.gRPC.Account.Request;
 using Backend.Libs.gRPC.Account.Responses;
 using Backend.Libs.gRPC.Enums;
+using Backend.Plugins.Database.Entities;
 using Microsoft.Extensions.Logging;
 
 namespace Backend.Plugins.gRPC.Account;
 
 public class GrpcAccountService : IGrpcAccountService
 {
-    private readonly IAccountRepository _accountRepository;
+    private readonly IGenericUuidRepositoryAsync<AccountEntity, AccountDto> _accountRepository;
     private readonly ILogger<GrpcAccountService> _logger;
 
-    public GrpcAccountService(IAccountRepository accountRepository, ILogger<GrpcAccountService> logger)
+    public GrpcAccountService(IGenericUuidRepositoryAsync<AccountEntity, AccountDto> accountRepository, ILogger<GrpcAccountService> logger)
     {
         _accountRepository = accountRepository;
         _logger = logger;
@@ -51,7 +53,8 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDto? accountDto = await _accountRepository.GetByEmailAsync(request.Search, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.FirstOrDefaultAsync(
+                x => string.Equals(x.Email, request.Search, StringComparison.InvariantCulture), cancellationToken);
 
             return new GrpcAccountResponse
             {
@@ -75,7 +78,8 @@ public class GrpcAccountService : IGrpcAccountService
                 return new GrpcAccountResponse { Type = GrpcResponseType.RequestError };
             }
 
-            AccountDto? accountDto = await _accountRepository.GetByUsernameAsync(request.Search, cancellationToken);
+            AccountDto? accountDto = await _accountRepository.FirstOrDefaultAsync(
+                x => string.Equals(x.Username, request.Search, StringComparison.InvariantCulture), cancellationToken);
 
             return new GrpcAccountResponse
             {
