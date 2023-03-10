@@ -27,7 +27,7 @@ public class AccountService : IAccountService
         _accountByLoginCache = accountByLoginCache;
     }
 
-    public async Task<Result<AccountDto?>> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool forceRefresh = false)
+    public async Task<Result<AccountDto>> GetByIdAsync(Guid id, CancellationToken cancellationToken, bool forceRefresh = false)
     {
         try
         {
@@ -36,7 +36,7 @@ public class AccountService : IAccountService
                 AccountDto? accountDto = await _accountByIdCache.GetByIdAsync(id);
                 if (accountDto != default)
                 {
-                    return Result<AccountDto?>.Ok(accountDto);
+                    return Result.Ok(accountDto);
                 }
             }
 
@@ -44,22 +44,22 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.RequestError or GrpcResponseType.UnknownError)
             {
-                return Result<AccountDto?>.BadRequest();
+                return Result.BadRequest<AccountDto>();
             }
 
             if (response.Type == GrpcResponseType.NotFound || response.AccountDto == null)
             {
-                return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountById);
+                return Result.NotFound<AccountDto>(ResultMessageKey.NotFoundAccountById);
             }
 
             await _accountByIdCache.RegisterAsync(id, response.AccountDto, _cacheTtl);
 
-            return Result<AccountDto?>.Ok(response.AccountDto);
+            return Result.Ok(response.AccountDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GetByIdAsync));
-            return Result<AccountDto?>.Maintenance();
+            return Result.Maintenance<AccountDto>();
         }
     }
 
@@ -92,7 +92,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<Result<AccountDto?>> AddAsync(AccountDto obj, CancellationToken cancellationToken)
+    public async Task<Result<AccountDto>> AddAsync(AccountDto obj, CancellationToken cancellationToken)
     {
         try
         {
@@ -100,24 +100,24 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.UnknownError or GrpcResponseType.RequestError)
             {
-                return Result<AccountDto?>.BadRequest();
+                return Result.BadRequest<AccountDto>();
             }
 
             if (response.Type == GrpcResponseType.Failure || response.AccountDto == null)
             {
-                return Result<AccountDto?>.Failure();
+                return Result.Failure<AccountDto>();
             }
 
             await _accountByIdCache.RegisterAsync(response.AccountDto.Id, response.AccountDto, _cacheTtl);
             await _accountByLoginCache.RegisterAsync(response.AccountDto.Email, response.AccountDto, _cacheTtl);
             await _accountByLoginCache.RegisterAsync(response.AccountDto.Username, response.AccountDto, _cacheTtl);
 
-            return Result<AccountDto?>.Created(response.AccountDto);
+            return Result.Created(response.AccountDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(AddAsync));
-            return Result<AccountDto?>.Failure();
+            return Result.Failure<AccountDto>();
         }
     }
 
@@ -126,7 +126,7 @@ public class AccountService : IAccountService
         throw new NotImplementedException();
     }
 
-    public async Task<Result<AccountDto?>> GetByEmailAsync(string email, CancellationToken cancellationToken, bool forceRefresh = false)
+    public async Task<Result<AccountDto>> GetByEmailAsync(string email, CancellationToken cancellationToken, bool forceRefresh = false)
     {
         try
         {
@@ -135,7 +135,7 @@ public class AccountService : IAccountService
                 AccountDto? accountDto = await _accountByLoginCache.GetByIdAsync(email);
                 if (accountDto != default)
                 {
-                    return Result<AccountDto?>.Ok(accountDto);
+                    return Result.Ok(accountDto);
                 }
             }
 
@@ -143,26 +143,26 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.RequestError or GrpcResponseType.UnknownError)
             {
-                return Result<AccountDto?>.BadRequest();
+                return Result.BadRequest<AccountDto>();
             }
 
             if (response.Type == GrpcResponseType.NotFound || response.AccountDto == null)
             {
-                return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountById);
+                return Result.NotFound<AccountDto>(ResultMessageKey.NotFoundAccountById);
             }
 
             await _accountByLoginCache.RegisterAsync(email, response.AccountDto, _cacheTtl);
 
-            return Result<AccountDto?>.Ok(response.AccountDto);
+            return Result.Ok(response.AccountDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GetByEmailAsync));
-            return Result<AccountDto?>.Maintenance();
+            return Result.Maintenance<AccountDto>();
         }
     }
 
-    public async Task<Result<AccountDto?>> GetByUsernameAsync(string username, CancellationToken cancellationToken, bool forceRefresh = false)
+    public async Task<Result<AccountDto>> GetByUsernameAsync(string username, CancellationToken cancellationToken, bool forceRefresh = false)
     {
         try
         {
@@ -171,7 +171,7 @@ public class AccountService : IAccountService
                 AccountDto? accountDto = await _accountByLoginCache.GetByIdAsync(username);
                 if (accountDto != default)
                 {
-                    return Result<AccountDto?>.Ok(accountDto);
+                    return Result.Ok(accountDto);
                 }
             }
 
@@ -179,22 +179,22 @@ public class AccountService : IAccountService
 
             if (response.Type is GrpcResponseType.RequestError or GrpcResponseType.UnknownError)
             {
-                return Result<AccountDto?>.BadRequest();
+                return Result.BadRequest<AccountDto>();
             }
 
             if (response.Type == GrpcResponseType.NotFound || response.AccountDto == null)
             {
-                return Result<AccountDto?>.NotFound(ResultMessageKey.NotFoundAccountByLogin);
+                return Result.NotFound<AccountDto>(ResultMessageKey.NotFoundAccountByLogin);
             }
 
             await _accountByLoginCache.RegisterAsync(username, response.AccountDto, _cacheTtl);
 
-            return Result<AccountDto?>.Ok(response.AccountDto);
+            return Result.Ok(response.AccountDto);
         }
         catch (Exception e)
         {
             _logger.LogError(e, "[{Scope}]", nameof(GetByUsernameAsync));
-            return Result<AccountDto?>.Maintenance();
+            return Result.Maintenance<AccountDto>();
         }
     }
 }

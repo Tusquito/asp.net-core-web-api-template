@@ -36,7 +36,7 @@ public class RegisterEndpoint : EndpointBaseAsync
 
         if (!validationResult.IsValid)
         {
-            return validationResult.ToActionResult();
+            return validationResult.FromResult();
         }
 
         RegisterAccountCommand command =
@@ -44,6 +44,6 @@ public class RegisterEndpoint : EndpointBaseAsync
 
         Result result = await _sender.Send(command, cancellationToken);
 
-        return result.ToActionResult();
+        return result.FromResult();
     }
 }

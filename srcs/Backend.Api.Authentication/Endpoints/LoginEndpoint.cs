@@ -35,11 +35,11 @@ public class LoginEndpoint : EndpointBaseAsync
         
         if (!validationResult.IsValid)
         {
-            return validationResult.ToActionResult();
+            return validationResult.FromResult();
         }
 
         Result<TokenModel> result = await _sender.Send(new AuthenticateCommand(form.Login, form.Password), cancellationToken);
 
-        return result.ToActionResult();
+        return result.FromResult();
     }
 }
