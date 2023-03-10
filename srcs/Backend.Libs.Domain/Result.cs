@@ -7,31 +7,12 @@ namespace Backend.Libs.Domain;
 public class Result<T> : Result
 {
     public T? Value { get; }
-
-    private Result(T? value)
-    {
-        Value = value;
-    }
-
-    private Result(T? value, ResultType type, ResultMessageKey message) : base(type, message)
+    
+    public Result(T? value, ResultType type, ResultMessageKey message) : base(type, message)
     {
         Value = value;
     }
     public Result(ResultType type, ResultMessageKey message) : base(type, message) { }
-
-    public static Result<T> Ok(T? value, ResultMessageKey message = ResultMessageKey.Ok) =>
-        new(value, ResultType.Ok, message);
-    public static Result<T> Created(T value, ResultMessageKey message = ResultMessageKey.Created) =>
-        new(value, ResultType.Created, message);
-    public new static Result<T> Failure(ResultMessageKey message = ResultMessageKey.InternalServerError) => new(ResultType.Failure, message);
-    public new static Result<T> Failure(ResultType type, ResultMessageKey message) => new(type, message);
-    public new static Result<T> NotFound(ResultMessageKey message = ResultMessageKey.NotFound) =>
-        new(ResultType.NotFound, message);
-    public new static Result<T> BadRequest(ResultMessageKey message = ResultMessageKey.BadRequest) =>
-        new(ResultType.BadRequest, message);
-    public new static Result<T> Maintenance(ResultMessageKey message = ResultMessageKey.ServiceUnavailable) =>
-        new(ResultType.Maintenance, message);
-
 }
 
 public class Result
@@ -39,8 +20,8 @@ public class Result
     public ResultType Type { get; init; } = ResultType.Ok;
     public ResultMessageKey Message { get; init; } = ResultMessageKey.Ok;
     public bool Successful => (Type & ResultType.Success) != 0;
-    
-    protected Result(){}
+
+    private Result(){}
 
     protected Result(ResultType type, ResultMessageKey message)
     {
@@ -75,5 +56,21 @@ public class Result
     public static Result BadRequest(ResultMessageKey message = ResultMessageKey.BadRequest) =>
         new(ResultType.BadRequest, message);
     public static Result Maintenance(ResultMessageKey message = ResultMessageKey.ServiceUnavailable) =>
+        new(ResultType.Maintenance, message);
+    
+    public static Result<T> Ok<T>(T? value, ResultMessageKey message = ResultMessageKey.Ok) =>
+        new(value, ResultType.Ok, message);
+    
+    public static Result<T> Created<T>(T value, ResultMessageKey message = ResultMessageKey.Created) =>
+        new(value, ResultType.Created, message);
+    public static Result<T> Failure<T>(ResultMessageKey message = ResultMessageKey.InternalServerError) =>
+        new(ResultType.Failure, message);
+    public static Result<T> Failure<T>(ResultType type, ResultMessageKey message) => 
+        new(type, message);
+    public static Result<T> NotFound<T>(ResultMessageKey message = ResultMessageKey.NotFound) =>
+        new(ResultType.NotFound, message);
+    public static Result<T> BadRequest<T>(ResultMessageKey message = ResultMessageKey.BadRequest) =>
+        new(ResultType.BadRequest, message);
+    public static Result<T> Maintenance<T>(ResultMessageKey message = ResultMessageKey.ServiceUnavailable) =>
         new(ResultType.Maintenance, message);
 }

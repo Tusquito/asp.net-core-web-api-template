@@ -22,7 +22,7 @@ public class AuthenticateAccountCommandHandler : ICommandHandler<AuthenticateCom
 
     public async Task<Result<TokenModel>> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
     {
-        Result<AccountDto?> result = await _accountService.GetByEmailAsync(request.Login, cancellationToken);
+        Result<AccountDto> result = await _accountService.GetByEmailAsync(request.Login, cancellationToken);
         
         if (result.Type == ResultType.NotFound || result.Value == null)
         {
@@ -35,8 +35,8 @@ public class AuthenticateAccountCommandHandler : ICommandHandler<AuthenticateCom
         }
         
         return result.Value.Password != _passwordHasherService.HashPassword(request.Password, result.Value.PasswordSalt)
-            ? Result<TokenModel>.BadRequest(ResultMessageKey.BadRequestWrongPassword)
-            : Result<TokenModel>.Ok(new TokenModel
+            ? Result.BadRequest<TokenModel>(ResultMessageKey.BadRequestWrongPassword)
+            : Result.Ok(new TokenModel
             {
                 AccessToken = result.Value.GenerateJwtToken(),
                 RefreshToken = string.Empty,

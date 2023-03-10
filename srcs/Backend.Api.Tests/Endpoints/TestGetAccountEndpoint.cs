@@ -24,9 +24,9 @@ public class TestGetAccountEndpoint : EndpointBaseAsync
     [HasPermission(PermissionType.TestGetAccount)]
     public override async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
-        Result<AccountDto?> res =
+        Result<AccountDto> res =
             await _accountService.GetByIdAsync(Guid.Parse("59001090-b7f7-47aa-911b-cbccbdf6857c"), cancellationToken);
 
-        return res.ToActionResult();
+        return res.FromResult();
     }
 }

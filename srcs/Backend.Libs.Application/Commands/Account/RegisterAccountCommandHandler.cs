@@ -21,7 +21,7 @@ public class RegisterAccountCommandHandler : ICommandHandler<RegisterAccountComm
 
     public async Task<Result> Handle(RegisterAccountCommand request, CancellationToken cancellationToken)
     {
-        Result<AccountDto?> result = await _accountService.GetByUsernameAsync(request.Username, cancellationToken);
+        Result<AccountDto> result = await _accountService.GetByUsernameAsync(request.Username, cancellationToken);
 
         if (result.Successful)
         {

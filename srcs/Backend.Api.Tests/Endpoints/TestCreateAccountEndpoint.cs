@@ -36,6 +36,6 @@ public class TestCreateAccountEndpoint : EndpointBaseAsync
         
         Result result = await _sender.Send(command, cancellationToken);
 
-        return result.ToActionResult();
+        return result.FromResult();
     }
 }
