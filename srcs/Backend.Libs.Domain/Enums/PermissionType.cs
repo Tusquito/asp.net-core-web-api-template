@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backend.Libs.Database.Account;
+using Backend.Libs.Persistence.Enums;
 
 namespace Backend.Libs.Domain.Enums;
 

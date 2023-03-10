@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+        <PackageReference Include="Ardalis.ApiEndpoints" Version="4.0.1" />
     </ItemGroup>
 
     <ItemGroup>
@@ -19,10 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Mediator\Backend.Libs.Mediator.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Messaging\Backend.Libs.Messaging.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Application\Backend.Libs.Application.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Infrastructure\Backend.Libs.Infrastructure.csproj" />
     </ItemGroup>
 </Project>

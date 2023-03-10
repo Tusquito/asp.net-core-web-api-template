@@ -1,68 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Backend.Libs.gRPC.Enums;
-using Backend.Plugins.Database.Context;
-using Backend.Plugins.Database.Mapping;
-using Microsoft.AspNetCore.Hosting;
+using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Infrastructure.Enums;
+using Backend.Libs.Infrastructure.Extensions;
+using Backend.Libs.Infrastructure.Services.Account;
+using Backend.Libs.Persistence.Extensions;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using ProtoBuf.Grpc.Server;
 
-namespace Backend.Server.Database;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
+builder.WebHost.ConfigureKestrel(x => x.ConfigureEndpointDefaults(co => co.Protocols = HttpProtocols.Http2));
+
+builder.Services.AddGrpcDatabaseServices();
+builder.Services.AddPersistenceLibs();
+builder.Services.AddDomainLibs(typeof(Program).Namespace!);
+builder.Services.AddInfrastructureLibs(builder.Configuration);
+builder.Services.TryAddRabbitMqProducer(builder.Configuration);
+builder.Services.AddCodeFirstGrpc(config =>
 {
-    public static async Task Main(string[] args)
-    {
-        MapsterMapperRules.InitMappingRules();
-        IHost web = CreateHostBuilder(args).Build();
+    config.MaxReceiveMessageSize = null;
+    config.EnableDetailedErrors = true;
+});
 
-        ILogger<Program> logger = web.Services.GetRequiredService<ILogger<Program>>();
-        
-        IDbContextFactory<BackendDbContext> tmp = web.Services.GetRequiredService<IDbContextFactory<BackendDbContext>>();
-        await using BackendDbContext context = await tmp.CreateDbContextAsync();
-        try
-        {
-            IEnumerable<string> pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-            IEnumerable<string> appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
+var app = builder.Build();
 
-            await context.Database.MigrateAsync();
-            IEnumerable<string> pendingMigrationsAfter = await context.Database.GetPendingMigrationsAsync();
-            logger.LogWarning("Database migration executed: {pendingMigrationsCountBefore} => {pendingMigrationsCountAfter} | totalMigrations: {appliedMigrationsCount}",
-                pendingMigrations.Count().ToString(), pendingMigrationsAfter.Count().ToString(), appliedMigrations.Count().ToString());
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "Migration failed");
-            return;
-        }
+app.UseDomainLibs();
 
-        logger.LogWarning("Starting...");
-        await web.StartAsync();
-        
-        logger.LogWarning("Running!");
-        await web.WaitForShutdownAsync();
-    }
+app.Urls.Add($"http://*:{(short)ServicePort.DATABASE_SERVER_PORT}");
 
-    private static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        IHostBuilder host = Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.ConfigureKestrel(s =>
-                {
-                    s.ConfigureEndpointDefaults(co =>
-                    {
-                        co.Protocols = HttpProtocols.Http2;
-                    });
-                });
-                webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls($"http://*:{(short)ServicePort.DatabaseServerPort}");
-            });
-        return host;
-    }
-}
+app.MapGrpcService<GrpcAccountService>();
+
+await app.TryMigrateEfCoreDatabaseAsync();
+await app.RunAsync();
+await app.WaitForShutdownAsync();

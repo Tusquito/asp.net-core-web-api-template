@@ -1,10 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using Backend.Api.Authentication.Commands;
+﻿using Ardalis.ApiEndpoints;
+using Backend.Libs.Application.Commands.Authentication;
+using Backend.Libs.Application.Extensions;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.Models.Authentication;
+using Backend.Libs.Domain.Forms.Authentication;
+using Backend.Libs.Domain.Models.Authentication;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -38,7 +38,7 @@ public class LoginEndpoint : EndpointBaseAsync
             return validationResult.ToActionResult();
         }
 
-        Result<TokenModel> result = await _sender.Send(new AuthenticateAccountCommand(form.Login, form.Password), cancellationToken);
+        Result<TokenModel> result = await _sender.Send(new AuthenticateCommand(form.Login, form.Password), cancellationToken);
 
         return result.ToActionResult();
     }

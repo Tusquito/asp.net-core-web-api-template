@@ -4,14 +4,13 @@
         <TargetFramework>net7.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <ImplicitUsings>true</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Cryptography\Backend.Libs.Cryptography.csproj" />
-      <ProjectReference Include="..\Backend.Libs.gRPC\Backend.Libs.gRPC.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.Database\Backend.Plugins.Database.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Infrastructure\Backend.Libs.Infrastructure.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Persistence\Backend.Libs.Persistence.csproj" />
     </ItemGroup>
 
     <ItemGroup>

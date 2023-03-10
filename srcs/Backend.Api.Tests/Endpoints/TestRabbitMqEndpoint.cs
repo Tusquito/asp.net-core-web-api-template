@@ -1,7 +1,7 @@
 ﻿using Ardalis.ApiEndpoints;
 using Backend.Libs.Domain;
-using Backend.Libs.Messaging.Abstractions;
-using Backend.Libs.Messaging.Messages;
+using Backend.Libs.Infrastructure.Messages;
+using Backend.Libs.Infrastructure.Producers.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Tests.Endpoints;
@@ -18,7 +18,8 @@ public class TestRabbitMqEndpoint : EndpointBaseAsync
         _logger = logger;
         _producer = producer;
     }
-    [HttpGet("api/test/rabbitmq")]
+    
+    [HttpGet("rabbitmq")]
     public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {
         try

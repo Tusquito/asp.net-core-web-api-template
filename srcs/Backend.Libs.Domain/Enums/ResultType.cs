@@ -1,5 +1,3 @@
-using System;
-
 namespace Backend.Libs.Domain.Enums;
 
 [Flags]
