@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using Backend.Libs.Domain.Attributes;
 using Backend.Libs.Domain.Enums;
 
@@ -10,23 +8,23 @@ public class Result<T> : Result
 {
     public T? Value { get; }
 
-    private Result(T value)
+    private Result(T? value)
     {
         Value = value;
     }
 
-    private Result(T value, ResultType type, ResultMessageKey message) : base(type, message)
+    private Result(T? value, ResultType type, ResultMessageKey message) : base(type, message)
     {
         Value = value;
     }
     public Result(ResultType type, ResultMessageKey message) : base(type, message) { }
 
-    public static Result<T> Ok(T value, ResultMessageKey message = ResultMessageKey.Ok) =>
+    public static Result<T> Ok(T? value, ResultMessageKey message = ResultMessageKey.Ok) =>
         new(value, ResultType.Ok, message);
     public static Result<T> Created(T value, ResultMessageKey message = ResultMessageKey.Created) =>
         new(value, ResultType.Created, message);
-    public static Result<T> Failed(ResultMessageKey message = ResultMessageKey.InternalServerError) => new(ResultType.Failure, message);
-    public static Result<T> Failed(ResultType type, ResultMessageKey message) => new(type, message);
+    public new static Result<T> Failure(ResultMessageKey message = ResultMessageKey.InternalServerError) => new(ResultType.Failure, message);
+    public new static Result<T> Failure(ResultType type, ResultMessageKey message) => new(type, message);
     public new static Result<T> NotFound(ResultMessageKey message = ResultMessageKey.NotFound) =>
         new(ResultType.NotFound, message);
     public new static Result<T> BadRequest(ResultMessageKey message = ResultMessageKey.BadRequest) =>
@@ -58,12 +56,9 @@ public class Result
                                        throw new ArgumentException();
 
         ResultType? resultType = currentMsgMbrInfo.GetCustomAttribute<ResultMessageTypeAttribute>()?.Type;
-        
-        if (!resultType.HasValue || !type.HasFlag(resultType.Value) || resultType.Value != type)
-        {
+
+        if (!resultType.HasValue || (!type.HasFlag(resultType.Value) && resultType.Value != type))
             throw new ArgumentException("Message type does not match result type");
-        }
-        
         Type = type;
         Message = message;
     }

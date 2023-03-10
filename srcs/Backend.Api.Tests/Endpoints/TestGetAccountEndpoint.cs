@@ -1,10 +1,10 @@
 ﻿using Ardalis.ApiEndpoints;
-using Backend.Libs.Database.Account;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Attributes;
 using Backend.Libs.Domain.Enums;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.Domain.Services.Account;
+using Backend.Libs.Infrastructure.Services.Account.Abstractions;
+using Backend.Libs.Persistence.Data.Account;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Tests.Endpoints;
@@ -20,7 +20,7 @@ public class TestGetAccountEndpoint : EndpointBaseAsync
         _accountService = accountService;
     }
     
-    [HttpGet("api/tests/account")]
+    [HttpGet("account")]
     [HasPermission(PermissionType.TestGetAccount)]
     public override async Task<IActionResult> HandleAsync(CancellationToken cancellationToken = new())
     {

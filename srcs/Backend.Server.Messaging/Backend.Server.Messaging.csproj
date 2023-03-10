@@ -2,9 +2,10 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>true</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -12,7 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Backend.Libs.Messaging\Backend.Libs.Messaging.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Application\Backend.Libs.Application.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Infrastructure\Backend.Libs.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

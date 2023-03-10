@@ -1,55 +1,24 @@
-using System.Reflection;
-using Backend.Libs.gRPC.Enums;
+using Backend.Libs.Application.Extensions;
+using Backend.Libs.Domain.Extensions;
+using Backend.Libs.Infrastructure.Enums;
+using Backend.Libs.Infrastructure.Extensions;
 
-namespace Backend.Api.Tests;
+var builder = WebApplication.CreateBuilder(args);
 
-public class Program
-{
-    public static async Task Main(string[] args)
-    {
-        PrintHeader();
-        IHost web = CreateHostBuilder(args).Build();
+builder.Services.TryAddRabbitMqProducer(builder.Configuration);
         
+builder.Services.AddGrpcDatabaseServices();
+builder.Services.AddDomainLibs(typeof(Program).Namespace!);
+builder.Services.AddInfrastructureLibs(builder.Configuration);
+builder.Services.AddApplicationLibs();
 
-        await web.StartAsync();
-        await web.WaitForShutdownAsync();
-    }
-    
-    private static void PrintHeader()
-    {
-        const string text = @"
-██████╗  █████╗  ██████╗██╗  ██╗███████╗███╗   ██╗██████╗     
-██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝████╗  ██║██╔══██╗    
-██████╔╝███████║██║     █████╔╝ █████╗  ██╔██╗ ██║██║  ██║    
-██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██║╚██╗██║██║  ██║    
-██████╔╝██║  ██║╚██████╗██║  ██╗███████╗██║ ╚████║██████╔╝    
-╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝     
-                                                              
- ██████╗ ██████╗ ██████╗ ███████╗     █████╗ ██████╗ ██╗      
-██╔════╝██╔═══██╗██╔══██╗██╔════╝    ██╔══██╗██╔══██╗██║      
-██║     ██║   ██║██████╔╝█████╗      ███████║██████╔╝██║      
-██║     ██║   ██║██╔══██╗██╔══╝      ██╔══██║██╔═══╝ ██║      
-╚██████╗╚██████╔╝██║  ██║███████╗    ██║  ██║██║     ██║      
- ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚═╝  ╚═╝╚═╝     ╚═╝    
+var app = builder.Build();
 
-                                                                                       
-";
-        string separator = new string('=', Console.WindowWidth);
-        string logo = text.Split('\n').Select(s => string.Format("{0," + (Console.WindowWidth / 2 + s.Length / 2) + "}\n", s))
-            .Aggregate("", (current, i) => current + i);
+app.UseDomainLibs();
 
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine(separator + logo + $"Version: {Assembly.GetExecutingAssembly().GetName().Version}\n" + separator);
-        Console.ForegroundColor = ConsoleColor.White;
-    }
+app.Urls.Add($"http://*:{(short)ServicePort.TEST_API_PORT}");
 
-    private static IHostBuilder CreateHostBuilder(string[] args) {
-        IHostBuilder host = Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-                webBuilder.UseUrls($"http://*:{(short)ServicePort.TestApiPort}");
-            });
-        return host;
-    }
-}
+app.UsePathBase("/api/tests/");
+
+await app.RunAsync();
+await app.WaitForShutdownAsync();

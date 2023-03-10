@@ -1,4 +1,3 @@
-using System;
 using Backend.Libs.Domain.Enums;
 
 namespace Backend.Libs.Domain.Attributes;

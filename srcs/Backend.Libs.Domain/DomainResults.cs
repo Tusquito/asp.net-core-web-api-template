@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Backend.Libs.Domain.Enums;
-using Backend.Libs.Domain.ObjectResults;
+﻿using Backend.Libs.Domain.Enums;
+using Backend.Libs.Domain.HttpResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

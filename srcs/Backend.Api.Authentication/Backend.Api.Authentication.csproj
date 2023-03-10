@@ -4,26 +4,24 @@
         <TargetFramework>net7.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>true</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="MediatR" Version="12.0.1" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Backend.Libs.Domain\Backend.Libs.Domain.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Mediator\Backend.Libs.Mediator.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Models\Backend.Libs.Models.csproj" />
-      <ProjectReference Include="..\Backend.Libs.Security\Backend.Libs.Security.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.Domain\Backend.Plugins.Domain.csproj" />
-      <ProjectReference Include="..\Backend.Plugins.gRPC\Backend.Plugins.gRPC.csproj" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <Content Include="..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Backend.Libs.Application\Backend.Libs.Application.csproj" />
+      <ProjectReference Include="..\Backend.Libs.Infrastructure\Backend.Libs.Infrastructure.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Reference Include="Ardalis.ApiEndpoints">
+        <HintPath>..\..\..\..\..\.nuget\packages\ardalis.apiendpoints\4.0.1\lib\netstandard2.0\Ardalis.ApiEndpoints.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

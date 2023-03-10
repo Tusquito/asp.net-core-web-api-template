@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Migrations" />
+    </ItemGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="EntityFrameworkCore.DataEncryption" Version="4.0.0" />
+      <PackageReference Include="Mapster" Version="7.3.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.3" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="protobuf-net.Core">
+        <HintPath>..\..\..\..\..\.nuget\packages\protobuf-net.core\3.2.12\lib\net6.0\protobuf-net.Core.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+</Project>

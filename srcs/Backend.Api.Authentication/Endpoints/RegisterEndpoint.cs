@@ -1,15 +1,13 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using Backend.Api.Authentication.Commands;
+﻿using Ardalis.ApiEndpoints;
+using Backend.Libs.Application.Commands.Account;
+using Backend.Libs.Application.Extensions;
 using Backend.Libs.Domain;
 using Backend.Libs.Domain.Extensions;
-using Backend.Libs.Models.Account;
+using Backend.Libs.Domain.Forms.Account;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Api.Authentication.Endpoints;
