@@ -22,7 +22,7 @@ jobs:
         id: extract_branch
       - name: 'Get Latest Tag'
         id: get_latest_tag
-        run: echo "latest_tag=$(git tag | grep -E '^[0-9]' | sort -V | tail -1))" >> $GITHUB_OUTPUT
+        run: echo "latest_tag=$(git tag | grep -E '^[0-9]' | sort -V | tail -1)" >> $GITHUB_OUTPUT
       - name: 'Format new tag'
         id: format_new_tag
         run: |
