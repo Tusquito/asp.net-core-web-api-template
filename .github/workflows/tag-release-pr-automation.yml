@@ -28,11 +28,11 @@ jobs:
         id: format_new_tag
         run: |
             if [[ ${{ steps.extract_branch.outputs.branch }} =~ ^major-*$ ]]; then
-              echo "new_tag=$(echo ${{ steps.get_latest_tag.outputs.latest_tag }} | awk -F. '{$1 = $1 + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
+              echo "new_tag=$(echo '${{ steps.get_latest_tag.outputs.latest_tag }}' | awk -F. '{$1 = $1 + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
             elif [[ ${{ steps.extract_branch.outputs.branch }} =~ ^minor-*$ ]]; then
-              echo "new_tag=$(echo ${{ steps.get_latest_tag.outputs.latest_tag }} | awk -F. '{$2 = $2 + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
+              echo "new_tag=$(echo '${{ steps.get_latest_tag.outputs.latest_tag }}' | awk -F. '{$2 = $2 + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
             elif [[ ${{ steps.extract_branch.outputs.branch }} =~ ^patch-*$ ]]; then
-              echo "new_tag=$(echo ${{ steps.get_latest_tag.outputs.latest_tag }} | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
+              echo "new_tag=$(echo '${{ steps.get_latest_tag.outputs.latest_tag }}' | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
             else
               exit 0
             fi
