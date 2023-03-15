@@ -1,52 +1,64 @@
-
-name: Automated tag & release creation on pull request
+name: Create Release on Merge
 
 on:
   pull_request:
+    types: [closed]
     branches:
       - main
-    types: [closed]
 
 jobs:
-  create-new-tag:
+  create_release:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
+
     steps:
-      - name: 'Checkout'
-        uses: 'actions/checkout@v3'
-        with:
-          fetch-depth: 0
-      - name: 'Extract branch name'
-        shell: bash
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
-        id: extract_branch
-      - name: 'Get Latest Tag'
-        id: get_latest_tag
-        run: echo "latest_tag=$(git tag | grep -E '^[0-9]' | sort -V | tail -1)" >> $GITHUB_OUTPUT
-      - name: 'Format new tag'
-        id: format_new_tag
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get previous tag
+        id: get_previous_tag
+        run: echo ::set-output name=previous_tag::$(git describe --abbrev=0)
+
+      - name: Determine tag prefix
+        id: determine_prefix
         run: |
-            if [[ ${{ steps.extract_branch.outputs.branch }} =~ ^major-*$ ]]; then
-              echo "new_tag=$(echo '${{ steps.get_latest_tag.outputs.latest_tag }}' | awk -F. '{$1 = $1 + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
-            elif [[ ${{ steps.extract_branch.outputs.branch }} =~ ^minor-*$ ]]; then
-              echo "new_tag=$(echo '${{ steps.get_latest_tag.outputs.latest_tag }}' | awk -F. '{$2 = $2 + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
-            elif [[ ${{ steps.extract_branch.outputs.branch }} =~ ^patch-*$ ]]; then
-              echo "new_tag=$(echo '${{ steps.get_latest_tag.outputs.latest_tag }}' | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')" >> $GITHUB_OUTPUT
-            else
-              exit 0
-            fi
-      - name: 'Create new tag'
-        uses: 'rickstaa/action-create-tag@latest'
-        id: tag_create
+          branch_name=$(echo ${GITHUB_REF#refs/heads/})
+          prefix=$(echo $branch_name | cut -d "-" -f 1)
+          echo "::set-output name=prefix::$prefix"
+
+      - name: Increment tag
+        id: increment_tag
+        run: |
+          prefix=${{ steps.determine_prefix.outputs.prefix }}
+          previous_tag=${{ steps.get_previous_tag.outputs.previous_tag }}
+          case $prefix in
+            major)
+              new_tag=$(echo $previous_tag | awk -F. '{print $1+1".0.0"}')
+              ;;
+            minor)
+              new_tag=$(echo $previous_tag | awk -F. '{print $1"."$2+1".0"}')
+              ;;
+            patch)
+              new_tag=$(echo $previous_tag | awk -F. '{print $1"."$2"."$3+1}')
+              ;;
+          esac
+          echo "::set-output name=new_tag::$new_tag"
+
+      - name: Create new tag
+        id: create_tag
+        uses: git-create-tag-action@latest
         with:
-          tag: ${{ steps.format_new_tag.outputs.new_tag }}
-      - name: 'Release snapshot'
-        id: release-snapshot
+          tag: ${{ steps.increment_tag.outputs.new_tag }}
+          message: 'New release'
+
+      - name: Create new release
+        id: create_release
         uses: actions/create-release@latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.format_new_tag.outputs.new_tag }}
-          release_name: ${{ steps.format_new_tag.outputs.new_tag }}
+          tag_name: ${{ steps.increment_tag.outputs.new_tag }}
+          release_name: 'New release'
+          body: 'Release created from Github Action'
           draft: false
           prerelease: false
