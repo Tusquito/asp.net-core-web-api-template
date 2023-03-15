@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  create_release:
+  create_tag_and_release:
     runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
@@ -46,7 +46,7 @@ jobs:
 
       - name: Create new tag
         id: create_tag
-        uses: git-create-tag-action@latest
+        uses: rickstaa/action-create-tag@v1
         with:
           tag: ${{ steps.increment_tag.outputs.new_tag }}
           message: 'New release'
