@@ -32,7 +32,10 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return _mapper.Map(await context.Set<TEntity>().FirstOrDefaultAsync(predicate, cancellationToken));
+            
+            return _mapper.Map(await context.Set<TEntity>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(predicate, cancellationToken));
         }
         catch (Exception e)
         {
@@ -46,7 +49,10 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return _mapper.Map(await context.Set<TEntity>().Where(predicate).ToListAsync(cancellationToken));
+            return _mapper.Map(await context.Set<TEntity>()
+                .AsNoTracking()
+                .Where(predicate)
+                .ToListAsync(cancellationToken));
         }
         catch (Exception e)
         {
@@ -60,7 +66,9 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return await context.Set<TEntity>().Where(predicate).ExecuteDeleteAsync(cancellationToken);
+            return await context.Set<TEntity>()
+                .Where(predicate)
+                .ExecuteDeleteAsync(cancellationToken);
         }
         catch (Exception e)
         {
@@ -74,7 +82,8 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return await context.Set<TEntity>().ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
+            return await context.Set<TEntity>()
+                .ExecuteUpdateAsync(setPropertyCalls, cancellationToken);
         }
         catch (Exception e)
         {
@@ -88,7 +97,9 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return _mapper.Map(await context.Set<TEntity>().ToListAsync(cancellationToken));
+            return _mapper.Map(await context.Set<TEntity>()
+                .AsNoTracking()
+                .ToListAsync(cancellationToken));
         }
         catch (Exception e)
         {
@@ -102,7 +113,9 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return _mapper.Map(await context.Set<TEntity>().FindAsync(new object?[] { id }, cancellationToken));
+            return _mapper.Map(await context.Set<TEntity>()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.Id == id, cancellationToken));
         }
         catch (Exception e)
         {
@@ -116,7 +129,9 @@ public class GenericUuidRepositoryAsync<TEntity, TDto> : IGenericUuidRepositoryA
         try
         {
             await using BackendDbContext context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            return _mapper.Map(await context.Set<TEntity>().Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken));
+            return _mapper.Map(await context.Set<TEntity>()
+                .AsNoTracking()
+                .Where(x => ids.Contains(x.Id)).ToListAsync(cancellationToken));
         }
         catch (Exception e)
         {
